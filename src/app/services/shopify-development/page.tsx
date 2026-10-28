@@ -165,7 +165,7 @@ export default function ShopifyDevelopmentPage() {
           </p>
         }
         primary={{ label: "Discuss Your Shopify Project", href: "/contact" }}
-        secondary={{ label: "Explore our work", href: "/#work" }}
+        secondary={{ label: "Explore our work", href: "/work" }}
         tagline="SHOPIFY · SHOPIFY PLUS · THEMES · MIGRATIONS · INTEGRATIONS"
         visual={{ src: "/images/shopify-development/hero-cube.png", width: 657, height: 657, className: `figma-crop ${cube.hero}` }}
       />

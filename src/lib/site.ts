@@ -18,42 +18,51 @@ export const site = {
 
 export type NavLink = { label: string; href: string; description?: string };
 
-export const services: (NavLink & { short: string })[] = [
+export const services: (NavLink & { short: string; visual: string; tags: string[] })[] = [
   {
     label: "Shopify Development",
     short: "Shopify Services",
     href: "/services/shopify-development",
     description: "Custom builds, Shopify Plus, themes and migrations.",
+    visual: "/images/shopify-development/hero-cube.png",
+    tags: ["Shopify Plus", "Custom themes", "Migrations", "Integrations"],
   },
   {
     label: "Conversion Rate Optimization",
     short: "Conversion Optimization",
     href: "/services/conversion-rate-optimization",
     description: "CRO audits, A/B testing and checkout fixes.",
+    visual: "/images/cro/hero-funnel.png",
+    tags: ["CRO audits", "A/B testing", "Checkout", "Landing pages"],
   },
   {
     label: "Ecommerce Marketing",
     short: "Ecommerce Marketing Agency",
     href: "/services/ecommerce-marketing",
     description: "Paid media, creative and Klaviyo retention.",
+    visual: "/images/marketing/orb-hero.png",
+    tags: ["Meta Ads", "Google & TikTok", "Klaviyo", "Creative"],
   },
   {
     label: "White Label Shopify",
     short: "White Label Shopify Development",
     href: "/services/white-label-shopify",
     description: "Delivery capacity for agencies, under your brand.",
+    visual: "/images/white-label/atom-3d.png",
+    tags: ["Shopify dev", "Web design", "PPC", "Email"],
   },
 ];
 
 export const mainNav: NavLink[] = [
   { label: "Home", href: "/" },
-  { label: "Work", href: "/#work" },
+  { label: "Work", href: "/work" },
   { label: "About", href: "/about" },
   { label: "Insights", href: "/insights" },
   { label: "For Agencies", href: "/partners" },
 ];
 
 export const companyNav: NavLink[] = [
+  { label: "Work", href: "/work" },
   { label: "Partnership", href: "/partners" },
   { label: "About", href: "/about" },
   { label: "Insights", href: "/insights" },

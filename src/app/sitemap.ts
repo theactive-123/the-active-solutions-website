@@ -6,6 +6,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const pages: { path: string; priority: number; changeFrequency: "weekly" | "monthly" | "yearly" }[] = [
     { path: "/", priority: 1, changeFrequency: "weekly" },
     ...services.map((s) => ({ path: s.href, priority: 0.9, changeFrequency: "monthly" as const })),
+    { path: "/work", priority: 0.8, changeFrequency: "monthly" },
     { path: "/partners", priority: 0.8, changeFrequency: "monthly" },
     { path: "/about", priority: 0.7, changeFrequency: "monthly" },
     { path: "/insights", priority: 0.8, changeFrequency: "weekly" },

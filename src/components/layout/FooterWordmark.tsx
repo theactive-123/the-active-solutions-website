@@ -6,20 +6,33 @@ import styles from "./Footer.module.css";
 
 const WORDS = ["The", "Active", "Solutions"];
 
-/** Giant brand wordmark; letters rise in sequence as the footer scrolls into view and react to hover. */
+/** Giant brand wordmark; letters rise in a wave as the footer scrolls into view and react to hover. */
 export function FooterWordmark() {
   const ref = useRef<HTMLParagraphElement>(null);
 
   useGSAP(
     () => {
       if (prefersReducedMotion()) return;
-      gsap.from("[data-char]", {
-        yPercent: 105,
-        duration: 1.3,
-        ease: "expo.out",
-        stagger: 0.035,
-        scrollTrigger: { trigger: ref.current, start: "top 95%", once: true },
-      });
+      // Scrubbed (tied to scroll position) rather than a one-shot trigger, so the reveal can never
+      // get stuck hidden after route changes or on very long pages.
+      gsap.fromTo(
+        "[data-char]",
+        { yPercent: 115, rotate: 8, opacity: 0 },
+        {
+          yPercent: 0,
+          rotate: 0,
+          opacity: 1,
+          ease: "power3.out",
+          stagger: 0.06,
+          scrollTrigger: {
+            trigger: ref.current,
+            start: "top bottom",
+            end: "bottom 98%",
+            scrub: 0.8,
+            invalidateOnRefresh: true,
+          },
+        },
+      );
     },
     { scope: ref },
   );

@@ -22,12 +22,7 @@ export function Button(props: AsLink | AsButton) {
   const cls = [styles.btn, styles[variant], size === "sm" && styles.sm, className].filter(Boolean).join(" ");
   const inner = (
     <>
-      <span className={styles.label}>
-        <span className={styles.text}>{children}</span>
-        <span className={styles.text} aria-hidden="true">
-          {children}
-        </span>
-      </span>
+      <span className={styles.label}>{children}</span>
       {arrow && (
         <span className={styles.arrowWrap}>
           <Arrow className={styles.arrow} />

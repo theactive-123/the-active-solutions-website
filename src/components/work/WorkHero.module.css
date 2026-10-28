@@ -1,0 +1,87 @@
+.hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  min-height: min(100svh, 980px);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding-top: clamp(120px, 10vw, 200px);
+  padding-bottom: clamp(32px, 2.6vw, 50px);
+}
+
+.inner {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  display: grid;
+  gap: 48px;
+  align-items: center;
+}
+
+.kicker {
+  margin-bottom: 20px;
+  color: var(--on-dark);
+}
+
+.copy {
+  max-width: 960px;
+}
+
+.text {
+  max-width: 600px;
+  margin-top: clamp(20px, 2vw, 36px);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px 20px;
+  margin-top: clamp(24px, 2.3vw, 44px);
+}
+
+.statsWrap {
+  position: relative;
+  z-index: 1;
+  margin-top: clamp(40px, 3.6vw, 70px);
+}
+
+.rule {
+  display: block;
+  height: 1px;
+  background: var(--line-light);
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: clamp(20px, 1.6vw, 30px);
+}
+
+.stat {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 4px;
+}
+
+.stat dd {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(2.5rem, 4.2vw, 5rem);
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+.stat dt {
+  color: var(--on-dark-2);
+  font-size: var(--fs-small);
+  text-transform: uppercase;
+}
+
+@media (min-width: 1024px) {
+  .inner {
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  }
+}

@@ -160,7 +160,7 @@ export function ContactForm({ initialKind = "project", initialNeeds = [] }: { in
             <Button href="/contact/schedule" className={styles.submit}>
               Book a 30-min call
             </Button>
-            <Button href="/#work" variant="outline-dark">
+            <Button href="/work" variant="outline-dark">
               See our work
             </Button>
           </div>

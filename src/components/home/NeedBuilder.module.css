@@ -27,6 +27,7 @@
 .picked {
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   gap: 6px;
   flex: 1;
   min-width: 0;
@@ -38,6 +39,37 @@
   height: clamp(48px, 3.6vw, 70px);
   border-radius: 6px;
   background: var(--white);
+  transition:
+    width 0.5s var(--ease-out),
+    height 0.5s var(--ease-out),
+    border-radius 0.5s var(--ease-out),
+    background-color 0.3s,
+    transform 0.3s var(--ease-out);
+}
+
+.plusBox:hover {
+  background: var(--red);
+  transform: rotate(90deg);
+}
+
+.plusBox:hover span {
+  background: var(--white);
+}
+
+.plusBox:active {
+  transform: rotate(90deg) scale(0.92);
+}
+
+/* Once something is picked the + shrinks to chip size */
+.picked:has(.chipOn) .plusBox {
+  width: 38px;
+  height: 38px;
+  border-radius: 40px;
+}
+
+.picked:has(.chipOn) .plusBox span {
+  width: 14px;
+  animation: none;
 }
 
 .plusBox span {

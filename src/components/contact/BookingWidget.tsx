@@ -264,7 +264,7 @@ export function BookingWidget({ bookingUrl }: { bookingUrl?: string }) {
             <strong>{details.email}</strong>.
           </p>
           <div className={form.successActions}>
-            <Button href="/#work" className={form.submit}>
+            <Button href="/work" className={form.submit}>
               Explore our work
             </Button>
             <button

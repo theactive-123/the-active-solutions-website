@@ -6,6 +6,7 @@ import { useCallback, useEffect, useId, useRef, useState } from "react";
 import { mainNav, services, site } from "@/lib/site";
 import { Button } from "@/components/ui/Button";
 import { Logo } from "@/components/ui/Logo";
+import { MegaMenu } from "./MegaMenu";
 import { useLenis } from "@/components/motion/SmoothScroll";
 import { gsap, prefersReducedMotion } from "@/components/motion/gsap";
 import styles from "./Header.module.css";
@@ -67,6 +68,16 @@ export function Header() {
 
   const closeMenu = useCallback(() => setMenuOpen(false), []);
 
+  // Close the services menu on a click/tap outside the header
+  useEffect(() => {
+    if (!servicesOpen) return;
+    const onDown = (e: PointerEvent) => {
+      if (!ref.current?.contains(e.target as Node)) setServicesOpen(false);
+    };
+    document.addEventListener("pointerdown", onDown);
+    return () => document.removeEventListener("pointerdown", onDown);
+  }, [servicesOpen]);
+
   // Close menus on navigation
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect -- reset UI when the route changes
@@ -115,6 +126,7 @@ export function Header() {
 
   return (
     <>
+      <div className={styles.scrim} data-open={servicesOpen} aria-hidden="true" />
       <header
         ref={ref}
         className={styles.header}
@@ -157,21 +169,7 @@ export function Header() {
                     <path d="M1 1l4 4 4-4" stroke="currentColor" fill="none" strokeWidth="1.4" />
                   </svg>
                 </button>
-                <div id={servicesId} className={styles.dropdown} data-open={servicesOpen}>
-                  <ul role="list">
-                    {services.map((s, i) => (
-                      <li key={s.href}>
-                        <Link href={s.href} className={styles.dropItem} aria-current={pathname === s.href ? "page" : undefined}>
-                          <span className={styles.dropNum}>0{i + 1}</span>
-                          <span>
-                            <span className={styles.dropTitle}>{s.label}</span>
-                            <span className={styles.dropDesc}>{s.description}</span>
-                          </span>
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+                <MegaMenu id={servicesId} open={servicesOpen} pathname={pathname} />
               </li>
               {mainNav.slice(1).map((l) => (
                 <li key={l.href}>

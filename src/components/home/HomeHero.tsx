@@ -47,7 +47,7 @@ export function HomeHero() {
             </p>
             <div className={styles.actions} data-reveal data-immediate data-delay="0.6">
               <Button href="/contact/schedule">Book a growth call</Button>
-              <Button href="/#work" variant="outline-light">
+              <Button href="/work" variant="outline-light">
                 See our work
               </Button>
             </div>

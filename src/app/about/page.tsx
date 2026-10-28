@@ -88,7 +88,7 @@ export default function AboutPage() {
           </p>
         }
         primary={{ label: "Schedule a meeting", href: "/contact/schedule" }}
-        secondary={{ label: "See our work", href: "/#work" }}
+        secondary={{ label: "See our work", href: "/work" }}
         tagline="KARACHI, PAKISTAN · SERVING BRANDS WORLDWIDE"
         visual={{ src: "/images/about/star-hero.png", width: 633, height: 633, className: "figma-crop" }}
       />
@@ -122,7 +122,7 @@ export default function AboutPage() {
         }
         text="Let's look at your Shopify store, marketing and customer journey, find the biggest opportunities and map a practical path to more customers and sustainable growth."
         primary={{ label: "Book a Shopify Growth Strategy Call", href: "/contact/schedule" }}
-        secondary={{ label: "Explore our work", href: "/#work" }}
+        secondary={{ label: "Explore our work", href: "/work" }}
         visual={
           <TiltVisual className="figma-crop">
             <Image src="/images/about/star-cta.png" alt="" width={637} height={637} sizes="(min-width: 1024px) 30vw, 70vw" />

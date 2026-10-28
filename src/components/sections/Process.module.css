@@ -85,6 +85,16 @@
   line-height: 1.55;
 }
 
+.trackDot {
+  display: none;
+}
+
+.numWrap {
+  display: block;
+  overflow: hidden;
+  padding-block: 0.04em;
+}
+
 @media (min-width: 900px) {
   .process[role="list"] {
     grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -94,30 +104,37 @@
   }
 
   .track {
-    top: 0;
+    top: 7px;
     bottom: auto;
     left: 0;
     right: 0;
     width: auto;
     height: 1.5px;
-    translate: 0 7px;
   }
 
   .progress {
     transform-origin: left;
   }
 
+  /* On desktop the dots live on the line itself, one at the start of each column */
   .dot {
-    top: calc(-1 * clamp(80px, 6vw, 110px));
-    left: 0;
+    display: none;
+  }
+
+  .trackDot {
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: calc(var(--i) * (100% + 24px) / 4);
+    width: 15px;
+    height: 15px;
+    margin-top: -7.5px;
+    border-radius: 50%;
+    background: var(--dot);
   }
 
   /* Descending staircase from the design (offsets 0 / 0 / 75 / 191px at 1920) */
   .step {
     margin-top: calc(var(--off) * min(1px, 0.052vw));
-  }
-
-  .dot {
-    top: calc(-1 * clamp(80px, 6vw, 110px) - var(--off) * min(1px, 0.052vw));
   }
 }

@@ -112,7 +112,7 @@ export default function HomePage() {
         }
         text="Let's look at your Shopify store, marketing and customer journey, find the biggest opportunities and map a practical path to more customers and sustainable growth."
         primary={{ label: "Book a Shopify Growth Strategy Call", href: "/contact/schedule" }}
-        secondary={{ label: "Explore our work", href: "/#work" }}
+        secondary={{ label: "Explore our work", href: "/work" }}
         visual={<CloudLogo />}
       />
       <MotionEngine />
