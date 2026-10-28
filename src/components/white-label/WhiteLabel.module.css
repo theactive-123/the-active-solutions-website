@@ -1,0 +1,14 @@
+/* Benefit cells in the design keep the number at the top and push title + copy to the bottom. */
+.bottomCards h3 {
+  margin-top: auto;
+  padding-top: clamp(28px, 2.6vw, 50px);
+}
+
+/* Figma heading boxes are wider than the shared SectionHeader default (820px). */
+h2.wide {
+  max-width: 1060px;
+}
+
+h2.wider {
+  max-width: 1240px;
+}

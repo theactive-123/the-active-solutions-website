@@ -1,0 +1,94 @@
+.hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  min-height: min(100svh, 833px);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding-top: clamp(120px, 12vw, 230px);
+  padding-bottom: clamp(48px, 5vw, 96px);
+}
+
+.inner {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 32px;
+  align-items: center;
+  flex: 1;
+}
+
+.copy {
+  max-width: 1040px;
+}
+
+.crumbs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: clamp(18px, 1.6vw, 30px);
+  color: var(--on-dark-2);
+  font-size: var(--fs-small);
+  text-transform: uppercase;
+}
+
+.crumbs li + li::before {
+  content: "/";
+  margin-right: 8px;
+}
+
+.crumbs a {
+  color: var(--white);
+  background: linear-gradient(currentColor, currentColor) 0 100% / 0% 1px no-repeat;
+  transition: background-size 0.5s var(--ease-out);
+}
+
+.crumbs a:hover,
+.crumbs a:focus-visible {
+  background-size: 100% 1px;
+}
+
+.title {
+  max-width: 1020px;
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 20px;
+  margin-top: clamp(24px, 2.1vw, 40px);
+  color: var(--on-dark);
+  font-size: var(--fs-body);
+}
+
+.visual {
+  justify-self: center;
+  width: min(64vw, 380px);
+  order: -1;
+}
+
+.bottom {
+  position: relative;
+  z-index: 1;
+  margin-top: clamp(32px, 3.3vw, 64px);
+}
+
+.rule {
+  display: block;
+  height: 1px;
+  background: var(--line-light);
+}
+
+@media (min-width: 1024px) {
+  .inner {
+    grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
+  }
+
+  .visual {
+    order: 0;
+    width: 100%;
+    max-width: 560px;
+    justify-self: end;
+  }
+}

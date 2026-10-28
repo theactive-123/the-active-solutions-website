@@ -1,0 +1,138 @@
+.section {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding-block: clamp(72px, 5.2vw, 100px);
+  scroll-margin-top: 0;
+}
+
+.inner {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 40px;
+  align-items: center;
+}
+
+.copy {
+  max-width: 940px;
+}
+
+.eyebrow {
+  margin-bottom: 18px;
+  color: var(--on-dark-2);
+  font-size: var(--fs-body);
+}
+
+.visual {
+  justify-self: center;
+  width: min(70vw, 420px);
+}
+
+.form {
+  margin-top: clamp(28px, 2.6vw, 50px);
+  max-width: 640px;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px 20px;
+  align-items: center;
+}
+
+.field {
+  flex: 1 1 260px;
+  max-width: 352px;
+}
+
+.input {
+  width: 100%;
+  min-height: clamp(42px, 2.35vw, 45px);
+  padding: 10px 20px;
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  border-radius: 40px;
+  background: transparent;
+  color: var(--white);
+  font-size: var(--fs-small);
+  transition:
+    border-color 0.3s,
+    background-color 0.3s;
+}
+
+.input::placeholder {
+  color: rgba(255, 255, 255, 0.62);
+}
+
+.input:hover {
+  border-color: var(--white);
+}
+
+.input:focus-visible {
+  outline: 2px solid var(--red);
+  outline-offset: 3px;
+  border-color: var(--white);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.input[aria-invalid="true"] {
+  border-color: #ff6b70;
+}
+
+.error {
+  margin-top: 12px;
+  color: #ff8a8e;
+  font-size: var(--fs-small);
+}
+
+.status {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 12px;
+  color: var(--white);
+  font-size: var(--fs-small);
+}
+
+.status:empty {
+  display: none;
+}
+
+.statusError {
+  color: #ff8a8e;
+}
+
+.tick {
+  flex: none;
+  color: var(--white);
+  background: var(--red);
+  border-radius: 50%;
+  padding: 2px;
+  width: 22px;
+  height: 22px;
+}
+
+.note {
+  margin-top: 14px;
+  color: var(--on-dark-2);
+  font-size: var(--fs-small);
+}
+
+@media (max-width: 640px) {
+  .field {
+    max-width: none;
+    flex-basis: 100%;
+  }
+}
+
+@media (min-width: 1024px) {
+  .inner {
+    grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  }
+
+  .visual {
+    width: 100%;
+    max-width: 580px;
+    justify-self: end;
+  }
+}

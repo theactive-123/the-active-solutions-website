@@ -1,0 +1,25 @@
+.section {
+  overflow: hidden;
+}
+
+.statement {
+  max-width: 1363px;
+  margin-left: auto;
+  font-family: var(--font-display);
+  font-size: var(--fs-statement);
+  font-weight: 400;
+  line-height: 1.04;
+  letter-spacing: -0.02em;
+  text-wrap: pretty;
+}
+
+.karachi {
+  margin-top: clamp(64px, 7.8vw, 150px);
+  text-align: center;
+}
+
+@media (min-width: 1024px) {
+  .statement {
+    width: 84%;
+  }
+}

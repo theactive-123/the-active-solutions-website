@@ -1,0 +1,82 @@
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  border-top: 1px solid rgba(11, 11, 12, 0.35);
+  border-left: 1px solid rgba(11, 11, 12, 0.35);
+}
+
+.tile {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  min-height: clamp(150px, 9.9vw, 190px);
+  padding: clamp(16px, 1.05vw, 20px);
+  border-right: 1px solid rgba(11, 11, 12, 0.35);
+  border-bottom: 1px solid rgba(11, 11, 12, 0.35);
+  overflow: hidden;
+  transition: color 0.5s;
+}
+
+.tile::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  z-index: -1;
+  background: var(--red);
+  transform: scaleY(0);
+  transform-origin: bottom;
+  transition: transform 0.7s var(--ease-out);
+}
+
+/* First tile is highlighted by default, like the design; any hovered tile takes over */
+.tile:first-child::before,
+.tile:hover::before {
+  transform: scaleY(1);
+}
+
+.tiles:hover .tile:first-child:not(:hover)::before {
+  transform: scaleY(0);
+  transform-origin: top;
+}
+
+.tile:first-child,
+.tile:hover {
+  color: var(--white);
+}
+
+.tiles:hover .tile:first-child:not(:hover) {
+  color: var(--ink);
+}
+
+.num {
+  font-size: var(--fs-body);
+  opacity: 0.7;
+}
+
+.name {
+  margin-top: clamp(14px, 1vw, 20px);
+  font-family: var(--font-display);
+  font-size: clamp(1.25rem, 1.1rem + 0.5vw, 1.875rem);
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  transition: transform 0.6s var(--ease-out);
+}
+
+.tile:hover .name {
+  transform: translateX(6px);
+}
+
+.stat {
+  margin-top: auto;
+  padding-top: clamp(16px, 1.2vw, 24px);
+  font-size: var(--fs-small);
+  opacity: 0.85;
+}
+
+@media (min-width: 1024px) {
+  .tiles {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}

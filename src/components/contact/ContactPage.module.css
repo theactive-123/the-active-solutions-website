@@ -1,0 +1,231 @@
+/* Layout for /contact and /contact/schedule heroes. */
+
+.hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding-top: clamp(112px, 12.4vw, 238px);
+  padding-bottom: clamp(64px, 9.9vw, 190px);
+}
+
+.schedule {
+  padding-top: clamp(112px, 11.2vw, 215px);
+  padding-bottom: clamp(64px, 7.8vw, 150px);
+}
+
+.inner {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: clamp(40px, 5vw, 64px);
+}
+
+@media (min-width: 1024px) {
+  .inner {
+    grid-template-columns: minmax(0, 676fr) minmax(0, 825fr);
+    column-gap: clamp(40px, 6.2vw, 119px);
+    align-items: start;
+  }
+}
+
+.copy {
+  min-width: 0;
+}
+
+.schedule .copy {
+  padding-top: clamp(0px, 4.2vw, 81px);
+}
+
+.title {
+  white-space: nowrap;
+}
+
+.title em {
+  display: block;
+  margin-left: -0.04em;
+}
+
+@media (max-width: 400px) {
+  .title {
+    white-space: normal;
+  }
+}
+
+.lead {
+  max-width: 676px;
+  margin-top: clamp(20px, 2.1vw, 40px);
+}
+
+.kicker {
+  margin-top: clamp(28px, 2.1vw, 40px);
+  font-size: var(--fs-body);
+  text-transform: uppercase;
+  color: var(--red);
+}
+
+.address {
+  margin-top: clamp(14px, 1.5vw, 28px);
+  font-style: normal;
+  font-size: var(--fs-body);
+  line-height: 1.56;
+  color: var(--white);
+}
+
+.contactLinks {
+  display: grid;
+  gap: 4px;
+  margin-top: 14px;
+}
+
+.mailLink {
+  position: relative;
+  width: fit-content;
+  color: var(--white);
+  font-size: var(--fs-body);
+}
+
+.mailLink::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -2px;
+  height: 1px;
+  background: currentColor;
+  transform-origin: right;
+  transform: scaleX(0.35);
+  opacity: 0.6;
+  transition:
+    transform 0.6s var(--ease-out),
+    opacity 0.3s;
+}
+
+.mailLink:hover::after,
+.mailLink:focus-visible::after {
+  transform: scaleX(1);
+  transform-origin: left;
+  opacity: 1;
+}
+
+/* "Prefer a conversation?" red card */
+.promo {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  margin-top: clamp(28px, 2.1vw, 40px);
+  padding: clamp(22px, 1.56vw, 30px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: clamp(14px, 0.9vw, 18px);
+  background: linear-gradient(115deg, #e4202e 0%, #b3141d 48%, #5c0a0f 100%);
+}
+
+.promo::before {
+  content: "";
+  position: absolute;
+  inset: -40%;
+  z-index: -1;
+  background: radial-gradient(40% 40% at var(--mx, 30%) var(--my, 30%), rgba(255, 255, 255, 0.22), transparent 70%);
+  opacity: 0;
+  transition: opacity 0.5s;
+}
+
+.promo:hover::before {
+  opacity: 1;
+}
+
+.promoTitle {
+  font-family: var(--font-display);
+  font-size: clamp(1.375rem, 1.1rem + 0.75vw, 2.1875rem);
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
+.promoText {
+  margin-top: 10px;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: var(--fs-body);
+}
+
+.promoAction {
+  margin-top: clamp(18px, 1.05vw, 20px);
+}
+
+.formCol {
+  min-width: 0;
+}
+
+/* -------------------------------------------------------------- schedule left column */
+.pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 20px;
+  margin-top: clamp(24px, 2.6vw, 50px);
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 35px;
+  padding: 6px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  border-radius: 90px;
+  font-size: var(--fs-small);
+  line-height: 1.2;
+}
+
+.pill svg {
+  color: var(--red);
+}
+
+.cover {
+  max-width: 520px;
+  margin-top: clamp(16px, 2.1vw, 40px);
+}
+
+.coverList {
+  margin-top: clamp(18px, 2.6vw, 50px);
+  list-style: none;
+  padding: 0;
+}
+
+.coverItem {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: clamp(14px, 0.85vw, 16px) 0;
+  border-top: 1px solid var(--line-light);
+  font-size: var(--fs-body);
+  transition: transform 0.5s var(--ease-out);
+}
+
+.coverItem:hover {
+  transform: translateX(8px);
+}
+
+.tick {
+  flex-shrink: 0;
+  color: var(--red);
+  transition: transform 0.6s var(--ease-out);
+}
+
+.coverItem:hover .tick {
+  transform: rotate(360deg);
+}
+
+/* Glow sits bottom-left on the schedule page */
+.glowLeft {
+  --gx: 4%;
+  --gy: 62%;
+}
+
+/* -------------------------------------------------------------- map section */
+.mapTitle {
+  text-align: center;
+  margin-bottom: clamp(32px, 2.6vw, 50px);
+}
+
+.mapTitle em {
+  white-space: nowrap;
+}

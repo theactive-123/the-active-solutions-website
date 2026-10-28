@@ -1,0 +1,133 @@
+.dash {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(16px, 1.6vw, 30px);
+  padding: clamp(18px, 1.8vw, 34px);
+  border-radius: var(--radius, 16px);
+  background: var(--ink);
+  color: var(--white);
+  overflow: hidden;
+  isolation: isolate;
+  transition: box-shadow 0.6s var(--ease-out);
+}
+
+.dash::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: radial-gradient(60% 50% at 90% 0%, rgba(234, 34, 41, 0.18), transparent 70%);
+}
+
+.dash:hover {
+  box-shadow: 0 40px 70px -40px rgba(11, 11, 12, 0.7);
+}
+
+.label {
+  font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  font-size: clamp(0.625rem, 0.55rem + 0.2vw, 0.875rem);
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.chart {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 662 / 217;
+  overflow: visible;
+}
+
+.grid {
+  stroke: rgba(255, 255, 255, 0.06);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.area {
+  opacity: 0.9;
+}
+
+.trend,
+.base {
+  fill: none;
+  stroke-linecap: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+  vector-effect: non-scaling-stroke;
+}
+
+.trend {
+  stroke: var(--red);
+  stroke-width: 3;
+}
+
+.base {
+  stroke: rgba(255, 255, 255, 0.4);
+  stroke-width: 1.5;
+}
+
+.dot {
+  fill: var(--red);
+  stroke: var(--ink);
+  stroke-width: 3;
+}
+
+.panels {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(8px, 0.85vw, 16px);
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  aspect-ratio: 201 / 148;
+  padding: clamp(10px, 0.85vw, 16px) clamp(10px, 1vw, 19px) clamp(10px, 1.1vw, 22px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.05);
+  transition:
+    background-color 0.4s,
+    transform 0.5s var(--ease-out);
+}
+
+.panel:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-4px);
+}
+
+.panelLabel {
+  font-size: clamp(0.625rem, 0.5rem + 0.3vw, 0.9375rem);
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.bars {
+  display: flex;
+  flex: 1;
+  align-items: flex-end;
+  gap: clamp(6px, 0.7vw, 14px);
+}
+
+.bar {
+  flex: 0 1 25px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.28);
+  transition:
+    background-color 0.3s,
+    scale 0.4s var(--ease-out);
+}
+
+.bar:last-child {
+  background: var(--red);
+}
+
+.panel:hover .bar {
+  scale: 1 1.06;
+  transform-origin: bottom;
+}
+
+.panel:hover .bar:not(:last-child) {
+  background: rgba(255, 255, 255, 0.45);
+}

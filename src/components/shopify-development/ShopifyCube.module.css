@@ -1,0 +1,12 @@
+.cube {
+  width: min(72vw, 520px);
+  margin-inline: auto;
+}
+
+/* Hero: the crop carries ~60px padding, so allow it wider than the shared 520px cap to match the Figma cube size. */
+@media (min-width: 1024px) {
+  .hero.hero {
+    max-width: 640px;
+    margin-right: calc(var(--gutter) * -0.35);
+  }
+}

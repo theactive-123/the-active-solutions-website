@@ -1,0 +1,477 @@
+.grid {
+  display: grid;
+  gap: clamp(36px, 3vw, 48px) clamp(16px, 1.56vw, 30px);
+  margin-top: clamp(40px, 2.6vw, 50px);
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+}
+
+.media {
+  position: relative;
+  aspect-ratio: 519 / 373;
+  overflow: hidden;
+  border-radius: var(--radius, 16px);
+  background: var(--ink);
+  isolation: isolate;
+  transition:
+    transform 0.7s var(--ease-out),
+    box-shadow 0.7s var(--ease-out);
+}
+
+.card:hover .media {
+  transform: translateY(-6px);
+  box-shadow: 0 30px 50px -30px rgba(11, 11, 12, 0.55);
+}
+
+.title {
+  margin-top: clamp(20px, 1.6vw, 30px);
+  font-family: var(--font-display);
+  font-size: clamp(1.375rem, 1.15rem + 0.7vw, 1.875rem);
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.015em;
+}
+
+.text {
+  max-width: 519px;
+  margin-top: clamp(10px, 0.8vw, 15px);
+  color: var(--muted);
+  font-size: var(--fs-body);
+  line-height: 1.55;
+}
+
+/* ---------- Static ad ---------- */
+.adStage {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: radial-gradient(120% 90% at 80% 0%, rgba(234, 34, 41, 0.45), transparent 60%), var(--ink);
+}
+
+.ad {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 10px;
+  width: 40%;
+  aspect-ratio: 4 / 5;
+  padding: 7% 6%;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform 0.8s var(--ease-out);
+}
+
+.adA {
+  background: linear-gradient(160deg, #2a0a0c, #0b0b0c 70%);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: var(--white);
+  transform: translateX(-12%) rotate(-4deg);
+  box-shadow: 0 30px 60px -25px rgba(0, 0, 0, 0.8);
+}
+
+.adB {
+  background: var(--red);
+  color: var(--white);
+  transform: translateX(12%) rotate(5deg);
+}
+
+.card:hover .adA {
+  transform: translateX(-38%) rotate(-8deg);
+}
+
+.card:hover .adB {
+  transform: translateX(38%) rotate(8deg);
+}
+
+.adOrb {
+  position: absolute;
+  top: -8%;
+  right: -14%;
+  width: 82%;
+  height: auto;
+  mix-blend-mode: lighten;
+  mask-image: radial-gradient(closest-side, #000 60%, transparent 100%);
+  animation: bob 5s ease-in-out infinite alternate;
+}
+
+.adTag {
+  position: absolute;
+  top: 7%;
+  left: 7%;
+  font-size: clamp(0.5625rem, 0.55vw, 0.75rem);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.75;
+}
+
+.adHead {
+  position: relative;
+  font-family: var(--font-display);
+  font-size: clamp(0.875rem, 1.05vw, 1.375rem);
+  font-weight: 600;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+}
+
+.adCta {
+  position: relative;
+  align-self: flex-start;
+  padding: 4px 10px;
+  border-radius: 99px;
+  background: var(--white);
+  color: var(--ink);
+  font-size: clamp(0.5625rem, 0.6vw, 0.8125rem);
+  font-weight: 600;
+}
+
+.adB .adCta {
+  background: var(--ink);
+  color: var(--white);
+}
+
+/* ---------- UGC ---------- */
+.ugcStage {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, #e7e4de 0%, #d9d3c9 100%);
+}
+
+.phone {
+  position: relative;
+  height: 86%;
+  aspect-ratio: 9 / 17;
+  padding: 2.5%;
+  border-radius: 22px;
+  background: var(--ink);
+  box-shadow: 0 30px 50px -24px rgba(11, 11, 12, 0.6);
+  transition: transform 0.8s var(--ease-out);
+}
+
+.card:hover .phone {
+  transform: rotate(-4deg) scale(1.04);
+}
+
+.screen {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 18px;
+  background:
+    radial-gradient(80% 50% at 50% 30%, rgba(255, 255, 255, 0.35), transparent 70%),
+    linear-gradient(180deg, #f28b8f 0%, #ea2229 55%, #7a0f14 100%);
+  color: var(--white);
+}
+
+.creator {
+  position: absolute;
+  top: 6%;
+  left: 7%;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: clamp(0.5rem, 0.5vw, 0.6875rem);
+  font-weight: 500;
+}
+
+.avatar {
+  display: grid;
+  place-items: center;
+  width: 2em;
+  height: 2em;
+  border-radius: 50%;
+  background: var(--white);
+  color: var(--red);
+  font-size: 0.9em;
+  font-weight: 700;
+}
+
+.play {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: clamp(40px, 3.4vw, 64px);
+  aspect-ratio: 1;
+  padding-left: 4px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--red);
+}
+
+.play::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 2px solid var(--white);
+  animation: ring 2.2s var(--ease-out) infinite;
+}
+
+.play svg {
+  width: 38%;
+  height: auto;
+}
+
+.captions {
+  position: absolute;
+  left: 8%;
+  right: 8%;
+  bottom: 14%;
+  display: grid;
+  gap: 3px;
+  justify-items: center;
+  font-size: clamp(0.5rem, 0.55vw, 0.75rem);
+  font-weight: 600;
+  text-align: center;
+}
+
+.captions span {
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: rgba(11, 11, 12, 0.75);
+  animation: caption 4s steps(1) infinite;
+}
+
+.captions span + span {
+  animation-delay: 0.6s;
+}
+
+.progress {
+  position: absolute;
+  left: 8%;
+  right: 8%;
+  bottom: 6%;
+  height: 3px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.35);
+  overflow: hidden;
+}
+
+.progress span {
+  display: block;
+  height: 100%;
+  background: var(--white);
+  transform-origin: left;
+  animation: progress 4s linear infinite;
+}
+
+.chip {
+  position: absolute;
+  padding: 6px 12px;
+  border-radius: 99px;
+  background: var(--white);
+  color: var(--ink);
+  font-size: clamp(0.6875rem, 0.7vw, 0.875rem);
+  font-weight: 500;
+  box-shadow: 0 10px 24px -14px rgba(11, 11, 12, 0.5);
+  animation: bob 4s ease-in-out infinite alternate;
+}
+
+.chip1 {
+  top: 22%;
+  left: 10%;
+}
+
+.chip2 {
+  right: 12%;
+  bottom: 24%;
+  background: var(--ink);
+  color: var(--white);
+  animation-delay: -2s;
+}
+
+/* ---------- Motion ---------- */
+.motionStage {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-rows: 1fr auto;
+  padding: 7% 8% 8%;
+  background: var(--red);
+  color: var(--white);
+}
+
+.shapes {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8%;
+}
+
+.shapes svg {
+  width: 22%;
+  height: auto;
+}
+
+.s1 {
+  color: var(--white);
+  animation: spinShape 6s var(--ease-in-out) infinite;
+}
+
+.s2 {
+  color: var(--ink);
+  animation: bounce 1.6s var(--ease-in-out) infinite alternate;
+}
+
+.s3 {
+  color: var(--white);
+  animation: pop 3s var(--ease-in-out) infinite;
+}
+
+.card:hover .shapes svg {
+  animation-duration: 1.2s;
+}
+
+.timeline {
+  position: relative;
+  height: 28px;
+  margin-top: 6%;
+  border-radius: 6px;
+  background: rgba(11, 11, 12, 0.22);
+}
+
+.keys {
+  position: absolute;
+  inset: 0 6%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.keys i {
+  width: 8px;
+  height: 8px;
+  background: var(--white);
+  transform: rotate(45deg);
+}
+
+.playhead {
+  position: absolute;
+  top: -6px;
+  bottom: -6px;
+  left: 0;
+  width: calc(100% - 2px);
+  pointer-events: none;
+  animation: playhead 4s linear infinite;
+}
+
+.playhead::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 2px;
+  background: var(--ink);
+}
+
+@keyframes bob {
+  to {
+    translate: 0 -8px;
+  }
+}
+
+@keyframes ring {
+  from {
+    opacity: 0.9;
+    scale: 1;
+  }
+
+  to {
+    opacity: 0;
+    scale: 1.7;
+  }
+}
+
+@keyframes progress {
+  from {
+    transform: scaleX(0);
+  }
+
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes caption {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  80% {
+    opacity: 0;
+  }
+}
+
+@keyframes spinShape {
+  to {
+    rotate: 360deg;
+  }
+}
+
+@keyframes bounce {
+  from {
+    translate: 0 18%;
+  }
+
+  to {
+    translate: 0 -18%;
+  }
+}
+
+@keyframes pop {
+  0%,
+  100% {
+    scale: 1;
+  }
+
+  50% {
+    scale: 0.6;
+    rotate: 45deg;
+  }
+}
+
+@keyframes playhead {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(100%);
+  }
+}
+
+@media (min-width: 900px) {
+  .grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 600px) and (max-width: 899px) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .adOrb,
+  .play::after,
+  .captions span,
+  .progress span,
+  .chip,
+  .shapes svg,
+  .playhead {
+    animation: none;
+  }
+}

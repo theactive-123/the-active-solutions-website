@@ -1,0 +1,18 @@
+/*
+ * Re-themes the shared <Process> for a red section (the shared component only has
+ * light/dark). Done with the component's data hooks + custom properties.
+ */
+.wrap ol {
+  --track: rgba(255, 255, 255, 0.45) !important;
+  --num: var(--white) !important;
+  --txt: var(--white) !important;
+}
+
+.wrap [data-progress] {
+  background: var(--ink);
+}
+
+/* The shared timeline animates active dots to brand red, which disappears on red. */
+.wrap [data-dot] {
+  background-color: var(--ink) !important;
+}

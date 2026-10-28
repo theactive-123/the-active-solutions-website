@@ -1,0 +1,29 @@
+.wrap {
+  margin-bottom: clamp(24px, 1.56vw, 30px);
+}
+
+.label {
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  font-weight: 500;
+  line-height: 1.55;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  color: var(--muted-2);
+}
+
+.line {
+  display: block;
+  height: 1px;
+  margin-top: 10px;
+  background: var(--line);
+  transform-origin: left;
+}
+
+.dark .label {
+  color: var(--on-dark-2);
+}
+
+.dark .line {
+  background: var(--line-light);
+}

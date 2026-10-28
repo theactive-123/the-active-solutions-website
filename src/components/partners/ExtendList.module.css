@@ -1,0 +1,101 @@
+.list {
+  border-top: 1px solid var(--line-light);
+}
+
+.item {
+  border-bottom: 1px solid var(--line-light);
+}
+
+.row {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  grid-template-areas:
+    "num title arrow"
+    ". text text";
+  align-items: center;
+  gap: 8px 18px;
+  padding: clamp(20px, 1.6vw, 30px) clamp(10px, 1.05vw, 20px);
+  color: var(--white);
+}
+
+.row::before {
+  content: "";
+  position: absolute;
+  inset: -1px 0;
+  z-index: -1;
+  background: var(--red);
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path 0.8s var(--ease-out);
+}
+
+.item[data-active="true"] .row::before {
+  clip-path: inset(0 0 0 0);
+}
+
+.num {
+  grid-area: num;
+  font-size: var(--fs-body);
+  color: var(--on-dark-2);
+  transition: color 0.4s;
+}
+
+.title {
+  grid-area: title;
+  font-family: var(--font-display);
+  font-size: clamp(1.25rem, 1rem + 0.9vw, 2.25rem);
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+  transition: transform 0.6s var(--ease-out);
+}
+
+.text {
+  grid-area: text;
+  max-width: 420px;
+  font-size: var(--fs-small);
+  line-height: 1.6;
+  color: var(--on-dark);
+  transition: color 0.4s;
+}
+
+.arrow {
+  grid-area: arrow;
+  width: clamp(40px, 6.4vw, 122px);
+  height: auto;
+  transition:
+    transform 0.7s var(--ease-out),
+    width 0.7s var(--ease-out);
+}
+
+.item[data-active="true"] .num,
+.item[data-active="true"] .text {
+  color: rgba(255, 255, 255, 0.88);
+}
+
+.item[data-active="true"] .title {
+  transform: translateX(8px);
+}
+
+.item[data-active="true"] .arrow {
+  transform: translateX(12px);
+}
+
+.row:focus-visible {
+  outline-offset: -3px;
+  outline-color: var(--white);
+}
+
+@media (min-width: 900px) {
+  .row {
+    grid-template-columns: clamp(32px, 2.6vw, 50px) minmax(0, 1fr) minmax(0, 0.62fr) clamp(120px, 11vw, 220px);
+    grid-template-areas: "num title text arrow";
+    gap: 24px;
+    min-height: clamp(90px, 6.8vw, 130px);
+  }
+
+  .arrow {
+    justify-self: start;
+  }
+}

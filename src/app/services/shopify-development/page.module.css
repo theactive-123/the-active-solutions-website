@@ -1,0 +1,15 @@
+.cta {
+  margin-top: clamp(32px, 2.4vw, 46px);
+}
+
+.label {
+  margin-bottom: clamp(10px, 0.8vw, 14px);
+  font-size: clamp(0.9375rem, 0.9rem + 0.1vw, 1.0625rem);
+  text-transform: uppercase;
+  font-weight: 400;
+  color: var(--muted-2);
+}
+
+.cards {
+  margin-top: clamp(56px, 4vw, 80px);
+}

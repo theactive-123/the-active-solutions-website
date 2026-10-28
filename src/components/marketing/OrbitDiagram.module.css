@@ -1,0 +1,240 @@
+.figure {
+  margin: 0;
+  width: 100%;
+  max-width: 753px;
+  justify-self: center;
+}
+
+.stage {
+  --r: 41.3cqi;
+  --spin: 70s;
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+  container-type: inline-size;
+}
+
+.rings {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.rings circle {
+  fill: none;
+  stroke: rgba(11, 11, 12, 0.28);
+  stroke-width: 0.16;
+  stroke-dasharray: 1.02;
+  stroke-dashoffset: 0;
+  transform-origin: 50% 50%;
+  transform: rotate(-90deg);
+  transition: stroke 0.4s;
+}
+
+.rings .ringInner {
+  stroke: rgba(234, 34, 41, 0.35);
+}
+
+.stage[data-active="true"] .rings circle:first-child {
+  stroke: rgba(234, 34, 41, 0.55);
+}
+
+/* Small satellites drifting the other way on the middle ring */
+.sats {
+  position: absolute;
+  inset: 0;
+  animation: spin calc(var(--spin) * 0.6) linear infinite reverse;
+  pointer-events: none;
+}
+
+.sat {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 1.6cqi;
+  height: 1.6cqi;
+  margin: -0.8cqi 0 0 -0.8cqi;
+  border-radius: 50%;
+  background: var(--red);
+  transform: rotate(35deg) translateX(25.6cqi);
+}
+
+.sat2 {
+  width: 1.1cqi;
+  height: 1.1cqi;
+  margin: -0.55cqi 0 0 -0.55cqi;
+  background: var(--ink);
+  transform: rotate(215deg) translateX(25.6cqi);
+}
+
+/* Centre */
+.core {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: grid;
+  place-items: center;
+  width: 23.6cqi;
+  height: 23.6cqi;
+  margin: -11.8cqi 0 0 -11.8cqi;
+  border-radius: 50%;
+  background: var(--red);
+  color: var(--white);
+  box-shadow: 0 20px 50px -18px rgba(234, 34, 41, 0.7);
+}
+
+.coreLabel {
+  position: relative;
+  font-family: var(--font-display);
+  font-size: clamp(1.125rem, 4.3cqi, 2rem);
+  font-weight: 600;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  text-align: center;
+}
+
+.pulse {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1px solid var(--red);
+  animation: pulse 3.2s var(--ease-out) infinite;
+}
+
+.pulse + .pulse {
+  animation-delay: 1.6s;
+}
+
+/* Orbiting nodes */
+.orbit {
+  position: absolute;
+  inset: 0;
+  animation: spin var(--spin) linear infinite;
+}
+
+.node {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  transform: rotate(var(--a)) translateX(var(--r));
+}
+
+.spoke {
+  position: absolute;
+  top: 0;
+  left: calc(-1 * var(--r) + 11.8cqi);
+  width: calc(var(--r) - 11.8cqi);
+  height: 1.5px;
+  margin-top: -0.75px;
+  background: linear-gradient(90deg, var(--red), rgba(234, 34, 41, 0.2));
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.6s var(--ease-out);
+}
+
+.node[data-on="true"] .spoke {
+  transform: scaleX(1);
+}
+
+.counter {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  animation: counter var(--spin) linear infinite;
+}
+
+.pill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  translate: -50% -50%;
+  padding: 0.7em 1.55em;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--white);
+  font-family: var(--font-display);
+  font-size: clamp(0.8125rem, 2.6cqi, 1.25rem);
+  font-weight: 500;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background-color 0.35s,
+    scale 0.45s var(--ease-out),
+    box-shadow 0.45s;
+}
+
+.node[data-on="true"] .pill {
+  background: var(--red);
+  scale: 1.1;
+  box-shadow: 0 14px 30px -12px rgba(234, 34, 41, 0.8);
+}
+
+.stage[data-active="true"] .node:not([data-on="true"]) .pill {
+  background: #3a3a3d;
+}
+
+/* Hovering or focusing the diagram pauses the orbit so nodes are easy to target */
+.stage:hover .orbit,
+.stage:hover .counter,
+.stage:focus-within .orbit,
+.stage:focus-within .counter,
+.stage:hover .sats {
+  animation-play-state: paused;
+}
+
+.note {
+  min-height: 3.2em;
+  max-width: 520px;
+  margin: clamp(16px, 1.5vw, 28px) auto 0;
+  color: var(--muted);
+  font-size: var(--fs-small);
+  line-height: 1.6;
+  text-align: center;
+}
+
+@keyframes spin {
+  to {
+    rotate: 360deg;
+  }
+}
+
+@keyframes counter {
+  from {
+    transform: rotate(calc(-1 * var(--a)));
+  }
+
+  to {
+    transform: rotate(calc(-1 * var(--a) - 360deg));
+  }
+}
+
+@keyframes pulse {
+  from {
+    opacity: 0.8;
+    scale: 1;
+  }
+
+  to {
+    opacity: 0;
+    scale: 1.9;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .orbit,
+  .counter,
+  .sats,
+  .pulse {
+    animation: none;
+  }
+
+  .counter {
+    transform: rotate(calc(-1 * var(--a)));
+  }
+}

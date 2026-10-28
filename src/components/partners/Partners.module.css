@@ -1,0 +1,61 @@
+/* The shared Process timeline only knows light/dark; on the red band the progress line
+   and dots switch to ink so they stay visible. */
+.onRed [data-progress] {
+  background: var(--ink);
+}
+
+.onRed [data-dot] {
+  background-color: rgba(255, 255, 255, 0.55) !important;
+}
+
+/* FAQ layout (mirrors the shared Faq section) */
+.faqGrid {
+  display: grid;
+  gap: 40px;
+}
+
+.faqIntro {
+  display: grid;
+  gap: 20px;
+  align-content: start;
+  justify-items: start;
+}
+
+.faqIntro > div {
+  margin-top: 16px;
+}
+
+/* "Tell us about your agency" */
+.formGrid {
+  display: grid;
+  gap: 40px;
+  align-items: start;
+}
+
+.formIntro {
+  display: grid;
+  gap: clamp(20px, 2vw, 36px);
+  max-width: 640px;
+}
+
+@media (min-width: 1024px) {
+  .faqGrid {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 54.6%);
+    gap: 64px;
+  }
+
+  .faqIntro {
+    position: sticky;
+    top: 140px;
+  }
+
+  .formGrid {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 55.6%);
+    gap: 64px;
+  }
+}
+
+/* Figma heading boxes are wider than the shared SectionHeader default (820px). */
+h2.wide {
+  max-width: 960px;
+}
