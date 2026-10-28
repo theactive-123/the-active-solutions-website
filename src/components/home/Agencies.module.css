@@ -1,0 +1,10 @@
+.center {
+  display: grid;
+  justify-items: center;
+  gap: clamp(20px, 1.6vw, 30px);
+  text-align: center;
+}
+
+.center p {
+  max-width: 700px;
+}

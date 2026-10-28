@@ -1,0 +1,15 @@
+.wrap {
+  perspective: 1000px;
+  will-change: transform;
+}
+
+.inner {
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.inner img {
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 40px 60px rgba(0, 0, 0, 0.45));
+}

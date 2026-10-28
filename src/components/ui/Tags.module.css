@@ -1,0 +1,52 @@
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  min-height: 30px;
+  padding: 5px 14px;
+  border-radius: 90px;
+  border: 1px solid currentColor;
+  font-family: var(--font-display);
+  font-size: clamp(0.8125rem, 0.78rem + 0.12vw, 0.9375rem);
+  font-weight: 400;
+  line-height: 1.2;
+  transition:
+    background-color 0.3s,
+    color 0.3s;
+}
+
+/* outlined on light backgrounds */
+.dark .tag {
+  color: var(--ink);
+  border-color: rgba(11, 11, 12, 0.55);
+}
+
+.dark .tag:hover {
+  background: var(--ink);
+  color: var(--white);
+}
+
+/* outlined on red/black backgrounds */
+.light .tag {
+  color: var(--white);
+  border-color: rgba(255, 255, 255, 0.75);
+}
+
+.light .tag:hover {
+  background: var(--white);
+  color: var(--ink);
+}
+
+/* filled translucent chips (case studies) */
+.glass .tag {
+  min-height: 35px;
+  padding-inline: 15px;
+  border-color: rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--white);
+}

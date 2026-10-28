@@ -1,0 +1,52 @@
+.cta {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding-block: clamp(72px, 5.2vw, 100px);
+}
+
+.inner {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 48px;
+  align-items: center;
+}
+
+.copy {
+  max-width: 900px;
+}
+
+.eyebrow {
+  margin-bottom: 18px;
+  color: var(--on-dark-2);
+  font-size: var(--fs-body);
+}
+
+.text {
+  max-width: 600px;
+  margin-top: clamp(20px, 2vw, 40px);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px 20px;
+  margin-top: clamp(24px, 2vw, 40px);
+}
+
+.visual {
+  position: relative;
+  justify-self: center;
+  width: min(100%, 560px);
+}
+
+@media (min-width: 1024px) {
+  .inner {
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+  }
+
+  .visual {
+    justify-self: end;
+  }
+}

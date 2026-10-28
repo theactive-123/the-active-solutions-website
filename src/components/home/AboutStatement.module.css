@@ -1,0 +1,38 @@
+.section {
+  padding-bottom: clamp(60px, 7.8vw, 150px);
+  overflow: hidden;
+}
+
+.body {
+  max-width: 1300px;
+  margin-left: auto;
+  padding-left: 0;
+}
+
+.statement {
+  font-family: var(--font-display);
+  font-size: var(--fs-statement);
+  font-weight: 400;
+  line-height: 1.04;
+  letter-spacing: -0.02em;
+  text-wrap: pretty;
+}
+
+.statement em {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  color: var(--red-deep);
+}
+
+.note {
+  margin-top: clamp(24px, 2vw, 36px);
+  color: var(--muted-2);
+  font-size: var(--fs-body);
+}
+
+@media (min-width: 1024px) {
+  .body {
+    width: 80%;
+  }
+}

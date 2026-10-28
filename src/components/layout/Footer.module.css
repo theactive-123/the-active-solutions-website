@@ -1,0 +1,138 @@
+.footer {
+  position: relative;
+  padding-top: clamp(56px, 4.5vw, 86px);
+  padding-bottom: 28px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+
+.top {
+  display: grid;
+  gap: 40px 32px;
+  grid-template-columns: 1fr 1fr;
+}
+
+.about {
+  grid-column: 1 / -1;
+}
+
+.logo {
+  display: inline-flex;
+}
+
+.blurb {
+  max-width: 560px;
+  margin-top: 28px;
+  color: var(--on-dark);
+  font-size: var(--fs-body);
+  line-height: 1.56;
+}
+
+.colTitle {
+  margin-bottom: 16px;
+  font-family: var(--font-display);
+  font-size: clamp(1rem, 0.94rem + 0.2vw, 1.25rem);
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--red);
+  letter-spacing: 0.01em;
+}
+
+.col ul {
+  display: grid;
+  gap: 10px;
+}
+
+.link {
+  position: relative;
+  color: var(--on-dark);
+  transition: color 0.3s;
+  background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat;
+  transition:
+    color 0.3s,
+    background-size 0.5s var(--ease-out);
+}
+
+.link:hover,
+.link:focus-visible {
+  color: var(--white);
+  background-size: 100% 1px;
+}
+
+.address {
+  font-style: normal;
+  color: var(--on-dark);
+  line-height: 1.6;
+}
+
+.address .link {
+  display: inline-block;
+  margin-top: 10px;
+}
+
+.wordmark {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.25em;
+  margin-block: clamp(48px, 5vw, 90px) clamp(28px, 2.6vw, 50px);
+  font-family: var(--font-brand);
+  font-weight: 300;
+  /* Sized so the wordmark spans the container exactly (text ≈ 7.9em wide incl. gaps) */
+  font-size: calc((min(100vw, var(--container) + var(--gutter) * 2) - var(--gutter) * 2) / 7.95);
+  line-height: 0.9;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+  user-select: none;
+}
+
+.word {
+  display: inline-flex;
+}
+
+.word[data-strong="true"] {
+  font-weight: 400;
+}
+
+.charWrap {
+  display: inline-block;
+  overflow: hidden;
+  padding-block: 0.08em;
+}
+
+.char {
+  display: inline-block;
+  transition:
+    transform 0.6s var(--ease-out),
+    color 0.4s;
+}
+
+.charWrap:hover .char {
+  transform: translateY(-12%);
+  color: var(--red);
+}
+
+.bottom {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 12px 24px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(255, 255, 255, 0.16);
+  color: var(--on-dark);
+  font-size: clamp(0.875rem, 0.84rem + 0.15vw, 1.125rem);
+}
+
+.legal {
+  display: flex;
+  gap: 18px;
+}
+
+@media (min-width: 900px) {
+  .top {
+    grid-template-columns: 1.6fr 1fr 0.8fr 0.8fr;
+  }
+
+  .about {
+    grid-column: auto;
+  }
+}

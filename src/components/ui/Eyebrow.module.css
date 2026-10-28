@@ -1,0 +1,36 @@
+.eyebrow {
+  margin-bottom: clamp(28px, 2.6vw, 50px);
+}
+
+.label {
+  font-size: var(--fs-body);
+  line-height: 1.55;
+  text-transform: uppercase;
+  color: var(--muted-2);
+}
+
+:global(.theme-dark) .label,
+:global(.theme-red) .label {
+  color: var(--on-dark-2);
+}
+
+:global(.theme-red) .label {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.line {
+  display: block;
+  height: 1px;
+  margin-top: 10px;
+  background: var(--line);
+  transform-origin: left;
+}
+
+:global(.theme-dark) .line,
+:global(.theme-red) .line {
+  background: var(--line-light);
+}
+
+:global(.theme-red) .line {
+  background: rgba(255, 255, 255, 0.3);
+}

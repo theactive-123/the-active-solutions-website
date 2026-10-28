@@ -1,0 +1,151 @@
+.section {
+  overflow: hidden;
+}
+
+.title {
+  max-width: 720px;
+}
+
+.giant {
+  margin-block: clamp(40px, 3.6vw, 70px) clamp(36px, 3vw, 60px);
+  overflow: hidden;
+}
+
+.giantTrack {
+  display: flex;
+  width: max-content;
+  animation: giant 40s linear infinite;
+}
+
+.giantRow {
+  display: flex;
+}
+
+.giantItem {
+  display: inline-flex;
+  align-items: center;
+  gap: clamp(20px, 2vw, 40px);
+  padding-right: clamp(20px, 2vw, 40px);
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(4rem, 2rem + 7vw, 11.875rem);
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: rgba(255, 255, 255, 0.1);
+  white-space: nowrap;
+}
+
+.star {
+  width: clamp(36px, 4.7vw, 90px);
+  height: auto;
+  animation: spin 8s linear infinite;
+}
+
+@keyframes giant {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.compare {
+  display: grid;
+  gap: 56px clamp(40px, 2.6vw, 50px);
+}
+
+.colHead {
+  display: flex;
+  align-items: center;
+  min-height: 36px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+  font-family: var(--font-body);
+  font-size: var(--fs-lead);
+  font-weight: 500;
+}
+
+.list li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-block: clamp(16px, 1.3vw, 24px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+  font-size: var(--fs-body);
+}
+
+.struck {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.struck s {
+  text-decoration: none;
+  background: linear-gradient(currentColor, currentColor) 0 55% / 100% 1px no-repeat;
+  transition: background-size 0.6s var(--ease-out);
+}
+
+.struck:hover s {
+  background-size: 0 1px;
+}
+
+.ours {
+  font-weight: 600;
+}
+
+.check {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--red);
+  box-shadow: 0 0 0 0 rgba(234, 34, 41, 0.6);
+  animation: pulse 2.4s ease-out infinite;
+}
+
+.ours:nth-child(2) .check {
+  animation-delay: 0.3s;
+}
+
+.ours:nth-child(3) .check {
+  animation-delay: 0.6s;
+}
+
+.ours:nth-child(4) .check {
+  animation-delay: 0.9s;
+}
+
+@keyframes pulse {
+  70% {
+    box-shadow: 0 0 0 10px rgba(234, 34, 41, 0);
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 rgba(234, 34, 41, 0);
+  }
+}
+
+.sum {
+  margin-top: clamp(16px, 1.3vw, 24px);
+  font-size: var(--fs-lead);
+}
+
+@media (min-width: 900px) {
+  .compare {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .col {
+    max-width: 760px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .giantTrack,
+  .star,
+  .check {
+    animation: none;
+  }
+}

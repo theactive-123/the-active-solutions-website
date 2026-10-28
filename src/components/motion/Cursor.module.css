@@ -1,0 +1,75 @@
+.cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 999;
+  pointer-events: none;
+  display: none;
+}
+
+.cursor[data-enabled="true"] {
+  display: block;
+}
+
+.cursor[data-hidden="true"] {
+  opacity: 0;
+}
+
+.dot {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--red);
+  translate: -50% -50%;
+  transition:
+    width 0.45s var(--ease-out),
+    height 0.45s var(--ease-out),
+    background-color 0.3s,
+    border-color 0.3s,
+    opacity 0.3s;
+  border: 1px solid transparent;
+}
+
+.cursor[data-state="hover"] .dot {
+  width: 54px;
+  height: 54px;
+  background: rgba(234, 34, 41, 0.12);
+  border-color: var(--red);
+}
+
+.cursor[data-state="text"] .dot {
+  width: 3px;
+  height: 26px;
+  border-radius: 2px;
+}
+
+.cursor[data-state="label"] .dot {
+  width: 96px;
+  height: 96px;
+  background: var(--red);
+}
+
+.cursor[data-down="true"] .dot {
+  scale: 0.8;
+}
+
+.label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  translate: -50% -50%;
+  color: var(--white);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.cursor[data-state="label"] .label {
+  opacity: 1;
+}

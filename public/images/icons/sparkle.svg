@@ -1,0 +1,16 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="301" height="301" viewBox="0 0 301 301" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="3D object slot (Three.js)" clip-path="url(#clip0_0_48)">
+<path id="Vector" d="M150.5 0C160.533 100.333 200.667 140.467 301 150.5C200.667 160.533 160.533 200.667 150.5 301C140.467 200.667 100.333 160.533 0 150.5C100.333 140.467 140.467 100.333 150.5 0Z" fill="url(#paint0_linear_0_48)"/>
+<path id="Vector_2" d="M150.499 43.8955C156.77 112.875 188.124 144.229 257.103 150.5C188.124 156.771 156.77 188.125 150.499 257.104C144.228 188.125 112.874 156.771 43.8945 150.5C112.874 144.229 144.228 112.875 150.499 43.8955Z" stroke-width="1.375" stroke="white" stroke-opacity="0.5"/>
+</g>
+<defs>
+<linearGradient id="paint0_linear_0_48" x1="0" y1="0" x2="301" y2="301" gradientUnits="userSpaceOnUse">
+<stop stop-color="#FF8A8F"/>
+<stop offset="0.4" stop-color="#E4202E"/>
+<stop offset="1" stop-color="#3A0509"/>
+</linearGradient>
+<clipPath id="clip0_0_48">
+<rect width="301" height="301" fill="white"/>
+</clipPath>
+</defs>
+</svg>

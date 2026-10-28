@@ -1,0 +1,45 @@
+.stage {
+  --w: clamp(220px, 23vw, 442px);
+  --h: clamp(220px, 23.7vw, 455px);
+  --angle: 30deg;
+  --radius: calc(var(--w) * 2.05);
+  position: relative;
+  height: calc(var(--h) * 1.3);
+  margin-top: clamp(48px, 5vw, 100px);
+  perspective: 1400px;
+  perspective-origin: 50% 50%;
+  overflow: hidden;
+  mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+}
+
+.ring {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  transform-origin: 50% 50% var(--radius);
+}
+
+.panel {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: var(--w);
+  height: var(--h);
+  margin: 0;
+  overflow: hidden;
+  border-radius: 6px;
+  background: #d9d9d9;
+  transform-origin: 50% 50% var(--radius);
+  transform: translate(-50%, -50%) rotateY(calc(var(--i) * var(--angle)));
+  backface-visibility: hidden;
+}
+
+.img {
+  object-fit: cover;
+  object-position: top center;
+  transition: transform 1.2s var(--ease-out);
+}
+
+.panel:hover .img {
+  transform: scale(1.06);
+}

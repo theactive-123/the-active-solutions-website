@@ -1,0 +1,50 @@
+.wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 5 / 4;
+}
+
+.logo {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 58%;
+  translate: -38% 0;
+  z-index: 1;
+}
+
+.cloud {
+  position: absolute;
+  left: -8%;
+  bottom: 0;
+  width: 116%;
+  height: auto;
+  z-index: 2;
+  pointer-events: none;
+  animation: drift 14s ease-in-out infinite alternate;
+}
+
+.cloud2 {
+  z-index: 0;
+  opacity: 0.55;
+  transform: scaleX(-1);
+  bottom: 18%;
+  animation-duration: 18s;
+  animation-direction: alternate-reverse;
+}
+
+@keyframes drift {
+  from {
+    translate: -4% 0;
+  }
+
+  to {
+    translate: 4% -3%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cloud {
+    animation: none;
+  }
+}

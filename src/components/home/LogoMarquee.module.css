@@ -1,0 +1,56 @@
+.marquee {
+  overflow: hidden;
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+
+.track {
+  display: flex;
+  width: max-content;
+  animation: scroll 32s linear infinite;
+}
+
+.marquee:hover .track {
+  animation-play-state: paused;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: clamp(40px, 3.1vw, 60px);
+  /* margin (not padding: the global list reset zeroes padding) keeps the -50% loop seamless */
+  margin-right: clamp(40px, 3.1vw, 60px);
+}
+
+.logo {
+  width: auto;
+  height: clamp(18px, 1.3vw, 26px);
+  opacity: 0.6;
+  transition: opacity 0.3s;
+}
+
+.row li:nth-child(2) .logo,
+.row li:nth-child(3) .logo,
+.row li:nth-child(4) .logo {
+  height: clamp(13px, 0.95vw, 18px);
+}
+
+.row li:nth-child(5) .logo {
+  height: clamp(24px, 1.7vw, 32px);
+}
+
+.logo:hover {
+  opacity: 1;
+}
+
+@keyframes scroll {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .track {
+    animation: none;
+    flex-wrap: wrap;
+  }
+}

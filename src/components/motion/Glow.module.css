@@ -1,0 +1,58 @@
+@property --gx {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 92%;
+}
+
+@property --gy {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 0%;
+}
+
+@property --px {
+  syntax: "<number>";
+  inherits: false;
+  initial-value: 0;
+}
+
+@property --py {
+  syntax: "<number>";
+  inherits: false;
+  initial-value: 0;
+}
+
+.glow {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+  background:
+    radial-gradient(
+      70% 95% at calc(var(--gx) + var(--px) * 1%) calc(var(--gy) + var(--py) * 1%),
+      rgba(234, 34, 41, 0.7) 0%,
+      rgba(160, 18, 26, 0.45) 30%,
+      rgba(11, 11, 12, 0) 72%
+    ),
+    var(--ink);
+}
+
+/* Fine vertical sheen lines seen in the hero artwork */
+.glow::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.018) 0 1px, transparent 1px 22px);
+  mask-image: radial-gradient(80% 90% at 85% 10%, #000, transparent 70%);
+}
+
+.right {
+  --gx: 88%;
+  --gy: 45%;
+}
+
+.center {
+  --gx: 50%;
+  --gy: 30%;
+}
