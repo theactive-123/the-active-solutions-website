@@ -7,8 +7,14 @@
   overflow: hidden;
   height: clamp(340px, 32.6vw, 626px);
   border-radius: clamp(16px, 1.05vw, 20px);
-  background: #d9d6d0;
   isolation: isolate;
+  /* Abstract street grid shown while the map tiles load (or if they are blocked). */
+  background:
+    linear-gradient(28deg, transparent 49.6%, rgba(255, 255, 255, 0.9) 49.6% 50.4%, transparent 50.4%) 0 0 / 100% 100%,
+    repeating-linear-gradient(118deg, transparent 0 86px, rgba(255, 255, 255, 0.65) 86px 92px),
+    repeating-linear-gradient(28deg, transparent 0 120px, rgba(255, 255, 255, 0.55) 120px 125px),
+    repeating-linear-gradient(118deg, transparent 0 22px, rgba(11, 11, 12, 0.035) 22px 24px),
+    #d9d8d4;
 }
 
 .frame {

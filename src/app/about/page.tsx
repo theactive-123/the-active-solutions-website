@@ -7,7 +7,7 @@ import { Team } from "@/components/home/Team";
 import { TiltVisual } from "@/components/motion/TiltVisual";
 import { MotionEngine } from "@/components/motion/MotionEngine";
 import { JsonLd } from "@/components/JsonLd";
-import { RedProcess } from "@/components/marketing/RedProcess";
+import { Process } from "@/components/sections/Process";
 import { WhoWeAre } from "@/components/about/WhoWeAre";
 import { Location } from "@/components/about/Location";
 import { IndustryTiles } from "@/components/about/IndustryTiles";
@@ -109,7 +109,7 @@ export default function AboutPage() {
               </span>
             }
           />
-          <RedProcess steps={STEPS} />
+          <Process theme="red" steps={STEPS} />
         </div>
       </section>
       <Location />

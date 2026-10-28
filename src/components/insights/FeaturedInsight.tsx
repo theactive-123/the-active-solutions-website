@@ -15,7 +15,7 @@ export function FeaturedInsight({ article }: { article: Insight }) {
         <SectionLabel id="featured-title">FEATURED</SectionLabel>
         <article className={styles.feature}>
           <Link href={href} className={styles.media} tabIndex={-1} aria-hidden="true" data-reveal="clip">
-            <Image src={article.cover.src} alt="" width={article.cover.width} height={article.cover.height} sizes="(min-width: 900px) 37vw, 92vw" className={styles.img} />
+            <Image src={article.cover.src} alt="" width={article.cover.width} height={article.cover.height} sizes="(min-width: 900px) 37vw, 92vw" loading="eager" className={styles.img} />
             <span className={styles.pill}>{article.category}</span>
           </Link>
           <div className={styles.copy}>

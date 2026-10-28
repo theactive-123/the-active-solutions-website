@@ -8,7 +8,23 @@ import styles from "./Faq.module.css";
 export type FaqItem = { question: string; answer: string };
 
 /** "Got questions?" section: intro + CTA on the left, accordion on the right. Emits FAQPage JSON-LD. */
-export function Faq({ items, theme = "paper" }: { items: FaqItem[]; theme?: "paper" | "sand" }) {
+export function Faq({
+  items,
+  theme = "paper",
+  title = (
+    <>
+      Got <em>questions?</em>
+    </>
+  ),
+  text = "Good. We like those.",
+  cta = { label: "Book a 30-min call", href: "/contact/schedule" },
+}: {
+  items: FaqItem[];
+  theme?: "paper" | "sand";
+  title?: React.ReactNode;
+  text?: React.ReactNode;
+  cta?: { label: string; href: string };
+}) {
   return (
     <section className={`section theme-${theme}`} aria-labelledby="faq-title">
       <div className="container">
@@ -16,14 +32,14 @@ export function Faq({ items, theme = "paper" }: { items: FaqItem[]; theme?: "pap
         <div className={styles.grid}>
           <div className={styles.intro}>
             <h2 id="faq-title" className="h2" data-split>
-              Got <em>questions?</em>
+              {title}
             </h2>
             <p className="body" data-reveal>
-              Good. We like those.
+              {text}
             </p>
             <div data-reveal data-delay="0.1">
-              <Button href="/contact/schedule" variant="dark">
-                Book a 30-min call
+              <Button href={cta.href} variant="dark">
+                {cta.label}
               </Button>
             </div>
           </div>

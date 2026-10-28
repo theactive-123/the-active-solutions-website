@@ -1,41 +1,67 @@
 "use client";
 
-import { useId, useState } from "react";
+import Link from "next/link";
+import { useId, useRef, useState } from "react";
 import { Button } from "@/components/ui/Button";
+import { HONEYPOT_FIELD, submitContact } from "@/components/contact/validation";
 import { site } from "@/lib/site";
 import styles from "./PartnerForm.module.css";
 
 const SERVICES = ["Shopify development", "Web design", "PPC", "Email marketing", "Ecommerce development"];
 
+type Status = { state: "idle" | "sending" | "sent" | "error" | "fallback"; message?: string; mailto?: string };
+
 /**
- * Partner enquiry card. There is no form backend yet, so a valid submission opens the
- * visitor's email app with the details pre-filled (addressed to the site email).
+ * Partner enquiry card. Posts to /api/contact as a partner enquiry. If email delivery isn't
+ * configured (503) it offers the visitor's email app with the details pre-filled instead.
  */
 export function PartnerForm() {
   const id = useId();
   const [services, setServices] = useState<string[]>(["Shopify development", "Email marketing"]);
-  const [sent, setSent] = useState(false);
+  const [status, setStatus] = useState<Status>({ state: "idle" });
+  const statusRef = useRef<HTMLParagraphElement>(null);
 
   const toggle = (s: string) => setServices((cur) => (cur.includes(s) ? cur.filter((x) => x !== s) : [...cur, s]));
 
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const form = e.currentTarget;
     if (!form.reportValidity()) return;
     const d = new FormData(form);
-    const body = [
-      `Name: ${d.get("name")}`,
-      `Work email: ${d.get("email")}`,
-      `Agency: ${d.get("agency") || "-"}`,
-      `Website: ${d.get("website") || "-"}`,
-      `Services: ${services.join(", ") || "-"}`,
-      "",
-      "Expected delivery requirements:",
-      `${d.get("requirements") || "-"}`,
-    ].join("\n");
-    const subject = `Partnership enquiry${d.get("agency") ? ` from ${d.get("agency")}` : ""}`;
-    window.location.href = `mailto:${site.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    setSent(true);
+    const get = (k: string) => String(d.get(k) ?? "").trim();
+    setStatus({ state: "sending" });
+    const res = await submitContact({
+      type: "contact",
+      kind: "partner",
+      name: get("name"),
+      email: get("email"),
+      company: get("agency"),
+      website: get("website"),
+      services,
+      message: get("requirements"),
+      consent: d.get("consent") === "on",
+      [HONEYPOT_FIELD]: get(HONEYPOT_FIELD),
+    });
+    if (res.ok) {
+      form.reset();
+      setStatus({ state: "sent", message: "Thanks! We'll review the details and reply within one business day." });
+    } else if (res.status === 503) {
+      const body = [
+        `Name: ${get("name")}`,
+        `Work email: ${get("email")}`,
+        `Agency: ${get("agency") || "-"}`,
+        `Website: ${get("website") || "-"}`,
+        `Services: ${services.join(", ") || "-"}`,
+        "",
+        get("requirements"),
+      ].join("\n");
+      const mailto = `mailto:${site.email}?subject=${encodeURIComponent("Partnership enquiry")}&body=${encodeURIComponent(body)}`;
+      setStatus({ state: "fallback", message: "Online sending isn't available right now. You can email us your details instead:", mailto });
+    } else {
+      const first = res.errors && Object.values(res.errors)[0];
+      setStatus({ state: "error", message: first || res.message || "Something went wrong. Please try again." });
+    }
+    requestAnimationFrame(() => statusRef.current?.focus());
   };
 
   return (
@@ -73,15 +99,41 @@ export function PartnerForm() {
 
       <div className={styles.field}>
         <label htmlFor={`${id}-req`}>Expected delivery requirements</label>
-        <textarea id={`${id}-req`} name="requirements" rows={5} placeholder="Tell us about timelines, volume and workflow…" />
+        <textarea
+          id={`${id}-req`}
+          name="requirements"
+          rows={5}
+          minLength={10}
+          required
+          placeholder="Tell us about timelines, volume and workflow…"
+        />
+      </div>
+
+      <label className={styles.consent}>
+        <input type="checkbox" name="consent" required />
+        <span>
+          I agree to {site.name} using my details to reply to this enquiry, as described in the <Link href="/privacy">Privacy Policy</Link>.
+        </span>
+      </label>
+
+      {/* Honeypot: hidden from people, tempting to bots */}
+      <div className={styles.hp} aria-hidden="true">
+        <label htmlFor={`${id}-hp`}>Leave this empty</label>
+        <input id={`${id}-hp`} name={HONEYPOT_FIELD} type="text" tabIndex={-1} autoComplete="off" />
       </div>
 
       <div className={styles.submit}>
-        <Button type="submit">Become a Partner</Button>
-        <p id={`${id}-status`} className={styles.status} role="status">
-          {sent
-            ? `Thanks! Your email app should open with your details. If it doesn't, write to ${site.email}.`
-            : "We'll review the details and get back to you."}
+        <Button type="submit" disabled={status.state === "sending"} aria-busy={status.state === "sending"}>
+          {status.state === "sending" ? "Sending…" : "Become a Partner"}
+        </Button>
+        <p id={`${id}-status`} ref={statusRef} tabIndex={-1} className={styles.status} role="status" data-state={status.state}>
+          {status.message ?? "We'll review the details and get back to you."}
+          {status.mailto && (
+            <>
+              {" "}
+              <a href={status.mailto}>{site.email}</a>
+            </>
+          )}
         </p>
       </div>
     </form>

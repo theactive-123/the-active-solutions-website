@@ -1,3 +1,4 @@
+import { Process } from "@/components/sections/Process";
 import Image from "next/image";
 import { PageHero } from "@/components/sections/PageHero";
 import { ServiceGrid } from "@/components/sections/ServiceGrid";
@@ -10,8 +11,7 @@ import { JsonLd } from "@/components/JsonLd";
 import { OrbitDiagram } from "@/components/marketing/OrbitDiagram";
 import { CreativeFormats } from "@/components/marketing/CreativeFormats";
 import { ReportingDashboard } from "@/components/marketing/ReportingDashboard";
-import { RedProcess } from "@/components/marketing/RedProcess";
-import { TitledFaq } from "@/components/marketing/TitledFaq";
+import { Faq } from "@/components/sections/Faq";
 import { breadcrumbJsonLd, pageMetadata, serviceJsonLd } from "@/lib/seo";
 import styles from "./page.module.css";
 
@@ -251,11 +251,11 @@ export default function EcommerceMarketingPage() {
               </span>
             }
           />
-          <RedProcess steps={STEPS} />
+          <Process theme="red" steps={STEPS} />
         </div>
       </section>
 
-      <TitledFaq
+      <Faq
         items={FAQS}
         title={
           <>

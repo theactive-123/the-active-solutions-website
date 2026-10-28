@@ -20,7 +20,19 @@
 }
 
 .copy {
-  max-width: 1040px;
+  max-width: 1060px;
+}
+
+.text {
+  max-width: 710px;
+  margin-top: clamp(20px, 1.6vw, 32px);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px 20px;
+  margin-top: clamp(24px, 2.3vw, 44px);
 }
 
 .crumbs {
@@ -50,7 +62,8 @@
 }
 
 .title {
-  max-width: 1020px;
+  max-width: 1040px;
+  text-wrap: wrap;
 }
 
 .meta {
@@ -80,9 +93,16 @@
   background: var(--line-light);
 }
 
+.tagline {
+  margin-top: clamp(18px, 1.3vw, 26px);
+  color: var(--on-dark);
+  font-size: var(--fs-body);
+  text-transform: uppercase;
+}
+
 @media (min-width: 1024px) {
   .inner {
-    grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1.85fr) minmax(0, 1fr);
   }
 
   .visual {

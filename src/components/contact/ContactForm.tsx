@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, useRef, useState, type FormEvent } from "react";
+import { useEffect, useId, useRef, useState, type FormEvent } from "react";
 import { Button } from "@/components/ui/Button";
 import { site } from "@/lib/site";
 import { Honeypot, SelectField, Spinner, SuccessMark, TextArea, TextField } from "./Fields";
@@ -62,6 +62,16 @@ export function ContactForm({ initialKind = "project", initialNeeds = [] }: { in
   const statusRef = useRef<HTMLDivElement>(null);
   const successRef = useRef<HTMLHeadingElement>(null);
   const copy = COPY[kind];
+  // Where focus should go after the next render (set by submit; applied once the DOM is updated).
+  const [focusReq, setFocusReq] = useState<{ to: "invalid" | "status" | "success"; n: number } | null>(null);
+  const requestFocus = (to: "invalid" | "status" | "success") => setFocusReq((r) => ({ to, n: (r?.n ?? 0) + 1 }));
+
+  useEffect(() => {
+    if (!focusReq) return;
+    if (focusReq.to === "success") successRef.current?.focus();
+    else if (focusReq.to === "status") statusRef.current?.focus();
+    else formRef.current?.querySelector<HTMLElement>("[aria-invalid='true']")?.focus();
+  }, [focusReq]);
 
   const revalidate = (next: Values, k: Kind, fields: Record<string, boolean>) => {
     const { errors: all } = validateContact({ ...next, kind: k });
@@ -89,8 +99,6 @@ export function ContactForm({ initialKind = "project", initialNeeds = [] }: { in
   const toggleService = (s: string) =>
     update("services", values.services.includes(s) ? values.services.filter((x) => x !== s) : [...values.services, s]);
 
-  const focusStatus = () => requestAnimationFrame(() => statusRef.current?.focus());
-
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (status === "sending") return;
@@ -98,8 +106,7 @@ export function ContactForm({ initialKind = "project", initialNeeds = [] }: { in
     setErrors(all);
     setTouched(Object.fromEntries(Object.keys(EMPTY).map((k) => [k, true])));
     if (Object.keys(all).length) {
-      const first = formRef.current?.querySelector<HTMLElement>("[aria-invalid='true']");
-      first?.focus();
+      requestFocus("invalid");
       return;
     }
     setStatus("sending");
@@ -108,18 +115,18 @@ export function ContactForm({ initialKind = "project", initialNeeds = [] }: { in
     if (res.ok) {
       setStatus("success");
       setMessage(res.message ?? "");
-      requestAnimationFrame(() => successRef.current?.focus());
+      requestFocus("success");
       return;
     }
     if (res.errors && Object.keys(res.errors).length) {
       setErrors(res.errors);
       setStatus("idle");
-      requestAnimationFrame(() => formRef.current?.querySelector<HTMLElement>("[aria-invalid='true']")?.focus());
+      requestFocus("invalid");
       return;
     }
     setStatus(res.status === 503 ? "unavailable" : "error");
     setMessage(res.message ?? "Something went wrong. Please try again.");
-    focusStatus();
+    requestFocus("status");
   };
 
   const mailto = `mailto:${site.email}?subject=${encodeURIComponent(

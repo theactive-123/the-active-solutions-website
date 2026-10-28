@@ -5,7 +5,7 @@ const INDUSTRIES = [
   { name: "Beauty & Skincare", count: 18 },
   { name: "Sustainable Apparel", count: 12 },
   { name: "Home & Lifestyle", count: 9 },
-  { name: "Food & Beverage", count: 7 },
+  { name: "Food & Beverage", count: 9 },
 ];
 
 /** "[ WHO WE WORK WITH ]": four bordered category cells; the first is lit red until another is hovered. */
