@@ -142,3 +142,41 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
+
+.consent {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  margin-top: 16px;
+  font-size: var(--fs-small);
+  color: var(--muted);
+}
+
+.consent input {
+  margin-top: 3px;
+  accent-color: var(--red);
+}
+
+.consent a,
+.status a {
+  color: var(--red);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.status[data-state="error"] {
+  color: var(--red);
+}
+
+.status[data-state="sent"] {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.hp {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}

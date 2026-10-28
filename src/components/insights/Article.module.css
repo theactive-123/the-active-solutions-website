@@ -6,9 +6,15 @@
 
 .cover {
   overflow: hidden;
-  aspect-ratio: 1620 / 626;
+  aspect-ratio: 16 / 10;
   border-radius: var(--radius);
   background: var(--ink-2);
+}
+
+@media (min-width: 900px) {
+  .cover {
+    aspect-ratio: 1620 / 626;
+  }
 }
 
 .coverImg {

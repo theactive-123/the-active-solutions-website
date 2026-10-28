@@ -1,3 +1,4 @@
+import { Process } from "@/components/sections/Process";
 import type { Metadata } from "next";
 import { PageHero } from "@/components/sections/PageHero";
 import { ServiceGrid } from "@/components/sections/ServiceGrid";
@@ -7,9 +8,8 @@ import { CtaBanner } from "@/components/sections/CtaBanner";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { MotionEngine } from "@/components/motion/MotionEngine";
 import { JsonLd } from "@/components/JsonLd";
-import { CroFaq } from "@/components/cro/CroFaq";
+import { Faq } from "@/components/sections/Faq";
 import { CroFunnel } from "@/components/cro/CroFunnel";
-import { RedProcess } from "@/components/cro/RedProcess";
 import { breadcrumbJsonLd, pageMetadata, serviceJsonLd } from "@/lib/seo";
 import styles from "./page.module.css";
 
@@ -239,7 +239,7 @@ export default function ConversionRateOptimizationPage() {
               </span>
             }
           />
-          <RedProcess steps={STEPS} />
+          <Process theme="red" steps={STEPS} />
         </div>
       </section>
 
@@ -257,7 +257,7 @@ export default function ConversionRateOptimizationPage() {
         </div>
       </section>
 
-      <CroFaq items={FAQS} />
+      <Faq items={FAQS} title={<>CRO <em>questions?</em></>} text="Straight answers before you reach out." />
 
       <CtaBanner
         title={

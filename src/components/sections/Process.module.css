@@ -10,6 +10,17 @@
   padding: 0 0 0 36px;
 }
 
+.process[role="list"].red {
+  --dot: rgba(255, 255, 255, 0.55);
+  --track: rgba(255, 255, 255, 0.45);
+  --num: var(--white);
+  --txt: rgba(255, 255, 255, 0.85);
+}
+
+.red .progress {
+  background: var(--ink);
+}
+
 .process[role="list"].dark {
   --dot: #555;
   --track: rgba(255, 255, 255, 0.25);

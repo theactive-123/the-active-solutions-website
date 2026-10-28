@@ -20,7 +20,6 @@ Per-page lists:
 - [Ecommerce marketing](image-swap/marketing.md)
 - [About](image-swap/about.md)
 - [Insights](image-swap/insights.md)
-- [Contact](image-swap/contact.md)
 
 ## Landing page (originals already in place)
 

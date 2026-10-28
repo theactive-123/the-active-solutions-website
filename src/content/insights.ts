@@ -51,7 +51,7 @@ export const insights: Insight[] = [
     category: "Shopify",
     date: "2026-10-20",
     author: MIRZA,
-    cover: cover("shopify-plus", "A red 3D cube floating in a dark red glow"),
+    cover: cover("shopify-plus", "A glossy red sphere beside a smaller red cube in a dark red glow"),
     featured: true,
     body: [
       {

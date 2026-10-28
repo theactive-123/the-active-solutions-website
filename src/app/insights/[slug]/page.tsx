@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import { notFound } from "next/navigation";
+import { Suspense } from "react";
 import { JsonLd } from "@/components/JsonLd";
 import { ArticleBody } from "@/components/insights/ArticleBody";
 import { ArticleHero } from "@/components/insights/ArticleHero";
 import { ArticleToc } from "@/components/insights/ArticleToc";
+import { ArticleSkeleton } from "@/components/insights/ArticleSkeleton";
 import { AuthorCard } from "@/components/insights/AuthorCard";
 import { InsightCard } from "@/components/insights/InsightCard";
 import { ReadingProgress } from "@/components/insights/ReadingProgress";
@@ -24,7 +26,7 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: PageProps<"/insights/[slug]">): Promise<Metadata> {
   const { slug } = await params;
   const article = getInsight(slug);
-  if (!article) return {};
+  if (!article) notFound();
   const path = `/insights/${article.slug}`;
   const base = pageMetadata({ title: article.title, description: article.description, path, type: "article", publishedTime: article.date });
   const image = { url: article.cover.src, width: article.cover.width, height: article.cover.height, alt: article.cover.alt };
@@ -47,7 +49,20 @@ export async function generateMetadata({ params }: PageProps<"/insights/[slug]">
   };
 }
 
-export default async function InsightPage({ params }: PageProps<"/insights/[slug]">) {
+/**
+ * Every known slug is prerendered by generateStaticParams. The params are read inside
+ * <Suspense> so the route also has an instant static shell (Partial Prefetching) and
+ * unknown slugs stream a 404 instead of blocking.
+ */
+export default function InsightPage({ params }: PageProps<"/insights/[slug]">) {
+  return (
+    <Suspense fallback={<ArticleSkeleton />}>
+      <InsightArticle params={params} />
+    </Suspense>
+  );
+}
+
+async function InsightArticle({ params }: { params: PageProps<"/insights/[slug]">["params"] }) {
   const { slug } = await params;
   const article = getInsight(slug);
   if (!article) notFound();

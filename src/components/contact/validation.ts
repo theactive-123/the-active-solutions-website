@@ -26,6 +26,9 @@ export const PROJECT_SERVICES = [
 
 export const PARTNER_SERVICES = [
   "Shopify development",
+  "Web design",
+  "PPC",
+  "Email marketing",
   "Conversion optimization",
   "White label",
   "Ecommerce development",

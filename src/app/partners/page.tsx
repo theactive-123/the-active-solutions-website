@@ -10,7 +10,7 @@ import { TiltVisual } from "@/components/motion/TiltVisual";
 import { MotionEngine } from "@/components/motion/MotionEngine";
 import { ExtendList } from "@/components/partners/ExtendList";
 import { PartnerForm } from "@/components/partners/PartnerForm";
-import { PartnerFaq } from "@/components/partners/PartnerFaq";
+import { Faq } from "@/components/sections/Faq";
 import styles from "@/components/partners/Partners.module.css";
 import { JsonLd } from "@/components/JsonLd";
 import { breadcrumbJsonLd, pageMetadata } from "@/lib/seo";
@@ -170,7 +170,7 @@ export default function PartnersPage() {
         </div>
       </section>
 
-      <section className={`section theme-red ${styles.onRed}`} aria-labelledby="steps-title">
+      <section className="section theme-red" aria-labelledby="steps-title">
         <div className="container">
           <SectionHeader
             titleClassName={styles.wide}
@@ -181,7 +181,7 @@ export default function PartnersPage() {
               </span>
             }
           />
-          <Process steps={STEPS} theme="dark" />
+          <Process steps={STEPS} theme="red" />
         </div>
       </section>
 
@@ -228,7 +228,7 @@ export default function PartnersPage() {
         </div>
       </section>
 
-      <PartnerFaq items={FAQS} />
+      <Faq items={FAQS} title={<>Partner <em>questions?</em></>} text="Straight answers before you reach out." />
 
       <CtaBanner
         title={

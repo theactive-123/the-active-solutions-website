@@ -61,7 +61,7 @@ function visitorZone() {
 
 const timeFmt = new Intl.DateTimeFormat(undefined, { hour: "numeric", minute: "2-digit" });
 const localDayFmt = new Intl.DateTimeFormat("en-US", { weekday: "short", month: "short", day: "numeric" });
-const fullFmt = new Intl.DateTimeFormat("en-US", { weekday: "long", month: "long", day: "numeric", hour: "numeric", minute: "2-digit" });
+const fullFmt = new Intl.DateTimeFormat("en-US", { weekday: "long", month: "long", day: "numeric", hour: "numeric", minute: "2-digit", timeZoneName: "short" });
 
 function bookingHost(url: string) {
   if (/calendly\.com/i.test(url)) return "Calendly";
@@ -83,14 +83,17 @@ export function BookingWidget({ bookingUrl }: { bookingUrl?: string }) {
   const [status, setStatus] = useState<Status>("idle");
   const [message, setMessage] = useState("");
   const [trap, setTrap] = useState("");
+  const [focusReq, setFocusReq] = useState<{ to: "invalid" | "slot" | "status" | "success"; n: number } | null>(null);
+  const requestFocus = (to: "invalid" | "slot" | "status" | "success") => setFocusReq((r) => ({ to, n: (r?.n ?? 0) + 1 }));
 
   const gridRef = useRef<HTMLTableSectionElement>(null);
   const slotsRef = useRef<HTMLUListElement>(null);
   const statusRef = useRef<HTMLDivElement>(null);
   const successRef = useRef<HTMLHeadingElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
-  const moveFocus = useRef(false);
-  const direction = useRef(0);
+  // Keyboard navigation bumps gridFocusReq so the effect below moves DOM focus; dir drives the month slide.
+  const [gridFocusReq, setGridFocusReq] = useState(0);
+  const [dir, setDir] = useState(0);
 
   const zone = useMemo(() => (ready ? visitorZone() : { id: "", label: "your local time" }), [ready]);
   const today = ready ? todayKey(now) : "";
@@ -112,16 +115,28 @@ export function BookingWidget({ bookingUrl }: { bookingUrl?: string }) {
 
   // Move DOM focus after keyboard navigation inside the grid (possibly across months).
   useEffect(() => {
-    if (!moveFocus.current || !focusKey) return;
-    moveFocus.current = false;
+    if (!gridFocusReq || !focusKey) return;
     gridRef.current?.querySelector<HTMLButtonElement>(`[data-key="${focusKey}"]`)?.focus();
-  }, [focusKey, viewMonth.y, viewMonth.m]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- only after a keyboard move
+  }, [gridFocusReq]);
+
+  // Apply focus requested by submit once the DOM reflects the new state.
+  useEffect(() => {
+    if (!focusReq) return;
+    if (focusReq.to === "success") successRef.current?.focus();
+    else if (focusReq.to === "status") statusRef.current?.focus();
+    else if (focusReq.to === "slot")
+      (
+        slotsRef.current?.querySelector<HTMLInputElement>("input") ?? gridRef.current?.querySelector<HTMLButtonElement>("[tabindex='0']")
+      )?.focus();
+    else formRef.current?.querySelector<HTMLElement>("[aria-invalid='true']")?.focus();
+  }, [focusReq]);
 
   // Month change: days slide in from the travel direction.
   useGSAP(
     () => {
-      if (!ready || !direction.current || prefersReducedMotion()) return;
-      gsap.fromTo(gridRef.current, { x: direction.current * 28, opacity: 0 }, { x: 0, opacity: 1, duration: 0.6, ease: "expo.out" });
+      if (!ready || !dir || prefersReducedMotion()) return;
+      gsap.fromTo(gridRef.current, { x: dir * 28, opacity: 0 }, { x: 0, opacity: 1, duration: 0.6, ease: "expo.out" });
     },
     { dependencies: [viewMonth.y, viewMonth.m], scope: gridRef },
   );
@@ -138,7 +153,7 @@ export function BookingWidget({ bookingUrl }: { bookingUrl?: string }) {
   const goMonth = (n: number) => {
     const target = addMonths(viewMonth, n);
     if (monthIndex(target) < monthIndex(minMonth) || monthIndex(target) > monthIndex(maxMonth)) return;
-    direction.current = n;
+    setDir(n);
     setView(target);
     setFocusKey(null);
   };
@@ -173,11 +188,11 @@ export function BookingWidget({ bookingUrl }: { bookingUrl?: string }) {
     if (next > hi) next = hi;
     const nm = monthOf(next);
     if (monthIndex(nm) !== monthIndex(viewMonth)) {
-      direction.current = monthIndex(nm) > monthIndex(viewMonth) ? 1 : -1;
+      setDir(monthIndex(nm) > monthIndex(viewMonth) ? 1 : -1);
       setView(nm);
     }
-    moveFocus.current = true;
     setFocusKey(next);
+    setGridFocusReq((n) => n + 1);
   };
 
   const updateDetail = (field: keyof Details, value: string) => {
@@ -201,13 +216,11 @@ export function BookingWidget({ bookingUrl }: { bookingUrl?: string }) {
     const { errors: all } = validateMeeting({ ...details, datetime: iso, timeZone: zone.id }, now);
     setErrors(all);
     if (all.datetime) {
-      const target =
-        slotsRef.current?.querySelector<HTMLInputElement>("input") ?? gridRef.current?.querySelector<HTMLButtonElement>("[tabindex='0']");
-      target?.focus();
+      requestFocus("slot");
       return;
     }
     if (Object.keys(all).length) {
-      formRef.current?.querySelector<HTMLElement>("[aria-invalid='true']")?.focus();
+      requestFocus("invalid");
       return;
     }
     setStatus("sending");
@@ -216,20 +229,21 @@ export function BookingWidget({ bookingUrl }: { bookingUrl?: string }) {
     if (res.ok) {
       setStatus("success");
       setMessage(res.message ?? "");
-      requestAnimationFrame(() => successRef.current?.focus());
+      requestFocus("success");
       return;
     }
     if (res.errors && Object.keys(res.errors).length) {
       setErrors(res.errors);
       setStatus("idle");
+      requestFocus(res.errors.datetime ? "slot" : "invalid");
       return;
     }
     setStatus(res.status === 503 ? "unavailable" : "error");
     setMessage(res.message ?? "Something went wrong. Please try again.");
-    requestAnimationFrame(() => statusRef.current?.focus());
+    requestFocus("status");
   };
 
-  const whenText = chosenSlot ? `${fullFmt.format(chosenSlot)} (${zone.label})` : "";
+  const whenText = chosenSlot ? fullFmt.format(chosenSlot) : "";
   const mailto = `mailto:${site.email}?subject=${encodeURIComponent("Meeting request (30 min)")}&body=${encodeURIComponent(
     [`Preferred time: ${whenText || "to be agreed"}`, `Name: ${details.name}`, details.storeUrl && `Store: ${details.storeUrl}`, details.notes && `\n${details.notes}`]
       .filter(Boolean)

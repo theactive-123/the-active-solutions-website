@@ -129,7 +129,12 @@
 
 /* Touch devices: show every card's tags, keep highlight on the active one */
 @media (hover: none) {
-  .tags {
+  .inner {
+    padding-top: calc(clamp(56px, 4.4vw, 84px) + 36px);
+  }
+
+  .tags,
+  .card[data-active="true"] .tags {
     max-height: none;
     margin-top: 18px;
     opacity: 1;

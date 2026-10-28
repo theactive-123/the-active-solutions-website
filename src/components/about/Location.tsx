@@ -12,6 +12,7 @@ export function Location() {
       <div className="container">
         <SectionHeader
           eyebrow="WHERE WE ARE"
+          titleClassName={styles.title}
           title={
             <span id="where-title">
               Based in <em>Karachi</em>, built for brands selling <em>internationally</em>

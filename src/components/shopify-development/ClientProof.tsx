@@ -1,6 +1,7 @@
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { Button } from "@/components/ui/Button";
 import { Laptop } from "./Laptop";
+import { CountUp } from "./CountUp";
 import styles from "./ClientProof.module.css";
 
 /*
@@ -57,9 +58,7 @@ export function ClientProof() {
           </div>
           <div className={styles.side}>
             <p className={styles.stat}>
-              <span className={styles.num} data-count>
-                57%
-              </span>
+              <CountUp className={styles.num} value={57} suffix="%" />
               <span className={styles.label} data-reveal>
                 higher lead generation
               </span>

@@ -14,7 +14,7 @@
 }
 
 .copy {
-  max-width: 900px;
+  max-width: 1140px;
 }
 
 .eyebrow {
@@ -43,7 +43,7 @@
 
 @media (min-width: 1024px) {
   .inner {
-    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1fr) minmax(0, 36%);
   }
 
   .visual {

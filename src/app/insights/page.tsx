@@ -4,8 +4,10 @@ import { FeaturedInsight } from "@/components/insights/FeaturedInsight";
 import { InsightsBrowser } from "@/components/insights/InsightsBrowser";
 import { Newsletter } from "@/components/insights/Newsletter";
 import { SectionLabel } from "@/components/insights/SectionLabel";
+import { InsightsHero } from "@/components/insights/InsightsHero";
+import heroStyles from "@/components/insights/InsightsHero.module.css";
+import { Button } from "@/components/ui/Button";
 import { MotionEngine } from "@/components/motion/MotionEngine";
-import { PageHero } from "@/components/sections/PageHero";
 import { sortedInsights } from "@/content/insights";
 import { breadcrumbJsonLd, pageMetadata } from "@/lib/seo";
 import { site } from "@/lib/site";
@@ -49,22 +51,23 @@ export default function InsightsPage() {
           blogJsonLd,
         ]}
       />
-      <PageHero
+      <InsightsHero
         title={
           <>
             <em>Shopify</em> &amp; <em>Ecommerce</em> Insights
           </>
         }
-        text={
-          <p>
-            Practical thinking from the team building and growing Shopify stores: development, conversion optimization, paid media and
-            retention.
-          </p>
-        }
-        primary={{ label: "Subscribe for new articles", href: "/insights#subscribe" }}
         tagline="SHOPIFY · CRO · PAID MEDIA · EMAIL & SMS · MIGRATIONS"
-        visual={{ src: "/images/insights/orb-3d.png", width: 600, height: 600, className: "figma-crop" }}
-      />
+        visual={{ src: "/images/insights/orb-3d.png", width: 600, height: 600 }}
+      >
+        <p className={`body ${heroStyles.text}`} data-reveal data-immediate data-delay="0.35">
+          Practical thinking from the team building and growing Shopify stores: development, conversion optimization, paid media and
+          retention.
+        </p>
+        <div className={heroStyles.actions} data-reveal data-immediate data-delay="0.5">
+          <Button href="/insights#subscribe">Subscribe for new articles</Button>
+        </div>
+      </InsightsHero>
 
       <FeaturedInsight article={featured} />
 

@@ -8,7 +8,7 @@ export function AuthorCard({ author }: { author: InsightAuthor }) {
     <div className={styles.author}>
       <Image src={author.photo} alt="" width={132} height={132} className={styles.avatar} />
       <div>
-        <p className={styles.authorName}>[ AUTHOR {author.name} ]</p>
+        <p className={styles.authorName}>[ AUTHOR <span style={{ whiteSpace: "nowrap" }}>{author.name} ]</span></p>
         <p className={styles.authorRole}>{author.role}</p>
       </div>
       <p className={styles.authorText}>Writes about Shopify builds, growth and the decisions behind them.</p>

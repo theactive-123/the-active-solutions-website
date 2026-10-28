@@ -196,9 +196,10 @@ export function MotionEngine() {
     return () => {
       window.clearTimeout(t);
       window.removeEventListener("load", refresh);
-      cleanups.forEach((fn) => fn());
-      splits.forEach((s) => s.revert());
+      // Revert tweens first: reverting a counter tween re-renders it at 0, so restore text afterwards.
       ctx.revert();
+      splits.forEach((s) => s.revert());
+      cleanups.forEach((fn) => fn());
     };
   }, [pathname]);
 
