@@ -188,7 +188,11 @@ export function MotionEngine() {
     });
 
     // Recalculate trigger positions once images and fonts have settled.
-    const refresh = () => ScrollTrigger.refresh();
+    // Sort first: pinned sections (e.g. Process) add height, so triggers must be measured top-down.
+    const refresh = () => {
+      ScrollTrigger.sort();
+      ScrollTrigger.refresh();
+    };
     window.addEventListener("load", refresh);
     document.fonts?.ready.then(refresh);
     const t = window.setTimeout(refresh, 600);

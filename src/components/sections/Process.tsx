@@ -1,77 +1,87 @@
 "use client";
 
 import { useRef } from "react";
-import { gsap, useGSAP, prefersReducedMotion } from "@/components/motion/gsap";
+import { gsap, ScrollTrigger, useGSAP, prefersReducedMotion } from "@/components/motion/gsap";
 import styles from "./Process.module.css";
-
-const OFFSETS = [0, 0, 75, 191];
 
 export type ProcessStep = { title: string; text: string };
 
 /**
- * Four-step timeline on a descending "staircase". When the section scrolls into view the
- * progress line draws across, and as it reaches each dot the dot pops and its step rises
- * into place, one after another.
+ * Four-step timeline.
+ *
+ * Desktop/tablet: when the section reaches the screen it pins (stays fixed) and the scroll drives
+ * the sequence: the line draws to each dot, the dot pops, and that step rises from the bottom into
+ * place, step 1 → 2 → 3 → 4, all ending level along the top. After a short hold the page scrolls on.
+ * Mobile: steps are stacked, so each one simply rises in as it scrolls into view.
  */
 export function Process({ steps, theme = "light" }: { steps: ProcessStep[]; theme?: "light" | "dark" | "red" }) {
   const ref = useRef<HTMLOListElement>(null);
 
   useGSAP(
     () => {
-      if (prefersReducedMotion()) return;
+      if (prefersReducedMotion() || !ref.current) return;
+      const list = ref.current;
+      const section = list.closest("section") ?? list;
       const active = theme === "red" ? "#0b0b0c" : "#ea2229";
       const mm = gsap.matchMedia();
 
       mm.add("(min-width: 900px)", () => {
-        const items = gsap.utils.toArray<HTMLElement>("[data-step]");
-        const dots = gsap.utils.toArray<HTMLElement>("[data-track-dot]");
-        const per = 0.42; // seconds between steps
-        gsap.set(items, { opacity: 0, y: 90 });
-        gsap.set(dots, { scale: 0.4, opacity: 0.5 });
+        const items = gsap.utils.toArray<HTMLElement>("[data-step]", list);
+        const dots = gsap.utils.toArray<HTMLElement>("[data-track-dot]", list);
+        const progress = list.querySelector("[data-progress]");
+        const n = items.length;
+
+        // Content rising from below must not paint over the next section while pinned.
+        gsap.set(section, { overflow: "clip" });
+        gsap.set(items, { y: () => Math.min(window.innerHeight * 0.55, 520), opacity: 0 });
+        gsap.set(dots, { scale: 0.4 });
+        gsap.set(progress, { scaleX: 0 });
 
         const tl = gsap.timeline({
-          paused: true,
-          defaults: { ease: "expo.out" },
-        });
-        tl.fromTo("[data-progress]", { scaleX: 0 }, { scaleX: 1, duration: per * items.length + 0.4, ease: "power2.inOut" }, 0);
-        items.forEach((item, i) => {
-          const at = 0.1 + i * per;
-          tl.to(dots[i], { scale: 1, opacity: 1, backgroundColor: active, duration: 0.5, ease: "back.out(3)" }, at);
-          tl.to(item, { opacity: 1, y: 0, duration: 1.1, ease: "back.out(1.3)" }, at + 0.05);
-          tl.from(item.querySelector("[data-num]"), { yPercent: 40, duration: 1.1 }, at + 0.05);
-        });
-
-        const st = gsap.timeline({
+          defaults: { ease: "none" },
           scrollTrigger: {
-            trigger: ref.current,
-            start: "top 62%",
-            once: true,
-            onEnter: () => tl.play(),
-            onLeave: () => tl.play(),
-            // Reloaded mid-page past this section: still show the steps.
-            onRefresh: (self) => {
-              if (self.progress > 0) tl.play();
-            },
+            trigger: section,
+            // Pin with the whole section on screen: centred if it fits, otherwise its bottom
+            // (where the steps are) aligned to the bottom of the viewport.
+            start: () => (section.offsetHeight >= window.innerHeight ? "bottom bottom" : "center center"),
+            end: () => `+=${Math.round(window.innerHeight * (0.55 * n + 0.35))}`,
+            pin: true,
+            pinSpacing: true,
+            scrub: 0.9,
+            anticipatePin: 1,
+            invalidateOnRefresh: true,
           },
         });
-        return () => {
-          st.kill();
-          tl.kill();
-        };
+
+        items.forEach((item, i) => {
+          const at = i;
+          // Line travels to this step's dot, the dot pops, then the step rises into place.
+          tl.to(progress, { scaleX: (i + 1) / n, duration: 0.45, ease: "power1.inOut" }, at);
+          tl.to(dots[i], { scale: 1.35, backgroundColor: active, duration: 0.2, ease: "back.out(3)" }, at + 0.3);
+          tl.to(dots[i], { scale: 1, duration: 0.2, ease: "power2.out" }, at + 0.5);
+          tl.to(item, { y: 0, opacity: 1, duration: 0.85, ease: "power3.out" }, at + 0.15);
+          tl.fromTo(item.querySelector("[data-num]"), { yPercent: 60 }, { yPercent: 0, duration: 0.85, ease: "power3.out" }, at + 0.2);
+        });
+        // Brief hold on the finished state before the page continues.
+        tl.to({}, { duration: 0.4 });
+
+        // Pins change the page height: re-measure everything in document order.
+        ScrollTrigger.sort();
+        ScrollTrigger.refresh();
       });
 
       mm.add("(max-width: 899px)", () => {
-        gsap.utils.toArray<HTMLElement>("[data-step]").forEach((item) => {
+        gsap.utils.toArray<HTMLElement>("[data-step]", list).forEach((item) => {
           gsap.fromTo(
             item,
-            { opacity: 0, y: 60 },
-            { opacity: 1, y: 0, duration: 1, ease: "back.out(1.3)", scrollTrigger: { trigger: item, start: "top 88%", once: true } },
+            { opacity: 0, y: 70 },
+            { opacity: 1, y: 0, duration: 1, ease: "power3.out", scrollTrigger: { trigger: item, start: "top 88%", once: true } },
           );
         });
         gsap.fromTo(
-          "[data-progress]",
+          list.querySelector("[data-progress]"),
           { scaleY: 0 },
-          { scaleY: 1, ease: "none", scrollTrigger: { trigger: ref.current, start: "top 75%", end: "bottom 70%", scrub: 0.6 } },
+          { scaleY: 1, ease: "none", scrollTrigger: { trigger: list, start: "top 75%", end: "bottom 70%", scrub: 0.6 } },
         );
       });
     },
@@ -87,7 +97,7 @@ export function Process({ steps, theme = "light" }: { steps: ProcessStep[]; them
         ))}
       </span>
       {steps.map((step, i) => (
-        <li key={step.title} className={styles.step} data-step style={{ "--off": OFFSETS[i] ?? 0 } as React.CSSProperties}>
+        <li key={step.title} className={styles.step} data-step>
           <span className={styles.dot} aria-hidden="true" />
           <span className={styles.numWrap} aria-hidden="true">
             <span className={styles.num} data-num>

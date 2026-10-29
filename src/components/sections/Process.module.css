@@ -133,8 +133,8 @@
     background: var(--dot);
   }
 
-  /* Descending staircase from the design (offsets 0 / 0 / 75 / 191px at 1920) */
+  /* All four steps finish level along the top. */
   .step {
-    margin-top: calc(var(--off) * min(1px, 0.052vw));
+    will-change: transform, opacity;
   }
 }

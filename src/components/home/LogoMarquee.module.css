@@ -6,7 +6,9 @@
 .track {
   display: flex;
   width: max-content;
-  animation: scroll 32s linear infinite;
+  /* ~60px/s whatever the width: one half of the track is ~15 logos */
+  animation: scroll 55s linear infinite;
+  will-change: transform;
 }
 
 .marquee:hover .track {
@@ -28,13 +30,15 @@
   transition: opacity 0.3s;
 }
 
-.row li:nth-child(2) .logo,
-.row li:nth-child(3) .logo,
-.row li:nth-child(4) .logo {
+.md {
+  height: clamp(18px, 1.3vw, 26px);
+}
+
+.sm {
   height: clamp(13px, 0.95vw, 18px);
 }
 
-.row li:nth-child(5) .logo {
+.lg {
   height: clamp(24px, 1.7vw, 32px);
 }
 

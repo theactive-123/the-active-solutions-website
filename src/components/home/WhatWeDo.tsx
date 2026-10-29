@@ -54,7 +54,7 @@ export function WhatWeDo() {
         />
         <ul role="list" className={styles.cards} data-reveal-stagger="0.12">
           {PILLARS.map((p, i) => (
-            <li key={p.title}>
+            <li key={p.title} className={styles.item}>
               <TiltCard className={`${styles.card} ${styles[p.tone]}`}>
                 <span className={styles.num}>{String(i + 1).padStart(2, "0")}</span>
                 <h3 className={styles.title}>{p.title}</h3>

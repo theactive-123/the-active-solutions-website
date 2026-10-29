@@ -26,6 +26,9 @@ const nextConfig = {
       },
     ];
   },
+  // `npm run dev` uses Turbopack; this empty entry lets it start alongside the webpack hook below
+  // (production builds run `next build --webpack`).
+  turbopack: {},
   webpack(config, { isServer, dev }) {
     if (isServer && !dev) {
       // Avoid export resolution failures for next/og with Hostinger's SWC WASM fallback.

@@ -157,7 +157,34 @@
 }
 
 @media (min-width: 900px) {
+  /* The three cards share one set of rows (subgrid), so text, tags, divider and CTA line up
+     across cards even when one paragraph wraps to more lines than the others. */
   .cards {
     grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-rows: repeat(7, auto);
+    row-gap: 0;
+  }
+
+  .item {
+    grid-row: span 7;
+    display: grid;
+    grid-template-rows: subgrid;
+  }
+
+  .card {
+    grid-row: 1 / -1;
+    display: grid;
+    grid-template-rows: subgrid;
+    row-gap: 0;
+    height: auto;
+  }
+
+  .tags {
+    align-self: start;
+  }
+
+  /* Top-aligned so the divider line above every CTA sits at the same height */
+  .link {
+    align-self: start;
   }
 }
