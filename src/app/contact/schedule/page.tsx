@@ -1,6 +1,8 @@
+import Script from "next/script";
 import { JsonLd } from "@/components/JsonLd";
-import { BookingWidget } from "@/components/contact/BookingWidget";
 import { Glow } from "@/components/motion/Glow";
+import { Button } from "@/components/ui/Button";
+import { SectionHeader } from "@/components/ui/SectionHeader";
 import { MotionEngine } from "@/components/motion/MotionEngine";
 import { breadcrumbJsonLd, pageMetadata } from "@/lib/seo";
 import { site } from "@/lib/site";
@@ -10,6 +12,9 @@ const DESCRIPTION =
   "Book a free 30-minute online meeting with The Active Solutions. We'll review your Shopify store, marketing and customer journey and map practical next steps.";
 
 export const metadata = pageMetadata({ title: "Schedule a Meeting", description: DESCRIPTION, path: "/contact/schedule" });
+
+/** Booking calendar hosted in our CRM (embedded below the hero). */
+const BOOKING_URL = "https://crm.theactivesolutions.com/book/49eb424a-2e4a-4e3d-9fd6-3254d2160933";
 
 const COVER = [
   "Your Shopify store",
@@ -30,7 +35,7 @@ const pageJsonLd = {
   potentialAction: {
     "@type": "ScheduleAction",
     name: "Book a 30-minute online meeting",
-    target: `${site.url}/contact/schedule`,
+    target: `${site.url}/contact/schedule#book`,
   },
 };
 
@@ -44,8 +49,6 @@ function Tick() {
 }
 
 export default function SchedulePage() {
-  const bookingUrl = process.env.NEXT_PUBLIC_BOOKING_URL || undefined;
-
   return (
     <>
       <section className={`${styles.hero} ${styles.schedule} theme-dark`} aria-labelledby="page-title">
@@ -76,26 +79,61 @@ export default function SchedulePage() {
               </li>
             </ul>
 
-            <div className={styles.cover}>
-              <h2 id="cover-title" className={styles.kicker} data-reveal="fade">
-                [ What we&apos;ll cover ]
-              </h2>
-              <ul role="list" className={styles.coverList} aria-labelledby="cover-title" data-reveal-stagger="0.07">
-                {COVER.map((item) => (
-                  <li key={item} className={styles.coverItem}>
-                    <Tick />
-                    {item}
-                  </li>
-                ))}
-              </ul>
+            <div className={styles.heroActions} data-reveal data-immediate data-delay="0.55">
+              <Button href="#book">Pick a time</Button>
+              <a className={styles.mailLink} href={`mailto:${site.email}`}>
+                Prefer email? {site.email}
+              </a>
             </div>
           </div>
 
-          <div className={styles.formCol} data-reveal="up" data-immediate data-delay="0.3">
-            <BookingWidget bookingUrl={bookingUrl} />
-          </div>
+          <aside className={styles.coverCard} aria-labelledby="cover-title" data-reveal="up" data-immediate data-delay="0.3">
+            <h2 id="cover-title" className={styles.kicker}>
+              [ What we&apos;ll cover ]
+            </h2>
+            <p className={styles.coverLead}>
+              In 30 minutes we look at your store end to end and leave you with <em>clear next steps.</em>
+            </p>
+            <ol role="list" className={styles.coverGrid} data-reveal-stagger="0.07">
+              {COVER.map((item, i) => (
+                <li key={item} className={styles.coverItem}>
+                  <span className={styles.coverNum} aria-hidden="true">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  {item}
+                  <Tick />
+                </li>
+              ))}
+            </ol>
+            <p className={styles.coverNote}>Free, no obligation.</p>
+          </aside>
         </div>
       </section>
+
+      <section id="book" className={`section theme-paper ${styles.bookSection}`} aria-labelledby="book-title">
+        <div className="container">
+          <SectionHeader
+            eyebrow="PICK A TIME"
+            title={
+              <span id="book-title">
+                Choose a time that <em>works for you.</em>
+              </span>
+            }
+            text={<p>Pick a day and time below to book your free 30-minute online call with our team.</p>}
+          />
+          <div className={styles.bookFrame} data-reveal>
+            <iframe src={BOOKING_URL} title="Meeting booking" width="100%" height="800" loading="lazy" className={styles.bookIframe} />
+          </div>
+          <p className={styles.bookFallback}>
+            Calendar not loading?{" "}
+            <a href={BOOKING_URL} target="_blank" rel="noopener noreferrer">
+              Open the booking page in a new tab
+            </a>{" "}
+            or email <a href={`mailto:${site.email}`}>{site.email}</a>.
+          </p>
+        </div>
+      </section>
+      <Script src="https://crm.theactivesolutions.com/crm-source.js" strategy="afterInteractive" />
 
       <JsonLd
         data={[

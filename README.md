@@ -36,7 +36,6 @@ Copy `.env.example` to `.env.local` and fill in what you need:
 | `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASSWORD` | Email notification for each submission (port 465 = TLS, 587 = STARTTLS) |
 | `ADMIN_EMAIL` | Inbox(es) that receive notifications; comma-separate several (falls back to `CONTACT_TO_EMAIL`) |
 | `CONTACT_FROM_EMAIL` | Optional sender override (defaults to `SMTP_USER`) |
-| `NEXT_PUBLIC_BOOKING_URL` | Optional Calendly/Cal.com link offered on the schedule page |
 | `WORDPRESS_API_URL` | WordPress REST API the blog reads from (default `https://blogs.theactivesolutions.com/wp-json/wp/v2`) |
 | `WORDPRESS_USERNAME`, `WORDPRESS_APP_PASSWORD` | Optional. Only needed if the WordPress REST API is locked down; published posts are public |
 | `WORDPRESS_REVALIDATE_SECRET` | Optional. Secret for `POST /api/revalidate?secret=…` to refresh the blog instantly |
