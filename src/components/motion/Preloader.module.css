@@ -1,0 +1,204 @@
+/* Shown only while <html> has `is-preloading` (set before first paint) or while it exits. */
+.preloader {
+  position: fixed;
+  inset: 0;
+  z-index: 998; /* under the custom cursor (999) and the skip link */
+  display: none;
+  pointer-events: auto;
+}
+
+:global(html.is-preloading) .preloader,
+.preloader[data-state="leaving"] {
+  display: block;
+}
+
+.preloader[data-state="leaving"] {
+  pointer-events: none;
+}
+
+.back,
+.panel {
+  position: absolute;
+  inset: 0;
+  will-change: transform;
+}
+
+.back {
+  background: var(--red);
+}
+
+.panel {
+  --gx: 72;
+  --gy: 28;
+  overflow: hidden;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  padding: clamp(24px, 3vw, 56px) var(--gutter);
+  background: var(--ink);
+  color: var(--white);
+}
+
+.glow {
+  position: absolute;
+  inset: -20%;
+  pointer-events: none;
+  background: radial-gradient(
+    circle at calc(var(--gx) * 1%) calc(var(--gy) * 1%),
+    rgba(234, 34, 41, 0.42) 0%,
+    rgba(122, 15, 20, 0.22) 22%,
+    transparent 48%
+  );
+  animation: drift 7s ease-in-out infinite alternate;
+}
+
+@keyframes drift {
+  to {
+    transform: translate3d(-3%, 4%, 0) scale(1.06);
+  }
+}
+
+.top,
+.bottom {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 24px;
+}
+
+.top {
+  align-items: flex-start;
+  color: var(--on-dark);
+  font-size: var(--fs-small);
+  letter-spacing: 0.02em;
+}
+
+.top span:first-child {
+  color: var(--white);
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+/* ------------------------------------------------------------- mark + ring */
+.center {
+  position: relative;
+  display: grid;
+  place-items: center;
+  perspective: 800px;
+}
+
+.mark {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: clamp(150px, 15vw, 220px);
+  aspect-ratio: 1;
+  transform-style: preserve-3d;
+}
+
+.ring {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+  overflow: visible;
+}
+
+.ring circle {
+  fill: none;
+  stroke-width: 1.4;
+}
+
+.track {
+  stroke: rgba(255, 255, 255, 0.12);
+}
+
+.progress {
+  stroke: var(--red);
+  stroke-linecap: round;
+  filter: drop-shadow(0 0 6px rgba(234, 34, 41, 0.8));
+}
+
+.logo {
+  width: 38%;
+  height: auto;
+  filter: drop-shadow(0 10px 30px rgba(234, 34, 41, 0.45));
+  animation: breathe 2.4s ease-in-out infinite;
+}
+
+@keyframes breathe {
+  50% {
+    transform: translateY(-6px) scale(1.04);
+  }
+}
+
+/* ------------------------------------------------------------- words + counter */
+.words {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 clamp(14px, 1.6vw, 28px);
+  padding: 0;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(1.5rem, 1rem + 1.6vw, 3rem);
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+}
+
+.words li {
+  color: rgba(255, 255, 255, 0.16);
+  transition: color 0.6s var(--ease-out);
+}
+
+.words li[data-on] {
+  color: var(--white);
+}
+
+.words em {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+
+.words li[data-on] em {
+  color: var(--red);
+}
+
+.count {
+  display: flex;
+  align-items: flex-start;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(3.5rem, 1.6rem + 7vw, 10rem);
+  line-height: 0.8;
+  letter-spacing: -0.05em;
+  font-variant-numeric: tabular-nums;
+}
+
+.pct {
+  margin-left: 0.06em;
+  color: var(--red);
+  font-size: 0.32em;
+  line-height: 1;
+}
+
+@media (max-width: 640px) {
+  .top span:last-child {
+    display: none;
+  }
+
+  .bottom {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .glow,
+  .logo {
+    animation: none;
+  }
+}

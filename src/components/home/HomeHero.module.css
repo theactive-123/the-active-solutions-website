@@ -32,6 +32,21 @@
   margin-top: 28px;
 }
 
+/* Particle canvas (desktop): behind the content, over the glow */
+.particles {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  display: none;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.slot {
+  display: none;
+}
+
 .partner {
   width: clamp(130px, 9vw, 174px);
   height: auto;
@@ -93,6 +108,25 @@
   .side {
     align-self: stretch;
     align-content: end;
+  }
+
+  /* The copy column stretches; the slot takes the free space above the badge and title. */
+  .copy {
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .particles {
+    display: block;
+  }
+
+  .slot {
+    display: block;
+    flex: 1;
+    min-height: 0;
+    margin: clamp(20px, 2vw, 40px) 0 clamp(24px, 2.4vw, 46px);
+    user-select: none;
   }
 
   .visual {

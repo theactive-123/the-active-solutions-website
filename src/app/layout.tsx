@@ -4,6 +4,7 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { SmoothScroll } from "@/components/motion/SmoothScroll";
 import { Cursor } from "@/components/motion/Cursor";
+import { Preloader } from "@/components/motion/Preloader";
 import { JsonLd } from "@/components/JsonLd";
 import { organizationJsonLd } from "@/lib/seo";
 import { site } from "@/lib/site";
@@ -55,7 +56,9 @@ export const viewport: Viewport = {
 
 // Hide reveal targets before first paint only when JS + motion are available. If the motion
 // engine has not booted within 4s (script error, slow device) content is shown regardless.
-const motionBoot = `(function(d){var r=d.documentElement;if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches){r.classList.add('js-motion');setTimeout(function(){if(!r.classList.contains('motion-ready'))r.classList.remove('js-motion')},4000)}})(document)`;
+// `is-preloading` shows the preloader from the first paint; if it has not finished within 10s
+// it is removed and on-load animations are released anyway.
+const motionBoot = `(function(d){var r=d.documentElement;r.classList.add('is-preloading');setTimeout(function(){if(r.classList.contains('is-preloading')){r.classList.remove('is-preloading');window.dispatchEvent(new Event('tas:intro'))}},10000);if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches){r.classList.add('js-motion');setTimeout(function(){if(!r.classList.contains('motion-ready'))r.classList.remove('js-motion')},4000)}})(document)`;
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
@@ -71,6 +74,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <a href="#main" className="skip-link">
           Skip to content
         </a>
+        <Preloader />
         <SmoothScroll>
           <Header />
           <main id="main" tabIndex={-1}>

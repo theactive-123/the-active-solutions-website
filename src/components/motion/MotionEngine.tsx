@@ -3,6 +3,7 @@
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 import { gsap, ScrollTrigger, SplitText, isFinePointer, prefersReducedMotion } from "./gsap";
+import { introPending, whenIntro } from "./intro";
 
 /**
  * Declarative scroll animations. Server components opt in with data attributes:
@@ -34,6 +35,18 @@ export function MotionEngine() {
     const splits: SplitText[] = [];
     const cleanups: (() => void)[] = [];
 
+    // On-load (data-immediate) animations wait for the preloader; they are created paused
+    // so their start state hides the content, then restarted (with their delay) on release.
+    let released = !introPending();
+    const held = new Map<Element, gsap.core.Animation>();
+    const hold = <T extends gsap.core.Animation>(el: Element, anim: T) => {
+      if (!released && el.hasAttribute("data-immediate")) {
+        anim.pause();
+        held.set(el, anim);
+      }
+      return anim;
+    };
+
     const ctx = gsap.context(() => {
       const trigger = (el: Element, start = "top 88%") =>
         el.hasAttribute("data-immediate") ? undefined : { trigger: el, start, once: true };
@@ -50,7 +63,7 @@ export function MotionEngine() {
           onSplit(self) {
             gsap.set(el, { visibility: "visible" });
             const targets = type === "words" ? self.words : self.lines;
-            return gsap.from(targets, {
+            return hold(el, gsap.from(targets, {
               yPercent: 115,
               rotate: type === "words" ? 4 : 2,
               transformOrigin: "0% 100%",
@@ -59,7 +72,7 @@ export function MotionEngine() {
               delay: delayOf(el),
               ease: "expo.out",
               scrollTrigger: trigger(el),
-            });
+            }));
           },
         });
         splits.push(split);
@@ -78,7 +91,7 @@ export function MotionEngine() {
       gsap.utils.toArray<HTMLElement>("[data-reveal]").forEach((el) => {
         const kind = el.dataset.reveal || "up";
         const masked = kind === "clip" || kind === "line";
-        gsap.fromTo(
+        hold(el, gsap.fromTo(
           el,
           { opacity: masked ? 1 : 0, ...(fromVars[kind] ?? fromVars.up) },
           {
@@ -93,11 +106,11 @@ export function MotionEngine() {
             ease: masked ? "expo.inOut" : "expo.out",
             scrollTrigger: trigger(el),
           },
-        );
+        ));
       });
 
       gsap.utils.toArray<HTMLElement>("[data-reveal-stagger]").forEach((el) => {
-        gsap.fromTo(
+        hold(el, gsap.fromTo(
           el.children,
           { opacity: 0, y: 50 },
           {
@@ -108,7 +121,7 @@ export function MotionEngine() {
             delay: delayOf(el),
             scrollTrigger: trigger(el, "top 85%"),
           },
-        );
+        ));
       });
 
       // Parallax drift
@@ -196,6 +209,14 @@ export function MotionEngine() {
     window.addEventListener("load", refresh);
     document.fonts?.ready.then(refresh);
     const t = window.setTimeout(refresh, 600);
+
+    cleanups.push(
+      whenIntro(() => {
+        released = true;
+        held.forEach((anim) => anim.restart(true));
+        held.clear();
+      }),
+    );
 
     return () => {
       window.clearTimeout(t);

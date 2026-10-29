@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { gsap, isFinePointer, prefersReducedMotion } from "./gsap";
+import { introPending, whenIntro } from "./intro";
 import styles from "./TiltVisual.module.css";
 
 /**
@@ -19,9 +20,12 @@ export function TiltVisual({ children, className, float = true }: { children: Re
 
     const host = el.closest("section") ?? el;
     let move: ((e: Event) => void) | null = null;
+    let stopWaiting = () => {};
 
     const ctx = gsap.context(() => {
-      gsap.from(body, { opacity: 0, scale: 0.82, rotate: -8, y: 40, duration: 1.8, ease: "expo.out", delay: 0.3 });
+      // Enters once the preloader lifts (or right away when there is none).
+      const enter = gsap.from(body, { opacity: 0, scale: 0.82, rotate: -8, y: 40, duration: 1.8, ease: "expo.out", delay: 0.3, paused: introPending() });
+      if (enter.paused()) stopWaiting = whenIntro(() => enter.restart(true));
       if (float) gsap.to(el, { y: -18, duration: 3.2, ease: "sine.inOut", yoyo: true, repeat: -1 });
       if (!isFinePointer()) return;
 
@@ -41,6 +45,7 @@ export function TiltVisual({ children, className, float = true }: { children: Re
     });
 
     return () => {
+      stopWaiting();
       if (move) host.removeEventListener("pointermove", move);
       ctx.revert();
     };
