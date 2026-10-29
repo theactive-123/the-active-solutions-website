@@ -33,12 +33,25 @@ export function Process({ steps, theme = "light" }: { steps: ProcessStep[]; them
 
         // Content rising from below must not paint over the next section while pinned.
         gsap.set(section, { overflow: "clip" });
-        gsap.set(items, { y: () => Math.min(window.innerHeight * 0.55, 520), opacity: 0 });
+
+        // Every tween states both ends explicitly and never renders early (immediateRender: false).
+        // The trigger re-measures on refresh (invalidateOnRefresh), e.g. when you come back to the
+        // page already scrolled past the section; plain `to` tweens would then re-record the
+        // finished state as their start, and an eager `fromTo` would snap back to its start
+        // without the playhead moving. Both left the steps stuck. The starting state is set once here.
+        const rise = () => Math.min(window.innerHeight * 0.55, 520);
+        const idle = dots.length ? getComputedStyle(dots[0]).backgroundColor : "transparent";
+        const nums = items.map((item) => item.querySelector("[data-num]"));
+        // Start clean: when Next hides and re-shows this page (back/forward), GSAP's cached
+        // transforms can be stale and would add an offset to the numbers.
+        gsap.set([...items, ...nums, ...dots, progress], { clearProps: "transform,opacity,backgroundColor" });
+        gsap.set(items, { y: rise, opacity: 0 });
+        gsap.set(nums, { yPercent: 60 });
         gsap.set(dots, { scale: 0.4 });
         gsap.set(progress, { scaleX: 0 });
 
         const tl = gsap.timeline({
-          defaults: { ease: "none" },
+          defaults: { ease: "none", immediateRender: false },
           scrollTrigger: {
             trigger: section,
             // Pin with the whole section on screen: centred if it fits, otherwise its bottom
@@ -56,11 +69,11 @@ export function Process({ steps, theme = "light" }: { steps: ProcessStep[]; them
         items.forEach((item, i) => {
           const at = i;
           // Line travels to this step's dot, the dot pops, then the step rises into place.
-          tl.to(progress, { scaleX: (i + 1) / n, duration: 0.45, ease: "power1.inOut" }, at);
-          tl.to(dots[i], { scale: 1.35, backgroundColor: active, duration: 0.2, ease: "back.out(3)" }, at + 0.3);
-          tl.to(dots[i], { scale: 1, duration: 0.2, ease: "power2.out" }, at + 0.5);
-          tl.to(item, { y: 0, opacity: 1, duration: 0.85, ease: "power3.out" }, at + 0.15);
-          tl.fromTo(item.querySelector("[data-num]"), { yPercent: 60 }, { yPercent: 0, duration: 0.85, ease: "power3.out" }, at + 0.2);
+          tl.fromTo(progress, { scaleX: i / n }, { scaleX: (i + 1) / n, duration: 0.45, ease: "power1.inOut" }, at);
+          tl.fromTo(dots[i], { scale: 0.4, backgroundColor: idle }, { scale: 1.35, backgroundColor: active, duration: 0.2, ease: "back.out(3)" }, at + 0.3);
+          tl.fromTo(dots[i], { scale: 1.35 }, { scale: 1, duration: 0.2, ease: "power2.out" }, at + 0.5);
+          tl.fromTo(item, { y: rise, opacity: 0 }, { y: 0, opacity: 1, duration: 0.85, ease: "power3.out" }, at + 0.15);
+          tl.fromTo(nums[i], { yPercent: 60 }, { yPercent: 0, duration: 0.85, ease: "power3.out" }, at + 0.2);
         });
         // Brief hold on the finished state before the page continues.
         tl.to({}, { duration: 0.4 });

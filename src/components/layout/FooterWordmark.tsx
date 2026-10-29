@@ -29,7 +29,6 @@ export function FooterWordmark() {
             start: "top bottom",
             end: "bottom 98%",
             scrub: 0.8,
-            invalidateOnRefresh: true,
           },
         },
       );

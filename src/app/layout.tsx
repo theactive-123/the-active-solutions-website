@@ -54,6 +54,9 @@ export const viewport: Viewport = {
   colorScheme: "light",
 };
 
+/** Google Analytics 4 measurement ID. */
+const GA_ID = "G-509X68CBRB";
+
 // Hide reveal targets before first paint only when JS + motion are available. If the motion
 // engine has not booted within 4s (script error, slow device) content is shown regardless.
 // `is-preloading` shows the preloader from the first paint; if it has not finished within 10s
@@ -69,6 +72,17 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: motionBoot }} />
+        {/* Google tag (gtag.js) */}
+        <script async src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`} />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+
+gtag('config', '${GA_ID}');`,
+          }}
+        />
       </head>
       <body>
         <a href="#main" className="skip-link">

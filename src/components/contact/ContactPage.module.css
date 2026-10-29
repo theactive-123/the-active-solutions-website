@@ -40,6 +40,14 @@
   white-space: nowrap;
 }
 
+/* In the two-column layout the full display size makes "Let's talk about" ~5% wider than its
+   column (the line mask then clips it); this size keeps it inside with room to spare. */
+@media (min-width: 1024px) {
+  .title {
+    font-size: calc(var(--fs-display) * 0.92);
+  }
+}
+
 .title em {
   display: block;
   margin-left: -0.04em;
