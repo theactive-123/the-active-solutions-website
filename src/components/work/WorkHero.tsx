@@ -1,8 +1,8 @@
 import { Glow } from "@/components/motion/Glow";
 import { Button } from "@/components/ui/Button";
-import { projects } from "@/content/work";
+import { caseStudyPath, projects } from "@/content/work";
 import { site } from "@/lib/site";
-import { FanStack } from "./FanStack";
+import { ProjectSlider } from "./ProjectSlider";
 import styles from "./WorkHero.module.css";
 
 const STATS = [
@@ -34,7 +34,16 @@ export function WorkHero() {
             </Button>
           </div>
         </div>
-        <FanStack images={projects.map((p) => ({ src: p.image, alt: `${p.name} storefront` }))} />
+        <ProjectSlider
+          slides={projects.map((p) => ({
+            slug: p.slug,
+            name: p.name,
+            domain: p.domain,
+            image: p.image,
+            industry: p.industry,
+            href: caseStudyPath(p.slug),
+          }))}
+        />
       </div>
 
       <div className={`container ${styles.statsWrap}`}>

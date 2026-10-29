@@ -10,8 +10,9 @@ import { caseStudyPath, type Project } from "@/content/work";
 import styles from "./ProjectStack.module.css";
 
 /**
- * Case-study cards that pin and stack as you scroll: each new card slides over the last,
- * which recedes (scales down, dims). Inside each card the screenshot drifts with scroll.
+ * Case-study cards that pin and stack as you scroll (desktop). Each card parks fully visible
+ * for a stretch of scroll (the "hold", see CSS) so its buttons are easy to use; then the next
+ * card slides over it while it recedes slightly. Inside each card the screenshot drifts with scroll.
  */
 export function ProjectStack({ projects }: { projects: Project[] }) {
   const ref = useRef<HTMLOListElement>(null);
@@ -26,13 +27,19 @@ export function ProjectStack({ projects }: { projects: Project[] }) {
         cards.forEach((card, i) => {
           const next = cards[i + 1];
           if (next) {
-            gsap.to(card.querySelector("[data-card-body]"), {
-              scale: 0.9,
-              // Darken rather than fade: a translucent card would let the one beneath show through.
-              filter: "brightness(0.4)",
-              ease: "none",
-              scrollTrigger: { trigger: next, start: "top bottom", end: "top 18%", scrub: true },
-            });
+            // Recede only while the next card is actually covering this one.
+            // From full brightness explicitly: tweening from "none" would start at brightness(0).
+            gsap.fromTo(
+              card.querySelector("[data-card-body]"),
+              { scale: 1, filter: "brightness(1)" },
+              {
+                scale: 0.94,
+                // Darken rather than fade: a translucent card would let the one beneath show through.
+                filter: "brightness(0.55)",
+                ease: "none",
+                scrollTrigger: { trigger: next, start: "top 70%", end: "top 20%", scrub: true },
+              },
+            );
           }
           gsap.fromTo(
             card.querySelector("[data-shot]"),

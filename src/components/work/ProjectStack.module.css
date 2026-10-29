@@ -159,8 +159,18 @@
     top: calc(110px + var(--i) * 22px);
   }
 
-  .stack {
-    padding-bottom: 6vh;
+  /* Hold: empty scroll space under each card (but the last), so it stays parked and fully
+     visible for a while before the next card arrives. */
+  .card:not(:last-child) {
+    padding-bottom: 45vh;
+  }
+
+  /* The same hold at the end keeps the earlier cards pinned until the last one has parked;
+     then the whole stack leaves together. A spacer, not padding: sticky boxes are limited by
+     their container's content box, which excludes padding. */
+  .stack::after {
+    content: "";
+    height: 45vh;
   }
 
   .body {
