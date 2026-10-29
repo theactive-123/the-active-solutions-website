@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useEffect, useRef } from "react";
 import { gsap, isFinePointer, prefersReducedMotion } from "./gsap";
 import { introPending, releaseIntro } from "./intro";
+import { createPreloaderScene, type PreloaderScene } from "./preloaderScene";
 import styles from "./Preloader.module.css";
 
 /** Shortest and longest time the preloader stays up (ms). */
@@ -35,6 +36,7 @@ export function Preloader() {
     const ring = q<SVGCircleElement>("[data-pl-ring]");
     const mark = q("[data-pl-mark]");
     const words = el.querySelectorAll<HTMLElement>("[data-pl-word]");
+    const canvas = q<HTMLCanvasElement>("[data-pl-canvas]");
     const reduced = prefersReducedMotion();
     const minTime = reduced ? MIN_TIME_REDUCED : MIN_TIME;
 
@@ -86,7 +88,24 @@ export function Preloader() {
     let shown = 0;
     let lastInt = -1;
     let leaving = false;
-    const tl = gsap.timeline({ paused: true });
+    let cancelled = false;
+    let tl: gsap.core.Timeline | null = null;
+
+    // three.js particle logo (loaded on demand). Until it is ready, the ring + mark show progress.
+    let scene: PreloaderScene | null = null;
+    if (!reduced) {
+      import("three")
+        .then((THREE) => createPreloaderScene(THREE, canvas))
+        .then((s) => {
+          if (!s) return;
+          if (cancelled || leaving) return s.destroy();
+          scene = s;
+          s.setProgress(shown / 100);
+          gsap.to(canvas, { opacity: 1, duration: 0.9, ease: "power2.out" });
+          gsap.to(mark, { opacity: 0, scale: 0.8, duration: 0.6, ease: "power2.in" });
+        })
+        .catch(() => {});
+    }
 
     const render = () => {
       const int = Math.round(shown);
@@ -110,36 +129,57 @@ export function Preloader() {
       shown += (goal - shown) * ease;
       if (goal >= 100 && shown > 99.6) shown = 100;
       render();
+      scene?.setProgress(shown / 100);
       if (shown === 100 && !leaving) {
         leaving = true;
         gsap.ticker.remove(tick);
-        tl.play();
+        tl = exit();
       }
     };
 
-    // Exit
-    tl.call(() => el.setAttribute("data-state", "leaving"));
-    if (reduced) {
-      tl.call(() => {
-        unblock();
-        releaseIntro();
-      }).to(el, { opacity: 0, duration: 0.5, ease: "power1.out" });
-    } else {
-      tl.to(mark, { scale: 1.12, duration: 0.35, ease: "power2.inOut" })
-        .to(el.querySelectorAll("[data-pl-out]"), { yPercent: -60, opacity: 0, duration: 0.5, ease: "power3.in", stagger: 0.04 }, "-=0.2")
-        .to(panel, { yPercent: -100, duration: 1.1, ease: "expo.inOut" }, "-=0.3")
-        .to(back, { yPercent: -100, duration: 1.1, ease: "expo.inOut" }, "<0.14")
-        // Start the hero as the curtain uncovers it.
-        .call(
-          () => {
-            unblock();
-            releaseIntro();
-          },
-          undefined,
-          "<0.35",
-        );
-    }
-    tl.call(() => el.setAttribute("data-state", "done"));
+    const release = () => {
+      unblock();
+      releaseIntro();
+    };
+
+    // Exit: with the particle logo, it bursts and the site opens through a portal with a red rim;
+    // otherwise the dark panel and red curtain lift.
+    const exit = () => {
+      const t = gsap.timeline();
+      t.call(() => el.setAttribute("data-state", "leaving"));
+      const outs = el.querySelectorAll("[data-pl-out]");
+      if (reduced) {
+        t.call(release).to(el, { opacity: 0, duration: 0.5, ease: "power1.out" });
+      } else if (scene) {
+        const s = scene;
+        const max = Math.hypot(window.innerWidth, window.innerHeight) / 2 + 40;
+        const hole = { front: 0, back: 0 };
+        const mask = (node: HTMLElement, r: number) => {
+          const img = `radial-gradient(circle at 50% 50%, transparent ${r}px, #000 ${r + 2}px)`;
+          node.style.maskImage = img;
+          node.style.setProperty("-webkit-mask-image", img);
+        };
+        t.to(s.uniforms.uGather, { value: 1, duration: 0.5, ease: "power2.inOut" })
+          .to(outs, { yPercent: -60, opacity: 0, duration: 0.5, ease: "power3.in", stagger: 0.04 }, "<")
+          .to(s.uniforms.uBurst, { value: 1, duration: 1.3, ease: "power2.in" }, ">-0.1")
+          .to(hole, { front: max, duration: 1.15, ease: "expo.inOut", onUpdate: () => mask(panel, hole.front) }, "<0.4")
+          .to(hole, { back: max, duration: 1.15, ease: "expo.inOut", onUpdate: () => mask(back, hole.back) }, "<0.12")
+          .call(release, undefined, "<0.3");
+      } else {
+        t.to(mark, { scale: 1.12, duration: 0.35, ease: "power2.inOut" })
+          .to(outs, { yPercent: -60, opacity: 0, duration: 0.5, ease: "power3.in", stagger: 0.04 }, "-=0.2")
+          .to(panel, { yPercent: -100, duration: 1.1, ease: "expo.inOut" }, "-=0.3")
+          .to(back, { yPercent: -100, duration: 1.1, ease: "expo.inOut" }, "<0.14")
+          // Start the hero as the curtain uncovers it.
+          .call(release, undefined, "<0.35");
+      }
+      t.call(() => {
+        el.setAttribute("data-state", "done");
+        scene?.destroy();
+        scene = null;
+      });
+      return t;
+    };
 
     // Interactive: the glow follows the pointer and the mark leans towards it.
     let move: ((e: PointerEvent) => void) | null = null;
@@ -151,6 +191,7 @@ export function Preloader() {
       move = (e) => {
         const nx = e.clientX / window.innerWidth;
         const ny = e.clientY / window.innerHeight;
+        scene?.setPointer(nx * 2 - 1, ny * 2 - 1);
         gx(nx * 100);
         gy(ny * 100);
         ry((nx - 0.5) * 30);
@@ -163,8 +204,10 @@ export function Preloader() {
     gsap.ticker.add(tick);
 
     return () => {
+      cancelled = true;
       gsap.ticker.remove(tick);
-      tl.kill();
+      tl?.kill();
+      scene?.destroy();
       unblock();
       if (move) window.removeEventListener("pointermove", move);
       window.removeEventListener("load", finishTask);
@@ -181,6 +224,7 @@ export function Preloader() {
       <div className={styles.back} data-pl-back />
       <div className={styles.panel} data-pl-panel>
         <div className={styles.glow} />
+        <canvas className={styles.canvas} data-pl-canvas />
         <div className={styles.top}>
           <span data-pl-out>The Active Solutions</span>
           <span data-pl-out>[ SHOPIFY &amp; DTC GROWTH ]</span>
