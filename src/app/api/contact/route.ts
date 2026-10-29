@@ -1,5 +1,6 @@
+import { after } from "next/server";
 import nodemailer from "nodemailer";
-import { sendCrmLead } from "@/lib/crm";
+import { crmConfig, sendCrmLead } from "@/lib/crm";
 import { site } from "@/lib/site";
 import {
   HONEYPOT_FIELD,
@@ -13,9 +14,10 @@ import {
 
 /**
  * Validates all website forms and saves leads to CRM before acknowledging success.
- * SMTP notifications are optional and cannot turn a saved lead into a failed submission.
+ * SMTP notifications are optional, sent after the response (so a slow mail server never
+ * delays the visitor) and cannot turn a saved lead into a failed submission.
+ * Route handlers run on Node.js by default; a `runtime` export is not allowed with Cache Components.
  */
-export const runtime = "nodejs";
 
 const RATE_LIMIT = 5;
 const RATE_WINDOW_MS = 60_000;
@@ -73,11 +75,17 @@ function formatInZone(instant: number, timeZone: string) {
   }
 }
 
+function smtpConfig() {
+  return {
+    host: process.env.SMTP_HOST?.trim(),
+    user: process.env.SMTP_USER?.trim(),
+    password: process.env.SMTP_PASSWORD,
+    port: Number(process.env.SMTP_PORT?.trim() || 465),
+  };
+}
+
 async function sendEmail(mail: { subject: string; replyTo: string; html: string; text: string }) {
-  const host = process.env.SMTP_HOST?.trim();
-  const user = process.env.SMTP_USER?.trim();
-  const password = process.env.SMTP_PASSWORD;
-  const port = Number(process.env.SMTP_PORT || 465);
+  const { host, user, password, port } = smtpConfig();
   if (!host || !user || !password || !Number.isInteger(port) || port < 1 || port > 65535) {
     console.error("[api/contact] SMTP notification skipped: missing or invalid SMTP configuration");
     return;
@@ -94,7 +102,7 @@ async function sendEmail(mail: { subject: string; replyTo: string; html: string;
     socketTimeout: 15_000,
   });
   const result = await transporter.sendMail({
-    from: process.env.CONTACT_FROM_EMAIL || { name: site.name, address: user },
+    from: process.env.CONTACT_FROM_EMAIL?.trim() || { name: site.name, address: user },
     to: (process.env.ADMIN_EMAIL || process.env.CONTACT_TO_EMAIL || site.email)
       .split(",")
       .map((address) => address.trim())
@@ -203,8 +211,9 @@ export async function POST(req: Request) {
       return json({ ok: false, message: "Unknown form type." }, 400);
   }
 
-  if (!process.env.CRM_BASE_URL || !process.env.CRM_SITE_API_KEY) {
-    return json({ ok: false, message: UNAVAILABLE }, 503);
+  if (!crmConfig().configured) {
+    console.error("[api/contact] CRM_BASE_URL and/or CRM_SITE_API_KEY are not set on the server");
+    return json({ ok: false, code: "not_configured", message: UNAVAILABLE }, 503);
   }
 
   const saved = await sendCrmLead(crmForm, crmFields, req);
@@ -213,10 +222,29 @@ export async function POST(req: Request) {
   }
 
   const { html, text } = renderEmail(title, rows);
-  try {
-    await sendEmail({ subject, replyTo, html, text });
-  } catch {
-    console.error("[api/contact] SMTP notification failed; lead remains saved in CRM");
-  }
+  after(async () => {
+    try {
+      await sendEmail({ subject, replyTo, html, text });
+    } catch (error) {
+      console.error("[api/contact] SMTP notification failed; lead remains saved in CRM:", error instanceof Error ? error.message : error);
+    }
+  });
   return json({ ok: true, message: success });
+}
+
+/**
+ * Health check: GET /api/contact shows whether the server can see its form settings
+ * (true/false only, never the values).
+ */
+export function GET() {
+  const crm = crmConfig();
+  const smtp = smtpConfig();
+  return Response.json(
+    {
+      crm: { baseUrl: crm.baseUrlValid, apiKey: crm.apiKeyValid },
+      smtp: { host: !!smtp.host, port: Number.isInteger(smtp.port) && smtp.port > 0 && smtp.port < 65536, user: !!smtp.user, password: !!smtp.password },
+      adminEmail: !!(process.env.ADMIN_EMAIL || process.env.CONTACT_TO_EMAIL),
+    },
+    { headers: { "Cache-Control": "no-store" } },
+  );
 }

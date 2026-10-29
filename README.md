@@ -32,16 +32,21 @@ Copy `.env.example` to `.env.local` and fill in what you need:
 | --- | --- |
 | `NEXT_PUBLIC_SITE_URL` | Canonical site URL used for metadata, sitemap and JSON-LD (default `https://www.theactivesolutions.com`) |
 | `NEXT_PUBLIC_CONTACT_EMAIL` | Public contact email shown on the site |
-| `RESEND_API_KEY` | Enables email delivery of contact, meeting and newsletter forms via [Resend](https://resend.com) |
-| `CONTACT_TO_EMAIL` | Inbox that receives form submissions |
-| `CONTACT_FROM_EMAIL` | Verified sender, e.g. `The Active Solutions <hello@yourdomain.com>` |
+| `CRM_BASE_URL`, `CRM_SITE_API_KEY` | Required. Every form submission is saved as a lead in the CRM (key: 64 hex characters) |
+| `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASSWORD` | Email notification for each submission (port 465 = TLS, 587 = STARTTLS) |
+| `ADMIN_EMAIL` | Inbox(es) that receive notifications; comma-separate several (falls back to `CONTACT_TO_EMAIL`) |
+| `CONTACT_FROM_EMAIL` | Optional sender override (defaults to `SMTP_USER`) |
 | `NEXT_PUBLIC_BOOKING_URL` | Optional Calendly/Cal.com link offered on the schedule page |
 | `WORDPRESS_API_URL` | WordPress REST API the blog reads from (default `https://blogs.theactivesolutions.com/wp-json/wp/v2`) |
 | `WORDPRESS_USERNAME`, `WORDPRESS_APP_PASSWORD` | Optional. Only needed if the WordPress REST API is locked down; published posts are public |
 | `WORDPRESS_REVALIDATE_SECRET` | Optional. Secret for `POST /api/revalidate?secret=…` to refresh the blog instantly |
 
-Without `RESEND_API_KEY` the forms show a friendly fallback with a `mailto:` link instead of
-silently dropping messages.
+Forms save the lead to the CRM first, then send the email notification in the background, so a
+slow mail server never delays the visitor. Without the CRM settings the forms show a friendly
+fallback with a `mailto:` link instead of silently dropping messages.
+
+**Check the server's settings:** open `/api/contact` in a browser. It shows `true`/`false` for
+each CRM and SMTP setting the running site can see (never the values).
 
 ## Blog (WordPress)
 

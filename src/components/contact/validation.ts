@@ -6,7 +6,8 @@
 export type ContactRequestType = "contact" | "meeting" | "newsletter";
 
 /** Response body of POST /api/contact. */
-export type ApiResponse = { ok: boolean; message?: string; errors?: Record<string, string> };
+/** `code: "not_configured"` marks the 503 the API sends when the form backend isn't set up. */
+export type ApiResponse = { ok: boolean; message?: string; errors?: Record<string, string>; code?: "not_configured" };
 
 /** Hidden honeypot field. Real visitors never fill it; the API answers 200 and drops the request. */
 export const HONEYPOT_FIELD = "botcheck";
@@ -203,7 +204,12 @@ export async function submitContact(
       body: JSON.stringify(body),
     });
     const json = (await res.json().catch(() => ({}))) as ApiResponse;
-    return { ok: res.ok && json.ok !== false, message: json.message, errors: json.errors, status: res.status };
+    const ok = res.ok && json.ok !== false;
+    // Only our own "not configured" answer means the forms are switched off. Any other 503
+    // (e.g. the host's gateway while the app restarts) is a temporary error worth retrying.
+    const status = res.status === 503 && json.code !== "not_configured" ? 502 : res.status;
+    const message = json.message ?? (ok ? undefined : "Something went wrong on our side. Please try again in a moment.");
+    return { ok, message, errors: json.errors, status };
   } catch {
     return { ok: false, status: 0, message: "We couldn't reach the server. Please check your connection and try again." };
   }

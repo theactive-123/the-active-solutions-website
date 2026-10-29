@@ -2,6 +2,18 @@ import "server-only";
 
 type FormKind = "newsletter" | "contact" | "partner" | "schedule";
 
+/** Reads the CRM settings at request time. Values are trimmed: a pasted trailing space or newline breaks the key check. */
+export function crmConfig() {
+  const baseUrl = process.env.CRM_BASE_URL?.trim() ?? "";
+  const apiKey = process.env.CRM_SITE_API_KEY?.trim() ?? "";
+  let baseUrlValid = false;
+  try {
+    baseUrlValid = /^https?:$/.test(new URL(baseUrl).protocol);
+  } catch {}
+  const apiKeyValid = /^[a-f0-9]{64}$/i.test(apiKey);
+  return { baseUrl, apiKey, baseUrlValid, apiKeyValid, configured: !!baseUrl && !!apiKey };
+}
+
 export async function sendCrmLead(
   form: FormKind,
   fields: Record<string, unknown>,
@@ -12,10 +24,9 @@ export async function sendCrmLead(
     const referrer=request?.headers.get("referer");
     if(referrer){const url=new URL(referrer);if(["https:","http:"].includes(url.protocol)&&url.origin===new URL(request!.url).origin&&!url.username&&!url.password){url.hash="";pageUrl=url.href;}}
   } catch {}
-  const baseUrl = process.env.CRM_BASE_URL;
-  const apiKey = process.env.CRM_SITE_API_KEY;
-  if (!baseUrl || !apiKey || !/^[a-f0-9]{64}$/.test(apiKey)) {
-    console.error("CRM delivery skipped: server environment is not configured.");
+  const { baseUrl, apiKey, baseUrlValid, apiKeyValid } = crmConfig();
+  if (!baseUrlValid || !apiKeyValid) {
+    console.error(`CRM delivery skipped: ${!baseUrlValid ? "CRM_BASE_URL is not a valid URL" : "CRM_SITE_API_KEY must be 64 hex characters"}.`);
     return false;
   }
 
