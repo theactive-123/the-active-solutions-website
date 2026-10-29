@@ -120,9 +120,9 @@ export function MegaMenu({ id, open, pathname }: { id: string; open: boolean; pa
         </div>
 
         <div className={styles.side}>
-          <Link href="/work" className={styles.sideLink} data-mega-side>
-            <span className={styles.sideKicker}>Case studies</span>
-            <span className={styles.sideTitle}>See our work</span>
+          <Link href="/case-studies" className={styles.sideLink} data-mega-side>
+            <span className={styles.sideKicker}>Our work</span>
+            <span className={styles.sideTitle}>Read case studies</span>
             <Arrow className={styles.sideArrow} />
           </Link>
           <Link href="/partners" className={styles.sideLink} data-mega-side>

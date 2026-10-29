@@ -10,6 +10,13 @@ const LenisContext = createContext<Lenis | null>(null);
 export const useLenis = () => useContext(LenisContext);
 
 /** Scrolls to a target with Lenis when active, falling back to native scrolling. */
+/** Finds the element for a "#hash". getElementById accepts any id, unlike querySelector,
+ *  which throws on ids such as "#1-check-the-tracking-first". */
+export function elementForHash(hash: string): HTMLElement | null {
+  const id = decodeURIComponent(hash.replace(/^#/, ""));
+  return id ? document.getElementById(id) : null;
+}
+
 export function scrollToTarget(lenis: Lenis | null, target: string | HTMLElement | number) {
   if (lenis) {
     lenis.scrollTo(target, { offset: typeof target === "number" ? 0 : -24, duration: 1.4 });
@@ -17,7 +24,7 @@ export function scrollToTarget(lenis: Lenis | null, target: string | HTMLElement
   }
   if (typeof target === "number") window.scrollTo({ top: target });
   else {
-    const el = typeof target === "string" ? document.querySelector(target) : target;
+    const el = typeof target === "string" ? elementForHash(target) : target;
     el?.scrollIntoView();
   }
 }
@@ -47,7 +54,7 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
   // Route change: jump to the hash target or the top of the new page.
   useEffect(() => {
     const hash = window.location.hash;
-    const target = hash ? document.querySelector<HTMLElement>(hash) : null;
+    const target = hash ? elementForHash(hash) : null;
     if (target) {
       requestAnimationFrame(() => scrollToTarget(lenis, target));
     } else {
@@ -62,7 +69,7 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
       if (!a || e.defaultPrevented || e.metaKey || e.ctrlKey) return;
       const url = new URL(a.href);
       if (url.pathname !== window.location.pathname || !url.hash) return;
-      const target = document.querySelector<HTMLElement>(url.hash);
+      const target = elementForHash(url.hash);
       if (!target) return;
       e.preventDefault();
       history.pushState(null, "", url.hash);

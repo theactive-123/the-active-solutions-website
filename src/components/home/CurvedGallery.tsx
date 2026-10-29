@@ -1,14 +1,15 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useRef } from "react";
 import { gsap, useGSAP, prefersReducedMotion } from "@/components/motion/gsap";
 import styles from "./CurvedGallery.module.css";
 
-const SLIDES = [
-  { src: "/images/work/thermolab.png", alt: "ThermoLab Shopify store homepage" },
-  { src: "/images/work/heybuddy.png", alt: "HeyBuddy Shopify store homepage" },
-  { src: "/images/work/peak-motion.png", alt: "Peak Motion Shopify store homepage" },
+const SLIDES: { src: string; alt: string; href?: string }[] = [
+  { src: "/images/work/thermolab.png", alt: "ThermoLab Shopify store homepage", href: "/case-studies/the-thermolab" },
+  { src: "/images/work/heybuddy.png", alt: "HeyBuddy Shopify store homepage", href: "/case-studies/heybuddy" },
+  { src: "/images/work/peak-motion.png", alt: "Peak Motion Shopify store homepage", href: "/case-studies/peak-motion" },
   { src: "/images/team/team-feature.png", alt: "The Active Solutions team at work in Karachi" },
 ];
 
@@ -52,6 +53,12 @@ export function CurvedGallery() {
             aria-hidden={i === 0 || i === slides.length - 1 || undefined}
           >
             <Image src={s.src} alt={i === 0 || i === slides.length - 1 ? "" : s.alt} fill sizes="(min-width: 1024px) 24vw, 60vw" className={styles.img} />
+            {/* Project panels open their case study (edge duplicates stay decorative) */}
+            {s.href && i > 0 && i < slides.length - 1 && (
+              <Link href={s.href} className={styles.link} data-cursor="View">
+                <span className="sr-only">Case study: {s.alt.replace(" Shopify store homepage", "")}</span>
+              </Link>
+            )}
           </figure>
         ))}
       </div>

@@ -5,7 +5,8 @@ import { useRef } from "react";
 import { gsap, useGSAP, prefersReducedMotion } from "@/components/motion/gsap";
 import { Button } from "@/components/ui/Button";
 import { CheckIcon } from "@/components/sections/CheckList";
-import type { Project } from "@/content/work";
+import Link from "next/link";
+import { caseStudyPath, type Project } from "@/content/work";
 import styles from "./ProjectStack.module.css";
 
 /**
@@ -65,15 +66,7 @@ export function ProjectStack({ projects }: { projects: Project[] }) {
           style={{ "--i": i, "--accent": p.accent } as React.CSSProperties}
         >
           <article className={styles.body} data-card-body aria-labelledby={`${p.slug}-title`}>
-            <a
-              href={`https://${p.domain}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={styles.media}
-              data-cursor="Visit"
-              tabIndex={-1}
-              aria-hidden="true"
-            >
+            <Link href={caseStudyPath(p.slug)} className={styles.media} data-cursor="View" tabIndex={-1} aria-hidden="true">
               <span className={styles.bar}>
                 <span className={styles.dots}>
                   <i />
@@ -87,7 +80,7 @@ export function ProjectStack({ projects }: { projects: Project[] }) {
                   <Image src={p.image} alt="" fill sizes="(min-width: 900px) 52vw, 92vw" className={styles.img} />
                 </span>
               </span>
-            </a>
+            </Link>
 
             <div className={styles.info}>
               <p className={styles.count} data-card-reveal>
@@ -120,8 +113,11 @@ export function ProjectStack({ projects }: { projects: Project[] }) {
                   </li>
                 ))}
               </ul>
-              <div data-card-reveal>
-                <Button href={`https://${p.domain}`} target="_blank" rel="noopener noreferrer">
+              <div className={styles.actions} data-card-reveal>
+                <Button href={caseStudyPath(p.slug)}>
+                  View case study<span className="sr-only">: {p.name}</span>
+                </Button>
+                <Button href={`https://${p.domain}`} target="_blank" rel="noopener noreferrer" variant="outline-light">
                   Visit live store<span className="sr-only"> (opens in a new tab)</span>
                 </Button>
               </div>

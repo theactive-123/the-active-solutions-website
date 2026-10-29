@@ -3,7 +3,8 @@ import { SectionHeader } from "@/components/ui/SectionHeader";
 import { Button } from "@/components/ui/Button";
 import { Tags } from "@/components/ui/Tags";
 import { BrowserFrame } from "./BrowserFrame";
-import { projects } from "@/content/work";
+import Link from "next/link";
+import { caseStudyPath, projects } from "@/content/work";
 import styles from "./FeaturedWork.module.css";
 
 export function FeaturedWork() {
@@ -24,8 +25,8 @@ export function FeaturedWork() {
             }
             text={<p>Built by our team in Karachi for customers worldwide.</p>}
             aside={
-              <Button href="/work" variant="outline-light">
-                See all work
+              <Button href="/case-studies" variant="outline-light">
+                All case studies
               </Button>
             }
           />
@@ -36,7 +37,9 @@ export function FeaturedWork() {
                 <p className={styles.count} aria-hidden="true">
                   <b>{String(i + 1).padStart(2, "0")}</b> / {String(projects.length).padStart(2, "0")}
                 </p>
-                <BrowserFrame src={p.image} domain={p.domain} alt={`${p.name} Shopify storefront`} priority={i === 0} />
+                <Link href={caseStudyPath(p.slug)} className={styles.frameLink} data-cursor="View" aria-label={`${p.name} case study`}>
+                  <BrowserFrame src={p.image} domain={p.domain} alt="" priority={i === 0} />
+                </Link>
                 <div className={styles.meta}>
                   <h3 className={`h2 ${styles.name}`} data-split>
                     {p.name}
@@ -46,9 +49,12 @@ export function FeaturedWork() {
                     <p className="body">{p.text}</p>
                   </div>
                   <div className={styles.cta} data-reveal data-delay="0.1">
-                    <Button href={`https://${p.domain}`} target="_blank" rel="noopener noreferrer">
-                      Visit live store<span className="sr-only"> (opens in a new tab)</span>
+                    <Button href={caseStudyPath(p.slug)}>
+                      View case study<span className="sr-only">: {p.name}</span>
                     </Button>
+                    <a href={`https://${p.domain}`} target="_blank" rel="noopener noreferrer" className={styles.visit}>
+                      Visit store ↗<span className="sr-only"> {p.domain} (opens in a new tab)</span>
+                    </a>
                   </div>
                 </div>
               </li>

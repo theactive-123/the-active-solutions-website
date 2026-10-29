@@ -132,3 +132,9 @@
     margin-right: 0;
   }
 }
+
+.ctas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 16px;
+}

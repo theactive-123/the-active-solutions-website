@@ -1,0 +1,126 @@
+.hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding-top: clamp(120px, 9vw, 180px);
+  padding-bottom: clamp(48px, 5vw, 100px);
+}
+
+.inner {
+  position: relative;
+  z-index: 1;
+}
+
+.crumbs ol {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  color: var(--on-dark-2);
+  font-size: var(--fs-small);
+}
+
+.crumbs li + li::before {
+  content: "/";
+  margin-right: 8px;
+  opacity: 0.6;
+}
+
+.crumbs a:hover,
+.crumbs a:focus-visible {
+  color: var(--white);
+}
+
+.crumbs [aria-current] {
+  color: var(--white);
+}
+
+.kicker {
+  margin-top: clamp(28px, 3vw, 56px);
+  color: var(--on-dark);
+}
+
+.title {
+  max-width: 1300px;
+  margin-top: 18px;
+}
+
+.row {
+  display: grid;
+  gap: 24px 48px;
+  align-items: end;
+  margin-top: clamp(24px, 2.4vw, 44px);
+}
+
+.summary {
+  max-width: 700px;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px 20px;
+}
+
+.facts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px 24px;
+  margin-top: clamp(36px, 3.6vw, 70px);
+  padding-top: clamp(20px, 1.6vw, 30px);
+  border-top: 1px solid var(--line-light);
+}
+
+.fact dt {
+  color: var(--on-dark-2);
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.fact dd {
+  margin: 4px 0 0;
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: var(--fs-body);
+}
+
+.factLink {
+  text-decoration: underline;
+  text-decoration-color: rgba(255, 255, 255, 0.35);
+  text-underline-offset: 3px;
+  transition: text-decoration-color 0.3s;
+}
+
+.factLink:hover,
+.factLink:focus-visible {
+  text-decoration-color: var(--red);
+}
+
+.showcase {
+  margin-top: clamp(48px, 5vw, 100px);
+}
+
+.showcase > div {
+  width: 100%;
+  max-width: none;
+  box-shadow:
+    0 60px 120px -50px rgba(0, 0, 0, 0.8),
+    0 0 0 1px rgba(255, 255, 255, 0.06),
+    0 0 120px -40px var(--accent);
+}
+
+@media (min-width: 700px) {
+  .facts {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1100px) {
+  .row {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .facts {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+}

@@ -81,9 +81,12 @@ export function ClientProof() {
                 </span>
               </figcaption>
             </figure>
-            <div data-reveal data-delay="0.15">
+            <div className={styles.ctas} data-reveal data-delay="0.15">
               <Button href="/contact" variant="dark">
                 Discuss Your Shopify Project
+              </Button>
+              <Button href="/case-studies/the-thermolab" variant="outline-dark">
+                Read the ThermoLab case study
               </Button>
             </div>
           </div>

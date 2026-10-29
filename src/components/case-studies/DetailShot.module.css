@@ -1,0 +1,31 @@
+.shot {
+  display: grid;
+  gap: 14px;
+}
+
+.frame {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: #111;
+}
+
+.img {
+  object-fit: cover;
+  transform: scale(var(--zoom));
+  transition: transform 1.4s var(--ease-out);
+}
+
+.shot:hover .img {
+  transform: scale(calc(var(--zoom) * 1.08));
+}
+
+.caption {
+  font-size: var(--fs-small);
+  color: var(--muted);
+}
+
+:global(.theme-dark) .caption {
+  color: var(--on-dark-2);
+}

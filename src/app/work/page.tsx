@@ -8,6 +8,7 @@ import { CtaBanner } from "@/components/sections/CtaBanner";
 import { Marquee } from "@/components/sections/Marquee";
 import { Process } from "@/components/sections/Process";
 import { SectionHeader } from "@/components/ui/SectionHeader";
+import { Button } from "@/components/ui/Button";
 import { MotionEngine } from "@/components/motion/MotionEngine";
 import { JsonLd } from "@/components/JsonLd";
 import { projects } from "@/content/work";
@@ -94,6 +95,11 @@ export default function WorkPage() {
               </span>
             }
             text={<p>Each build starts with the customer journey and ends with a store the brand&apos;s own team can run.</p>}
+            aside={
+              <Button href="/case-studies" variant="outline-light">
+                All case studies
+              </Button>
+            }
           />
           <ProjectStack projects={projects} />
         </div>

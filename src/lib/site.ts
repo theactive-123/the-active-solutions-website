@@ -63,6 +63,7 @@ export const mainNav: NavLink[] = [
 
 export const companyNav: NavLink[] = [
   { label: "Work", href: "/work" },
+  { label: "Case studies", href: "/case-studies" },
   { label: "Partnership", href: "/partners" },
   { label: "About", href: "/about" },
   { label: "Insights", href: "/insights" },

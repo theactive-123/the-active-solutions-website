@@ -1,0 +1,148 @@
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  border-radius: var(--radius);
+  background: var(--white);
+  overflow: hidden;
+  box-shadow: 0 30px 60px -45px rgba(11, 11, 12, 0.45);
+  transition:
+    transform 0.6s var(--ease-out),
+    box-shadow 0.6s var(--ease-out);
+}
+
+.card:hover,
+.card:focus-within {
+  transform: translateY(-8px);
+  box-shadow: 0 40px 80px -40px rgba(11, 11, 12, 0.55);
+}
+
+.media {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  background: #111;
+}
+
+.img {
+  object-fit: cover;
+  object-position: top center;
+  transition: transform 1.2s var(--ease-out);
+}
+
+.card:hover .img {
+  transform: scale(1.06);
+}
+
+.badge {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  padding: 4px 10px;
+  border-radius: 40px;
+  background: rgba(11, 11, 12, 0.75);
+  color: var(--white);
+  font-size: 13px;
+  backdrop-filter: blur(6px);
+}
+
+.view {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  display: grid;
+  place-items: center;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: var(--red);
+  color: var(--white);
+  font-size: 14px;
+  font-weight: 600;
+  text-align: center;
+  line-height: 1.2;
+  padding: 18px;
+  translate: -50% -50%;
+  scale: 0;
+  transition: scale 0.6s var(--ease-out);
+}
+
+.card:hover .view {
+  scale: 1;
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex: 1;
+  padding: clamp(18px, 1.6vw, 28px);
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.chips li {
+  padding: 3px 11px;
+  border: 1px solid var(--line);
+  border-radius: 40px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(1.5rem, 1.2rem + 0.9vw, 2.25rem);
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+
+/* The heading link stretches over the whole card */
+.link::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.link:focus-visible {
+  outline: none;
+}
+
+.card:has(.link:focus-visible) {
+  outline: 2px solid var(--red);
+  outline-offset: 4px;
+}
+
+.text {
+  color: var(--muted);
+  font-size: var(--fs-small);
+  line-height: 1.6;
+}
+
+.more {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: auto;
+  padding-top: 8px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.more svg {
+  transition: transform 0.5s var(--ease-out);
+}
+
+.card:hover .more {
+  color: var(--red);
+}
+
+.card:hover .more svg {
+  transform: translateX(8px);
+}

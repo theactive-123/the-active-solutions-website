@@ -1,0 +1,44 @@
+.skeleton {
+  min-height: 100svh;
+}
+
+.challenge {
+  display: grid;
+  gap: 40px clamp(40px, 5vw, 100px);
+}
+
+.prose {
+  display: grid;
+  gap: 1em;
+  max-width: 720px;
+  font-size: var(--fs-lead);
+  line-height: 1.6;
+}
+
+.prose p:first-child {
+  font-family: var(--font-display);
+  font-size: clamp(1.25rem, 0.95rem + 0.9vw, 2rem);
+  font-weight: 500;
+  line-height: 1.35;
+  letter-spacing: -0.015em;
+}
+
+.prose p + p {
+  color: var(--muted);
+}
+
+.details {
+  display: grid;
+  gap: clamp(16px, 1.6vw, 30px);
+  margin-top: clamp(40px, 4vw, 80px);
+}
+
+@media (min-width: 900px) {
+  .challenge {
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  }
+
+  .details {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}

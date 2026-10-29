@@ -57,3 +57,32 @@
     gap: 40px;
   }
 }
+
+.frameLink {
+  display: block;
+  border-radius: var(--radius);
+}
+
+.cta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 22px;
+}
+
+.visit {
+  color: var(--on-dark);
+  font-size: var(--fs-small);
+  text-decoration: underline;
+  text-decoration-color: rgba(255, 255, 255, 0.3);
+  text-underline-offset: 4px;
+  transition:
+    color 0.3s,
+    text-decoration-color 0.3s;
+}
+
+.visit:hover,
+.visit:focus-visible {
+  color: var(--white);
+  text-decoration-color: var(--red);
+}

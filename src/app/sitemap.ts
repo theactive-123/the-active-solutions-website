@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { insights } from "@/content/insights";
+import { caseStudyPath, projects } from "@/content/work";
 import { services, site } from "@/lib/site";
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -7,6 +8,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: "/", priority: 1, changeFrequency: "weekly" },
     ...services.map((s) => ({ path: s.href, priority: 0.9, changeFrequency: "monthly" as const })),
     { path: "/work", priority: 0.8, changeFrequency: "monthly" },
+    { path: "/case-studies", priority: 0.8, changeFrequency: "monthly" },
+    ...projects.map((p) => ({ path: caseStudyPath(p.slug), priority: 0.7, changeFrequency: "yearly" as const })),
     { path: "/partners", priority: 0.8, changeFrequency: "monthly" },
     { path: "/about", priority: 0.7, changeFrequency: "monthly" },
     { path: "/insights", priority: 0.8, changeFrequency: "weekly" },
