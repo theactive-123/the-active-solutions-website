@@ -41,8 +41,9 @@ Copy `.env.example` to `.env.local` and fill in what you need:
 | `WORDPRESS_USERNAME`, `WORDPRESS_APP_PASSWORD` | Optional. Only needed if the WordPress REST API is locked down; published posts are public |
 | `WORDPRESS_REVALIDATE_SECRET` | Optional. Secret for `POST /api/revalidate?secret=…` to refresh the blog instantly |
 
-Forms save the lead to the CRM first, then send the email notification in the background, so a
-slow mail server never delays the visitor. Without the CRM settings the forms show a friendly
+Forms save the lead to the CRM first, then send two emails in the background (so a slow mail
+server never delays the visitor): a notification to your team (`ADMIN_EMAIL`) and a branded
+thank-you to the visitor (`src/lib/email/confirmation.ts`; replies go to your team inbox). Without the CRM settings the forms show a friendly
 fallback with a `mailto:` link instead of silently dropping messages.
 
 **Check the server's settings:** open `/api/contact` in a browser. It shows `true`/`false` for

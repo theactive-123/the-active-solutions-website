@@ -1,6 +1,7 @@
 import { after } from "next/server";
 import nodemailer from "nodemailer";
 import { crmConfig, sendCrmLead } from "@/lib/crm";
+import { renderConfirmation, type Confirmation } from "@/lib/email/confirmation";
 import { site } from "@/lib/site";
 import {
   HONEYPOT_FIELD,
@@ -14,8 +15,9 @@ import {
 
 /**
  * Validates all website forms and saves leads to CRM before acknowledging success.
- * SMTP notifications are optional, sent after the response (so a slow mail server never
- * delays the visitor) and cannot turn a saved lead into a failed submission.
+ * Emails (a notification to the team and a branded thank-you to the visitor) are optional,
+ * sent after the response (so a slow mail server never delays the visitor) and cannot turn
+ * a saved lead into a failed submission.
  * Route handlers run on Node.js by default; a `runtime` export is not allowed with Cache Components.
  */
 
@@ -69,7 +71,17 @@ ${filled
 
 function formatInZone(instant: number, timeZone: string) {
   try {
-    return new Intl.DateTimeFormat("en-GB", { dateStyle: "full", timeStyle: "short", timeZone, timeZoneName: "short" }).format(instant);
+    // dateStyle/timeStyle can't be combined with timeZoneName (it throws), so list the fields.
+    return new Intl.DateTimeFormat("en-GB", {
+      weekday: "long",
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+      hour: "numeric",
+      minute: "2-digit",
+      timeZone,
+      timeZoneName: "short",
+    }).format(instant);
   } catch {
     return new Date(instant).toISOString();
   }
@@ -84,13 +96,27 @@ function smtpConfig() {
   };
 }
 
-async function sendEmail(mail: { subject: string; replyTo: string; html: string; text: string }) {
+const smtpReady = () => {
   const { host, user, password, port } = smtpConfig();
-  if (!host || !user || !password || !Number.isInteger(port) || port < 1 || port > 65535) {
-    console.error("[api/contact] SMTP notification skipped: missing or invalid SMTP configuration");
+  return !!(host && user && password && Number.isInteger(port) && port > 0 && port < 65536);
+};
+
+/** Admin inbox(es): ADMIN_EMAIL, then CONTACT_TO_EMAIL, then the public address. */
+const teamInboxes = () =>
+  (process.env.ADMIN_EMAIL || process.env.CONTACT_TO_EMAIL || site.email)
+    .split(",")
+    .map((address) => address.trim())
+    .filter(Boolean);
+
+type Mail = { to: string | string[]; replyTo: string; subject: string; html: string; text: string };
+
+/** Sends the team notification and the visitor's thank-you over one SMTP connection. */
+async function sendEmails(mails: { label: string; mail: Mail }[]) {
+  if (!smtpReady()) {
+    console.error("[api/contact] Emails skipped: missing or invalid SMTP configuration");
     return;
   }
-
+  const { host, user, password, port } = smtpConfig();
   const transporter = nodemailer.createTransport({
     host,
     port,
@@ -101,22 +127,17 @@ async function sendEmail(mail: { subject: string; replyTo: string; html: string;
     greetingTimeout: 10_000,
     socketTimeout: 15_000,
   });
-  const result = await transporter.sendMail({
-    from: process.env.CONTACT_FROM_EMAIL?.trim() || { name: site.name, address: user },
-    to: (process.env.ADMIN_EMAIL || process.env.CONTACT_TO_EMAIL || site.email)
-      .split(",")
-      .map((address) => address.trim())
-      .filter(Boolean),
-    replyTo: mail.replyTo,
-    subject: mail.subject,
-    html: mail.html,
-    text: mail.text,
-    disableFileAccess: true,
-    disableUrlAccess: true,
+  const from = process.env.CONTACT_FROM_EMAIL?.trim() || { name: site.name, address: user! };
+  // Each email is independent: a failed thank-you never blocks the team notification.
+  const results = await Promise.allSettled(
+    mails.map(({ mail }) => transporter.sendMail({ from, ...mail, disableFileAccess: true, disableUrlAccess: true })),
+  );
+  results.forEach((r, i) => {
+    const label = mails[i].label;
+    if (r.status === "rejected") console.error(`[api/contact] ${label} email failed:`, r.reason instanceof Error ? r.reason.message : r.reason);
+    else if (!r.value.accepted.length || r.value.rejected.length) console.error(`[api/contact] ${label} email was not accepted by all recipients`);
   });
-  if (!result.accepted.length || result.rejected.length) {
-    console.error("[api/contact] SMTP notification was not accepted by all recipients");
-  }
+  transporter.close();
 }
 
 const UNAVAILABLE = `Our form isn't connected right now. Please email us at ${site.email} and we'll reply within one business day.`;
@@ -146,6 +167,7 @@ export async function POST(req: Request) {
   let title: string;
   let rows: Row[];
   let success: string;
+  let confirmation: Confirmation;
 
   switch (body.type) {
     case "contact": {
@@ -167,6 +189,7 @@ export async function POST(req: Request) {
         [partner ? "Delivery requirements" : "Message", data.message],
       ];
       success = "Thanks! Your message is in. We'll reply within one business day.";
+      confirmation = { kind: partner ? "partner" : "project", name: data.name, services: data.services, budget: data.budget };
       break;
     }
     case "meeting": {
@@ -189,6 +212,9 @@ export async function POST(req: Request) {
         ["Notes", data.notes],
       ];
       success = "Request received. We'll confirm by email with a meeting link within one business day.";
+      confirmation = data.timeZone
+        ? { kind: "meeting", name: data.name, when: formatInZone(instant, data.timeZone), timeZone: data.timeZone }
+        : { kind: "meeting", name: data.name, when: office };
       break;
     }
     case "newsletter": {
@@ -205,6 +231,7 @@ export async function POST(req: Request) {
         ["Signed up from", data.source],
       ];
       success = "You're on the list. Look out for our next issue.";
+      confirmation = { kind: "newsletter", name: data.name };
       break;
     }
     default:
@@ -222,14 +249,21 @@ export async function POST(req: Request) {
   }
 
   const { html, text } = renderEmail(title, rows);
+  const thanks = renderConfirmation(confirmation);
+  const team = teamInboxes();
   after(async () => {
     try {
-      await sendEmail({ subject, replyTo, html, text });
+      await sendEmails([
+        { label: "Team notification", mail: { to: team, replyTo, subject, html, text } },
+        // Replies to the thank-you go to the team inbox.
+        { label: "Visitor thank-you", mail: { to: replyTo, replyTo: team[0] ?? site.email, ...thanks } },
+      ]);
     } catch (error) {
-      console.error("[api/contact] SMTP notification failed; lead remains saved in CRM:", error instanceof Error ? error.message : error);
+      console.error("[api/contact] Emails failed; lead remains saved in CRM:", error instanceof Error ? error.message : error);
     }
   });
-  return json({ ok: true, message: success });
+  const note = smtpReady() ? " We've sent a confirmation to your inbox." : "";
+  return json({ ok: true, message: success + note });
 }
 
 /**

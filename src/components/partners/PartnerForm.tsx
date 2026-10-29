@@ -44,7 +44,7 @@ export function PartnerForm() {
     });
     if (res.ok) {
       form.reset();
-      setStatus({ state: "sent", message: "Thanks! We'll review the details and reply within one business day." });
+      setStatus({ state: "sent", message: res.message || "Thanks! We'll review the details and reply within one business day." });
     } else if (res.status === 503) {
       const body = [
         `Name: ${get("name")}`,
