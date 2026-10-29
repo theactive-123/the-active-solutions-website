@@ -1,3 +1,5 @@
+import nodemailer from "nodemailer";
+import { sendCrmLead } from "@/lib/crm";
 import { site } from "@/lib/site";
 import {
   HONEYPOT_FIELD,
@@ -10,11 +12,10 @@ import {
 } from "@/components/contact/validation";
 
 /**
- * POST /api/contact — JSON body `{ type: "contact" | "meeting" | "newsletter", …fields }`.
- * Responds `{ ok, message?, errors? }`. Mail goes out through Resend's REST API when
- * RESEND_API_KEY is set (see .env.example); without it the route answers 503 so the UI can
- * fall back to a mailto: link.
+ * Validates all website forms and saves leads to CRM before acknowledging success.
+ * SMTP notifications are optional and cannot turn a saved lead into a failed submission.
  */
+export const runtime = "nodejs";
 
 const RATE_LIMIT = 5;
 const RATE_WINDOW_MS = 60_000;
@@ -72,28 +73,42 @@ function formatInZone(instant: number, timeZone: string) {
   }
 }
 
-async function sendEmail(apiKey: string, mail: { subject: string; replyTo: string; html: string; text: string }) {
-  const res = await fetch("https://api.resend.com/emails", {
-    method: "POST",
-    headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
-    body: JSON.stringify({
-      from: process.env.CONTACT_FROM_EMAIL || "The Active Solutions <onboarding@resend.dev>",
-      to: (process.env.CONTACT_TO_EMAIL || site.email)
-        .split(",")
-        .map((s) => s.trim())
-        .filter(Boolean),
-      reply_to: mail.replyTo,
-      subject: mail.subject,
-      html: mail.html,
-      text: mail.text,
-    }),
-    signal: AbortSignal.timeout(10_000),
-  });
-  if (!res.ok) {
-    console.error("[api/contact] Resend error", res.status, await res.text().catch(() => ""));
-    return false;
+async function sendEmail(mail: { subject: string; replyTo: string; html: string; text: string }) {
+  const host = process.env.SMTP_HOST?.trim();
+  const user = process.env.SMTP_USER?.trim();
+  const password = process.env.SMTP_PASSWORD;
+  const port = Number(process.env.SMTP_PORT || 465);
+  if (!host || !user || !password || !Number.isInteger(port) || port < 1 || port > 65535) {
+    console.error("[api/contact] SMTP notification skipped: missing or invalid SMTP configuration");
+    return;
   }
-  return true;
+
+  const transporter = nodemailer.createTransport({
+    host,
+    port,
+    secure: port === 465,
+    requireTLS: port !== 465,
+    auth: { user, pass: password },
+    connectionTimeout: 10_000,
+    greetingTimeout: 10_000,
+    socketTimeout: 15_000,
+  });
+  const result = await transporter.sendMail({
+    from: process.env.CONTACT_FROM_EMAIL || { name: site.name, address: user },
+    to: (process.env.ADMIN_EMAIL || process.env.CONTACT_TO_EMAIL || site.email)
+      .split(",")
+      .map((address) => address.trim())
+      .filter(Boolean),
+    replyTo: mail.replyTo,
+    subject: mail.subject,
+    html: mail.html,
+    text: mail.text,
+    disableFileAccess: true,
+    disableUrlAccess: true,
+  });
+  if (!result.accepted.length || result.rejected.length) {
+    console.error("[api/contact] SMTP notification was not accepted by all recipients");
+  }
 }
 
 const UNAVAILABLE = `Our form isn't connected right now. Please email us at ${site.email} and we'll reply within one business day.`;
@@ -116,6 +131,8 @@ export async function POST(req: Request) {
     return json({ ok: false, message: "Too many requests. Please wait a minute and try again." }, 429);
   }
 
+  let crmForm: "contact" | "partner" | "schedule" | "newsletter";
+  let crmFields: Record<string, unknown>;
   let subject: string;
   let replyTo: string;
   let title: string;
@@ -127,6 +144,8 @@ export async function POST(req: Request) {
       const { data, errors } = validateContact(body);
       if (Object.keys(errors).length) return json({ ok: false, message: "Please check the highlighted fields.", errors }, 422);
       const partner = data.kind === "partner";
+      crmForm = partner ? "partner" : "contact";
+      crmFields = { ...data, website: normalizeUrl(data.website) || "" };
       subject = oneLine(`${partner ? "Partner enquiry" : "New enquiry"}: ${data.name}${data.company ? ` (${data.company})` : ""}`);
       replyTo = data.email;
       title = partner ? "New agency partner enquiry" : "New project enquiry";
@@ -145,6 +164,8 @@ export async function POST(req: Request) {
     case "meeting": {
       const { data, errors } = validateMeeting(body);
       if (Object.keys(errors).length) return json({ ok: false, message: errors.datetime ?? "Please check the highlighted fields.", errors }, 422);
+      crmForm = "schedule";
+      crmFields = { ...data, storeUrl: normalizeUrl(data.storeUrl) || "" };
       const instant = Date.parse(data.datetime);
       const office = formatInZone(instant, OFFICE_TIME_ZONE);
       subject = oneLine(`Meeting request: ${data.name}, ${office}`);
@@ -165,6 +186,8 @@ export async function POST(req: Request) {
     case "newsletter": {
       const { data, errors } = validateNewsletter(body);
       if (Object.keys(errors).length) return json({ ok: false, message: errors.email, errors }, 422);
+      crmForm = "newsletter";
+      crmFields = { ...data };
       subject = oneLine(`Newsletter signup: ${data.email}`);
       replyTo = data.email;
       title = "New newsletter signup";
@@ -180,18 +203,20 @@ export async function POST(req: Request) {
       return json({ ok: false, message: "Unknown form type." }, 400);
   }
 
-  const apiKey = process.env.RESEND_API_KEY;
-  if (!apiKey) return json({ ok: false, message: UNAVAILABLE }, 503);
+  if (!process.env.CRM_BASE_URL || !process.env.CRM_SITE_API_KEY) {
+    return json({ ok: false, message: UNAVAILABLE }, 503);
+  }
+
+  const saved = await sendCrmLead(crmForm, crmFields, req);
+  if (!saved) {
+    return json({ ok: false, message: `We couldn't save your submission just now. Please try again or email us at ${site.email}.` }, 502);
+  }
 
   const { html, text } = renderEmail(title, rows);
-  let sent = false;
   try {
-    sent = await sendEmail(apiKey, { subject, replyTo, html, text });
-  } catch (err) {
-    console.error("[api/contact] send failed", err);
-  }
-  if (!sent) {
-    return json({ ok: false, message: `We couldn't send your message just now. Please try again or email us at ${site.email}.` }, 502);
+    await sendEmail({ subject, replyTo, html, text });
+  } catch {
+    console.error("[api/contact] SMTP notification failed; lead remains saved in CRM");
   }
   return json({ ok: true, message: success });
 }
