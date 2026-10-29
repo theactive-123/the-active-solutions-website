@@ -1,9 +1,11 @@
 import type { MetadataRoute } from "next";
-import { insights } from "@/content/insights";
+import { insightPath } from "@/content/insights";
 import { caseStudyPath, projects } from "@/content/work";
 import { services, site } from "@/lib/site";
+import { absoluteImage, getInsights } from "@/lib/wordpress";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const insights = await getInsights();
   const pages: { path: string; priority: number; changeFrequency: "weekly" | "monthly" | "yearly" }[] = [
     { path: "/", priority: 1, changeFrequency: "weekly" },
     ...services.map((s) => ({ path: s.href, priority: 0.9, changeFrequency: "monthly" as const })),
@@ -22,11 +24,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
   return [
     ...pages.map((p) => ({ url: `${site.url}${p.path}`, changeFrequency: p.changeFrequency, priority: p.priority })),
     ...insights.map((a) => ({
-      url: `${site.url}/insights/${a.slug}`,
-      lastModified: a.date,
+      url: `${site.url}${insightPath(a.slug)}`,
+      lastModified: a.modified,
       changeFrequency: "yearly" as const,
       priority: 0.6,
-      images: [`${site.url}${a.cover.src}`],
+      images: [absoluteImage(a.cover.src)],
     })),
   ];
 }

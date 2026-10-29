@@ -1,14 +1,14 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
-import type { Insight } from "@/content/insights";
+import { insightPath, type Insight } from "@/content/insights";
 import { InsightMeta } from "./InsightMeta";
 import { SectionLabel } from "./SectionLabel";
 import styles from "./FeaturedInsight.module.css";
 
 /** "[ FEATURED ]" — large cover on the left, headline, excerpt, meta and "Read article" on the right. */
 export function FeaturedInsight({ article }: { article: Insight }) {
-  const href = `/insights/${article.slug}`;
+  const href = insightPath(article.slug);
   return (
     <section className={`section theme-paper ${styles.section}`} aria-labelledby="featured-title">
       <div className="container">

@@ -15,21 +15,24 @@ import { ShareLinks } from "@/components/insights/ShareLinks";
 import styles from "@/components/insights/Article.module.css";
 import { MotionEngine } from "@/components/motion/MotionEngine";
 import { CtaBanner } from "@/components/sections/CtaBanner";
-import { getInsight, insights, readingTime, relatedInsights, tableOfContents } from "@/content/insights";
+import { insightPath, relatedInsights } from "@/content/insights";
+import { absoluteImage, getInsight, getInsights } from "@/lib/wordpress";
 import { breadcrumbJsonLd, pageMetadata } from "@/lib/seo";
 import { site } from "@/lib/site";
 
-export function generateStaticParams() {
-  return insights.map((a) => ({ slug: a.slug }));
+export async function generateStaticParams() {
+  const articles = await getInsights();
+  // Cache Components needs at least one entry; a placeholder simply prerenders the 404.
+  return articles.length ? articles.map((a) => ({ slug: a.slug })) : [{ slug: "no-articles-yet" }];
 }
 
 export async function generateMetadata({ params }: PageProps<"/insights/[slug]">): Promise<Metadata> {
   const { slug } = await params;
-  const article = getInsight(slug);
+  const article = await getInsight(slug);
   if (!article) notFound();
-  const path = `/insights/${article.slug}`;
+  const path = insightPath(article.slug);
   const base = pageMetadata({ title: article.title, description: article.description, path, type: "article", publishedTime: article.date });
-  const image = { url: article.cover.src, width: article.cover.width, height: article.cover.height, alt: article.cover.alt };
+  const image = { url: absoluteImage(article.cover.src), width: article.cover.width, height: article.cover.height, alt: article.cover.alt };
   return {
     ...base,
     authors: [{ name: article.author.name }],
@@ -42,10 +45,11 @@ export async function generateMetadata({ params }: PageProps<"/insights/[slug]">
       locale: site.locale,
       images: [image],
       publishedTime: article.date,
+      modifiedTime: article.modified,
       authors: [article.author.name],
       section: article.category,
     },
-    twitter: { ...base.twitter, images: [article.cover.src] },
+    twitter: { ...base.twitter, images: [absoluteImage(article.cover.src)] },
   };
 }
 
@@ -64,13 +68,13 @@ export default function InsightPage({ params }: PageProps<"/insights/[slug]">) {
 
 async function InsightArticle({ params }: { params: PageProps<"/insights/[slug]">["params"] }) {
   const { slug } = await params;
-  const article = getInsight(slug);
+  const all = await getInsights();
+  const article = all.find((a) => a.slug === slug);
   if (!article) notFound();
 
-  const path = `/insights/${article.slug}`;
+  const path = insightPath(article.slug);
   const url = `${site.url}${path}`;
-  const toc = tableOfContents(article);
-  const related = relatedInsights(article, 3);
+  const related = relatedInsights(all, article, 3);
 
   const articleJsonLd = {
     "@context": "https://schema.org",
@@ -78,13 +82,15 @@ async function InsightArticle({ params }: { params: PageProps<"/insights/[slug]"
     "@id": `${url}#article`,
     headline: article.title,
     description: article.description,
-    image: [`${site.url}${article.cover.src}`],
+    image: [absoluteImage(article.cover.src)],
     datePublished: article.date,
-    dateModified: article.date,
+    dateModified: article.modified,
     articleSection: article.category,
-    timeRequired: `PT${readingTime(article)}M`,
+    timeRequired: `PT${article.readingMinutes}M`,
     inLanguage: "en",
-    author: { "@type": "Person", name: article.author.name, jobTitle: article.author.role, url: `${site.url}/about` },
+    author: article.author.team
+      ? { "@id": `${site.url}/#organization` }
+      : { "@type": "Person", name: article.author.name, jobTitle: article.author.role, url: `${site.url}/about` },
     publisher: { "@id": `${site.url}/#organization` },
     mainEntityOfPage: { "@type": "WebPage", "@id": url },
     isPartOf: { "@id": `${site.url}/insights#blog` },
@@ -112,10 +118,10 @@ async function InsightArticle({ params }: { params: PageProps<"/insights/[slug]"
           </figure>
           <div className={styles.layout}>
             <div className={styles.stick}>
-              <ArticleToc items={toc} />
+              <ArticleToc items={article.toc} />
             </div>
             <article id="article-body" className={styles.main} aria-labelledby="page-title">
-              <ArticleBody blocks={article.body} />
+              <ArticleBody html={article.html} />
             </article>
             <aside className={styles.aside} aria-label="Share and author">
               <ShareLinks url={url} title={article.title} />

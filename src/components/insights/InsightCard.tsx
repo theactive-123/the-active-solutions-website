@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import type { Insight } from "@/content/insights";
+import { insightPath, type Insight } from "@/content/insights";
 import { InsightMeta } from "./InsightMeta";
 import styles from "./InsightCard.module.css";
 
@@ -9,7 +9,7 @@ export function InsightCard({ article, headingLevel = "h3" }: { article: Insight
   const Heading = headingLevel;
   return (
     <article className={styles.card}>
-      <Link href={`/insights/${article.slug}`} className={styles.link}>
+      <Link href={insightPath(article.slug)} className={styles.link}>
         <div className={styles.media}>
           <Image src={article.cover.src} alt="" width={article.cover.width} height={article.cover.height} sizes="(min-width: 1100px) 28vw, (min-width: 700px) 45vw, 92vw" className={styles.img} />
           <span className={styles.pill}>{article.category}</span>

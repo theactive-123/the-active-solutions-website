@@ -8,7 +8,8 @@ import { InsightsHero } from "@/components/insights/InsightsHero";
 import heroStyles from "@/components/insights/InsightsHero.module.css";
 import { Button } from "@/components/ui/Button";
 import { MotionEngine } from "@/components/motion/MotionEngine";
-import { sortedInsights } from "@/content/insights";
+import { insightPath } from "@/content/insights";
+import { absoluteImage, getInsights, insightCategories } from "@/lib/wordpress";
 import { breadcrumbJsonLd, pageMetadata } from "@/lib/seo";
 import { site } from "@/lib/site";
 
@@ -19,9 +20,10 @@ export const metadata: Metadata = pageMetadata({
   path: "/insights",
 });
 
-export default function InsightsPage() {
-  const articles = sortedInsights();
+export default async function InsightsPage() {
+  const articles = await getInsights();
   const featured = articles.find((a) => a.featured) ?? articles[0];
+  const categories = insightCategories(articles);
 
   const blogJsonLd = {
     "@context": "https://schema.org",
@@ -33,10 +35,10 @@ export default function InsightsPage() {
     blogPost: articles.map((a) => ({
       "@type": "BlogPosting",
       headline: a.title,
-      url: `${site.url}/insights/${a.slug}`,
+      url: `${site.url}${insightPath(a.slug)}`,
       datePublished: a.date,
-      image: `${site.url}${a.cover.src}`,
-      author: { "@type": "Person", name: a.author.name },
+      image: absoluteImage(a.cover.src),
+      author: a.author.team ? { "@id": `${site.url}/#organization` } : { "@type": "Person", name: a.author.name },
     })),
   };
 
@@ -57,7 +59,7 @@ export default function InsightsPage() {
             <em>Shopify</em> &amp; <em>Ecommerce</em> Insights
           </>
         }
-        tagline="SHOPIFY · CRO · PAID MEDIA · EMAIL & SMS · MIGRATIONS"
+        tagline={categories.length ? categories.join(" · ").toUpperCase() : "SHOPIFY · CRO · PAID MEDIA · EMAIL & SMS · MIGRATIONS"}
         visual={{ src: "/images/insights/orb-3d.png", width: 600, height: 600 }}
       >
         <p className={`body ${heroStyles.text}`} data-reveal data-immediate data-delay="0.35">
@@ -69,14 +71,24 @@ export default function InsightsPage() {
         </div>
       </InsightsHero>
 
-      <FeaturedInsight article={featured} />
-
-      <section className="section theme-sand" aria-labelledby="all-articles-title">
-        <div className="container">
-          <SectionLabel id="all-articles-title">ALL ARTICLES</SectionLabel>
-          <InsightsBrowser articles={articles} featuredSlug={featured.slug} />
-        </div>
-      </section>
+      {featured ? (
+        <>
+          <FeaturedInsight article={featured} />
+          <section className="section theme-sand" aria-labelledby="all-articles-title">
+            <div className="container">
+              <SectionLabel id="all-articles-title">ALL ARTICLES</SectionLabel>
+              <InsightsBrowser articles={articles} categories={categories} featuredSlug={featured.slug} />
+            </div>
+          </section>
+        </>
+      ) : (
+        <section className="section theme-sand" aria-labelledby="all-articles-title">
+          <div className="container">
+            <SectionLabel id="all-articles-title">ALL ARTICLES</SectionLabel>
+            <p className="body">New articles are on their way. Subscribe below and we&rsquo;ll send them to you first.</p>
+          </div>
+        </section>
+      )}
 
       <Newsletter />
       <MotionEngine />

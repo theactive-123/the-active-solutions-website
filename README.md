@@ -36,9 +36,27 @@ Copy `.env.example` to `.env.local` and fill in what you need:
 | `CONTACT_TO_EMAIL` | Inbox that receives form submissions |
 | `CONTACT_FROM_EMAIL` | Verified sender, e.g. `The Active Solutions <hello@yourdomain.com>` |
 | `NEXT_PUBLIC_BOOKING_URL` | Optional Calendly/Cal.com link offered on the schedule page |
+| `WORDPRESS_API_URL` | WordPress REST API the blog reads from (default `https://blogs.theactivesolutions.com/wp-json/wp/v2`) |
+| `WORDPRESS_USERNAME`, `WORDPRESS_APP_PASSWORD` | Optional. Only needed if the WordPress REST API is locked down; published posts are public |
+| `WORDPRESS_REVALIDATE_SECRET` | Optional. Secret for `POST /api/revalidate?secret=…` to refresh the blog instantly |
 
 Without `RESEND_API_KEY` the forms show a friendly fallback with a `mailto:` link instead of
 silently dropping messages.
+
+## Blog (WordPress)
+
+`/insights` and `/insights/[slug]` read published posts from WordPress (`src/lib/wordpress`):
+title, excerpt, content, featured image, categories, author, date and sticky ("featured") flag.
+The HTML is sanitized and styled with the site's own typography; h2 headings build the
+"In this article" list. Posts refresh in the background every 5 minutes, or instantly when
+WordPress calls `POST /api/revalidate?secret=WORDPRESS_REVALIDATE_SECRET` (e.g. from a webhook
+plugin on publish/update).
+
+- **Featured article:** mark a post "Stick to the top of the blog" in WordPress; otherwise the newest is featured.
+- **Author:** set the author's *Display name publicly as* to their real name. Team members
+  (e.g. "Mirza Abbas") get their photo and role; login names like "admin" are credited to the team.
+- **SEO:** canonical URLs point to this site. Set the WordPress site itself to noindex
+  (Settings → Reading → "Discourage search engines") so the posts aren't indexed twice.
 
 ## Deploying
 
@@ -56,7 +74,8 @@ src/
     ui/                   Button, Eyebrow, SectionHeader, Tags, Logo, ShapeIcon
     sections/             PageHero, ServiceGrid, CardGrid, CheckList, Process, Faq, CtaBanner, Marquee
     home/ …               page-specific sections
-  content/insights.ts     blog articles
+  content/insights.ts     blog types and helpers (articles come from WordPress)
+  lib/wordpress/          WordPress REST client, HTML sanitizing, cached getters
   lib/site.ts             site config: nav, services, contact details
   lib/seo.ts              metadata + JSON-LD helpers
 docs/IMAGE-SWAP.md        temporary image crops to replace with Figma exports

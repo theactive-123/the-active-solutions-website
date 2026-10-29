@@ -1,8 +1,8 @@
-import { formatInsightDate, readingTime, type Insight } from "@/content/insights";
+import { formatInsightDate, type Insight } from "@/content/insights";
 
 /** "[ 03 / Nov / 2026 ]  [ 6 mins Read Time ]" */
 export function InsightMeta({ article, className, author = false }: { article: Insight; className?: string; author?: boolean }) {
-  const mins = readingTime(article);
+  const mins = article.readingMinutes;
   return (
     <p className={className}>
       {author && <span>[ AUTHOR {article.author.name} ]</span>}

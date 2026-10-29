@@ -2,27 +2,25 @@
 
 import { useRef, useState } from "react";
 import { Flip, gsap, prefersReducedMotion, useGSAP } from "@/components/motion/gsap";
-import { INSIGHT_CATEGORIES, type Insight, type InsightCategory } from "@/content/insights";
+import type { Insight } from "@/content/insights";
 import { InsightCard } from "./InsightCard";
 import styles from "./InsightsBrowser.module.css";
 
-type Filter = "All" | InsightCategory;
-const FILTERS: Filter[] = ["All", ...INSIGHT_CATEGORIES];
 
 /**
  * Category filter + article grid. All cards stay in the DOM; filtered-out cards are hidden
  * with display:none so GSAP Flip can animate the re-layout (moves, enters and exits).
  * Under "All" the featured article is hidden (it is shown above); category filters include it.
  */
-export function InsightsBrowser({ articles, featuredSlug }: { articles: Insight[]; featuredSlug?: string }) {
-  const [filter, setFilter] = useState<Filter>("All");
+export function InsightsBrowser({ articles, categories, featuredSlug }: { articles: Insight[]; categories: string[]; featuredSlug?: string }) {
+  const [filter, setFilter] = useState("All");
   const scope = useRef<HTMLDivElement>(null);
   const flipState = useRef<Flip.FlipState | null>(null);
 
-  const isVisible = (a: Insight) => (filter === "All" ? a.slug !== featuredSlug : a.category === filter);
+  const isVisible = (a: Insight) => (filter === "All" ? a.slug !== featuredSlug : a.categories.includes(filter));
   const count = articles.filter(isVisible).length;
 
-  const choose = (next: Filter) => {
+  const choose = (next: string) => {
     if (next === filter) return;
     const cards = scope.current?.querySelectorAll("[data-flip-card]");
     if (cards?.length && !prefersReducedMotion()) flipState.current = Flip.getState(cards, { props: "opacity" });
@@ -51,7 +49,7 @@ export function InsightsBrowser({ articles, featuredSlug }: { articles: Insight[
     <div ref={scope}>
       <div className={styles.toolbar}>
         <div className={styles.filters} role="group" aria-label="Filter articles by category" data-reveal-stagger="0.05">
-          {FILTERS.map((f) => (
+          {["All", ...categories].map((f) => (
             <button key={f} type="button" className={styles.filter} aria-pressed={filter === f} onClick={() => choose(f)}>
               <span className={styles.filterText}>{f}</span>
             </button>
