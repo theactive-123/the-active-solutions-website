@@ -68,6 +68,7 @@
   font-size: clamp(1rem, 0.92rem + 0.22vw, 1.25rem);
   font-weight: 400;
   color: var(--fg);
+  white-space: nowrap;
 }
 
 .navLink::after {
@@ -248,7 +249,8 @@
   margin-top: 16px;
 }
 
-@media (min-width: 1100px) {
+/* Seven links + logo + CTA need ~1200px; below that the burger menu is used. */
+@media (min-width: 1200px) {
   .nav {
     display: block;
   }

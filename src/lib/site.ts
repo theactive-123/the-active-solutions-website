@@ -56,6 +56,7 @@ export const services: (NavLink & { short: string; visual: string; tags: string[
 export const mainNav: NavLink[] = [
   { label: "Home", href: "/" },
   { label: "Work", href: "/work" },
+  { label: "Case studies", href: "/case-studies" },
   { label: "About", href: "/about" },
   { label: "Insights", href: "/insights" },
   { label: "For Agencies", href: "/partners" },

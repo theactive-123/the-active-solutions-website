@@ -1,5 +1,4 @@
 import { Eyebrow } from "@/components/ui/Eyebrow";
-import { CurvedGallery } from "./CurvedGallery";
 import styles from "./AboutStatement.module.css";
 
 export function AboutStatement() {
@@ -20,7 +19,6 @@ export function AboutStatement() {
           </p>
         </div>
       </div>
-      <CurvedGallery />
     </section>
   );
 }
