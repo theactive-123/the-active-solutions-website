@@ -204,6 +204,12 @@
   color: var(--red);
 }
 
+/* Click-to-reveal email in the hero (the button brings its own dashed underline) */
+.emailNote {
+  color: var(--white);
+  font-size: var(--fs-body);
+}
+
 .heroActions {
   display: flex;
   flex-wrap: wrap;

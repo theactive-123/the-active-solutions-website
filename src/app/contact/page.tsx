@@ -9,6 +9,8 @@ import { Button } from "@/components/ui/Button";
 import { breadcrumbJsonLd, pageMetadata } from "@/lib/seo";
 import { site } from "@/lib/site";
 import styles from "@/components/contact/ContactPage.module.css";
+import { Email } from "@/components/ui/Email";
+import { encodeEmail } from "@/lib/contact-email";
 
 const DESCRIPTION =
   "Contact The Active Solutions about your Shopify store or agency partnership. Share your goals and we'll reply within one business day with a clear scope.";
@@ -25,7 +27,7 @@ const contactPageJsonLd = {
     "@id": `${site.url}/#organization`,
     "@type": "ProfessionalService",
     name: site.name,
-    email: site.email,
+    telephone: site.phone.tel,
     address: {
       "@type": "PostalAddress",
       streetAddress: site.address.street,
@@ -36,7 +38,7 @@ const contactPageJsonLd = {
     contactPoint: {
       "@type": "ContactPoint",
       contactType: "sales",
-      email: site.email,
+      telephone: site.phone.tel,
       availableLanguage: ["English", "Urdu"],
       areaServed: ["US", "GB", "AE", "SA", "PK"],
     },
@@ -70,9 +72,12 @@ export default function ContactPage() {
                 {site.address.city}, {site.address.postalCode}
               </address>
               <div className={styles.contactLinks}>
-                <a className={styles.mailLink} href={`mailto:${site.email}`}>
-                  {site.email}
+                <a className={styles.mailLink} href={`tel:${site.phone.tel}`}>
+                  {site.phone.display}
                 </a>
+                <span className={styles.emailNote}>
+                  <Email />
+                </span>
               </div>
             </div>
 
@@ -90,8 +95,8 @@ export default function ContactPage() {
           </div>
 
           <div className={styles.formCol} data-reveal="up" data-immediate data-delay="0.3">
-            <Suspense fallback={<ContactForm />}>
-              <ContactFormFromParams />
+            <Suspense fallback={<ContactForm emailCode={encodeEmail()} />}>
+              <ContactFormFromParams emailCode={encodeEmail()} />
             </Suspense>
           </div>
         </div>

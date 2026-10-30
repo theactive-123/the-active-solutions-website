@@ -7,6 +7,7 @@ import { MotionEngine } from "@/components/motion/MotionEngine";
 import { breadcrumbJsonLd, pageMetadata } from "@/lib/seo";
 import { site } from "@/lib/site";
 import styles from "@/components/contact/ContactPage.module.css";
+import { Email } from "@/components/ui/Email";
 
 const DESCRIPTION =
   "Book a free 30-minute online meeting with The Active Solutions. We'll review your Shopify store, marketing and customer journey and map practical next steps.";
@@ -81,9 +82,9 @@ export default function SchedulePage() {
 
             <div className={styles.heroActions} data-reveal data-immediate data-delay="0.55">
               <Button href="#book">Pick a time</Button>
-              <a className={styles.mailLink} href={`mailto:${site.email}`}>
-                Prefer email? {site.email}
-              </a>
+              <span className={styles.emailNote}>
+                Prefer email? <Email />
+              </span>
             </div>
           </div>
 
@@ -129,7 +130,7 @@ export default function SchedulePage() {
             <a href={BOOKING_URL} target="_blank" rel="noopener noreferrer">
               Open the booking page in a new tab
             </a>{" "}
-            or email <a href={`mailto:${site.email}`}>{site.email}</a>.
+            or email us: <Email />.
           </p>
         </div>
       </section>

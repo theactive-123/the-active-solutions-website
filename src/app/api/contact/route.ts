@@ -1,5 +1,6 @@
 import { after } from "next/server";
 import nodemailer from "nodemailer";
+import { CONTACT_EMAIL } from "@/lib/contact-email";
 import { crmConfig, sendCrmLead } from "@/lib/crm";
 import { renderConfirmation, type Confirmation } from "@/lib/email/confirmation";
 import { site } from "@/lib/site";
@@ -103,7 +104,7 @@ const smtpReady = () => {
 
 /** Admin inbox(es): ADMIN_EMAIL, then CONTACT_TO_EMAIL, then the public address. */
 const teamInboxes = () =>
-  (process.env.ADMIN_EMAIL || process.env.CONTACT_TO_EMAIL || site.email)
+  (process.env.ADMIN_EMAIL || process.env.CONTACT_TO_EMAIL || CONTACT_EMAIL)
     .split(",")
     .map((address) => address.trim())
     .filter(Boolean);
@@ -140,7 +141,8 @@ async function sendEmails(mails: { label: string; mail: Mail }[]) {
   transporter.close();
 }
 
-const UNAVAILABLE = `Our form isn't connected right now. Please email us at ${site.email} and we'll reply within one business day.`;
+// Messages shown on the site never spell out the address; the forms offer it via click-to-reveal.
+const UNAVAILABLE = "Our form isn't connected right now. Please email us instead and we'll reply within one business day.";
 
 export async function POST(req: Request) {
   let body: Record<string, unknown>;
@@ -245,7 +247,7 @@ export async function POST(req: Request) {
 
   const saved = await sendCrmLead(crmForm, crmFields, req);
   if (!saved) {
-    return json({ ok: false, message: `We couldn't save your submission just now. Please try again or email us at ${site.email}.` }, 502);
+    return json({ ok: false, message: "We couldn't save your submission just now. Please try again in a moment." }, 502);
   }
 
   const { html, text } = renderEmail(title, rows);
@@ -256,7 +258,7 @@ export async function POST(req: Request) {
       await sendEmails([
         { label: "Team notification", mail: { to: team, replyTo, subject, html, text } },
         // Replies to the thank-you go to the team inbox.
-        { label: "Visitor thank-you", mail: { to: replyTo, replyTo: team[0] ?? site.email, ...thanks } },
+        { label: "Visitor thank-you", mail: { to: replyTo, replyTo: team[0] ?? CONTACT_EMAIL, ...thanks } },
       ]);
     } catch (error) {
       console.error("[api/contact] Emails failed; lead remains saved in CRM:", error instanceof Error ? error.message : error);

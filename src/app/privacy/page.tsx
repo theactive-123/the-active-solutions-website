@@ -1,6 +1,7 @@
 import { LegalPage } from "@/components/legal/LegalPage";
 import { pageMetadata } from "@/lib/seo";
 import { site } from "@/lib/site";
+import { Email } from "@/components/ui/Email";
 
 export const metadata = pageMetadata({
   title: "Privacy Policy",
@@ -68,7 +69,7 @@ export default function PrivacyPage() {
           body: (
             <p>
               Depending on where you live you may have the right to access, correct, delete or export your personal information, or to
-              object to how we use it. Email <a href={`mailto:${site.email}`}>{site.email}</a> and we will respond within 30 days.
+              object to how we use it. Email us (<Email />) and we will respond within 30 days.
             </p>
           ),
         },
@@ -77,7 +78,7 @@ export default function PrivacyPage() {
           body: (
             <p>
               {site.name}, {site.address.street}, {site.address.city} {site.address.postalCode}, {site.address.countryName}.{" "}
-              <a href={`mailto:${site.email}`}>{site.email}</a>
+              Phone: <a href={`tel:${site.phone.tel}`}>{site.phone.display}</a>. Email: <Email />
             </p>
           ),
         },

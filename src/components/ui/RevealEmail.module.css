@@ -1,0 +1,40 @@
+.reveal {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  text-decoration: underline;
+  text-decoration-style: dashed;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+  text-align: left;
+  white-space: nowrap;
+  transition: color 0.3s;
+}
+
+.reveal:hover {
+  color: var(--red);
+}
+
+.reveal:focus-visible,
+.revealed:focus-visible {
+  outline: 2px solid var(--red);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+.icon {
+  flex-shrink: 0;
+  color: var(--red);
+}
+
+.revealed {
+  color: inherit;
+  /* Breaks only after the "@" (see <wbr>) in narrow columns, never mid-word. */
+  overflow-wrap: normal;
+}

@@ -43,7 +43,7 @@ export const organizationJsonLd = {
   logo: `${site.url}/images/brand/logo-mark.png`,
   image: `${site.url}/images/brand/logo-3d.png`,
   description: site.description,
-  email: site.email,
+  telephone: site.phone.tel,
   address: {
     "@type": "PostalAddress",
     streetAddress: site.address.street,

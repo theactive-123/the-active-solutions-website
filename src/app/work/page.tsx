@@ -18,7 +18,7 @@ import { site } from "@/lib/site";
 export const metadata = pageMetadata({
   title: "Our Work: Shopify Case Studies",
   description:
-    "Shopify and Shopify Plus stores we designed and built for DTC brands in fitness, pet care and fashion: ThermoLab, HeyBuddy and Peak Motion.",
+    "Shopify and Shopify Plus stores we designed and built for DTC brands: ThermoLab, HeyBuddy, Peak Motion, Dermalyft, Glo and Moo'd Up.",
   path: "/work",
 });
 

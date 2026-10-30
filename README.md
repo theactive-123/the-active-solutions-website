@@ -31,7 +31,7 @@ Copy `.env.example` to `.env.local` and fill in what you need:
 | Variable | Purpose |
 | --- | --- |
 | `NEXT_PUBLIC_SITE_URL` | Canonical site URL used for metadata, sitemap and JSON-LD (default `https://www.theactivesolutions.com`) |
-| `NEXT_PUBLIC_CONTACT_EMAIL` | Public contact email shown on the site |
+| `CONTACT_EMAIL` | Contact address. Server-only: the site shows it behind "Click to reveal" (`<Email />`), never as plain text |
 | `CRM_BASE_URL`, `CRM_SITE_API_KEY` | Required. Every form submission is saved as a lead in the CRM (key: 64 hex characters) |
 | `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASSWORD` | Email notification for each submission (port 465 = TLS, 587 = STARTTLS) |
 | `ADMIN_EMAIL` | Inbox(es) that receive notifications; comma-separate several (falls back to `CONTACT_TO_EMAIL`) |

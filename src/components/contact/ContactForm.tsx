@@ -2,6 +2,7 @@
 
 import { useEffect, useId, useRef, useState, type FormEvent } from "react";
 import { Button } from "@/components/ui/Button";
+import { RevealEmail } from "@/components/ui/RevealEmail";
 import { site } from "@/lib/site";
 import { Honeypot, SelectField, Spinner, SuccessMark, TextArea, TextField } from "./Fields";
 import { BUDGETS, PARTNER_SERVICES, PROJECT_SERVICES, submitContact, validateContact, type ContactPayload } from "./validation";
@@ -48,7 +49,16 @@ const EMPTY: Values = { name: "", email: "", company: "", website: "", budget: "
  * Project / partner enquiry form. `initialKind` + `initialNeeds` come from the URL
  * (?type=partner, ?need=Shopify Store,Conversion Rate Optimization) via ContactFormFromParams.
  */
-export function ContactForm({ initialKind = "project", initialNeeds = [] }: { initialKind?: Kind; initialNeeds?: string[] }) {
+export function ContactForm({
+  initialKind = "project",
+  initialNeeds = [],
+  emailCode,
+}: {
+  initialKind?: Kind;
+  initialNeeds?: string[];
+  /** Encoded contact address (lib/contact-email) for the click-to-reveal fallback. */
+  emailCode: string;
+}) {
   const uid = useId().replace(/:/g, "");
   const id = (f: string) => `${uid}-${f}`;
   const [kind, setKind] = useState<Kind>(initialKind);
@@ -129,20 +139,17 @@ export function ContactForm({ initialKind = "project", initialNeeds = [] }: { in
     requestFocus("status");
   };
 
-  const mailto = `mailto:${site.email}?subject=${encodeURIComponent(
-    kind === "partner" ? "Agency partner enquiry" : "Project enquiry",
-  )}&body=${encodeURIComponent(
-    [
-      `Name: ${values.name}`,
-      values.company && `${copy.company}: ${values.company}`,
-      values.website && `${copy.website}: ${values.website}`,
-      values.budget && `Budget: ${values.budget}`,
-      values.services.length > 0 && `Services: ${values.services.join(", ")}`,
-      `\n${values.message}`,
-    ]
-      .filter(Boolean)
-      .join("\n"),
-  )}`;
+  const mailSubject = kind === "partner" ? "Agency partner enquiry" : "Project enquiry";
+  const mailBody = [
+    `Name: ${values.name}`,
+    values.company && `${copy.company}: ${values.company}`,
+    values.website && `${copy.website}: ${values.website}`,
+    values.budget && `Budget: ${values.budget}`,
+    values.services.length > 0 && `Services: ${values.services.join(", ")}`,
+    `\n${values.message}`,
+  ]
+    .filter(Boolean)
+    .join("\n");
 
   if (status === "success") {
     return (
@@ -344,12 +351,13 @@ export function ContactForm({ initialKind = "project", initialNeeds = [] }: { in
             <p>
               {status === "unavailable" ? (
                 <>
-                  Our online form is taking a break. Your details are still here, so you can{" "}
-                  <a href={mailto}>send them by email to {site.email}</a> and we&apos;ll reply within one business day.
+                  Our online form is taking a break. Your details are still here, so you can send them by email (
+                  <RevealEmail code={emailCode} label="click to reveal our address" subject={mailSubject} body={mailBody} />) and
+                  we&apos;ll reply within one business day.
                 </>
               ) : (
                 <>
-                  {message} You can also email <a href={mailto}>{site.email}</a>.
+                  {message} You can also email us: <RevealEmail code={emailCode} subject={mailSubject} body={mailBody} />
                 </>
               )}
             </p>

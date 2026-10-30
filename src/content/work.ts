@@ -4,6 +4,8 @@
  * The narrative copy (challenge, goals, approach, features, outcomes) is editable copy written from
  * the Figma case-study list and what is visible on each live store (checked October 2026). Facts about
  * a brand (customer counts, units sold, nutrition) are the brand's own public claims, not our results.
+ * Platform: all six run on Shopify; only Glo shows a Shopify Plus feature publicly (B2B checkout with
+ * company accounts), so the others say "Shopify". Change any to "Shopify Plus" if you know otherwise.
  * No performance figures are claimed for our work. Add real, client-approved numbers to `results`
  * and a real quote to `testimonial` when available; both render automatically when present.
  */
@@ -64,14 +66,14 @@ export const projects: Project[] = [
     mobileImage: "/images/work/the-thermolab-mobile.jpg",
     industry: "Fitness & Recovery",
     market: "United Kingdom",
-    platform: "Shopify Plus",
+    platform: "Shopify",
     timeline: "6 weeks",
-    tags: ["Shopify Plus", "6 weeks", "Fitness"],
+    tags: ["Shopify", "6 weeks", "Fitness"],
     text: "An enterprise-grade, technically optimized platform that turns complex red light and sauna technology into a professional, lead-generating experience.",
     summary:
       "ThermoLab sells red light therapy panels, portable steam saunas and PEMF mats, designed in Britain. The store needed to explain serious technology without slowing shoppers down, and turn high-consideration visits into orders and expert enquiries.",
     headline: "Turning lab-grade engineering into a store that *converts.*",
-    scope: ["Custom Shopify Plus theme", "Product education pages", "Expert-consultation lead flow", "Performance & Core Web Vitals"],
+    scope: ["Custom Shopify theme", "Product education pages", "Expert-consultation lead flow", "Performance & Core Web Vitals"],
     services: [SHOPIFY_DEV, CRO],
     challenge: [
       "ThermoLab's range runs from a £9.99 essential oil to professional red light panels close to £1,900. Buyers want to understand wavelengths, wattage and the science before they spend, and many want to talk to someone first.",
@@ -86,7 +88,7 @@ export const projects: Project[] = [
     approach: [
       { title: "Research", text: "We mapped the questions buyers ask before buying recovery equipment and where they dropped out of the old journey." },
       { title: "Information design", text: "Product pages were restructured around benefits, specifications and proof, in the order shoppers need them." },
-      { title: "Build", text: "A custom Shopify Plus theme with reusable sections, so ThermoLab's team can publish new products and campaigns themselves." },
+      { title: "Build", text: "A custom Shopify theme with reusable sections, so ThermoLab's team can publish new products and campaigns themselves." },
       { title: "Launch & tune", text: "We launched, then refined page speed, trust messaging and the consultation flow based on how visitors used it." },
     ],
     features: [
@@ -119,9 +121,9 @@ export const projects: Project[] = [
     mobileImage: "/images/work/heybuddy-mobile.jpg",
     industry: "Pet Care",
     market: "United States",
-    platform: "Shopify Plus",
+    platform: "Shopify",
     timeline: "6 weeks",
-    tags: ["Shopify Plus", "6 weeks", "Petcare"],
+    tags: ["Shopify", "6 weeks", "Petcare"],
     text: "A premium, high-converting web experience for HeyBuddy built to explain the product clearly and turn curious pet parents into customers.",
     summary:
       "HeyBuddy's QR code smart pet tag links to an online pet profile: anyone who finds a lost pet scans the tag (no app needed) and the owner gets an instant alert with the pet's location. The storefront had to make a new product category feel simple, trustworthy and worth buying in a few scrolls.",
@@ -141,7 +143,7 @@ export const projects: Project[] = [
     approach: [
       { title: "Positioning", text: "We distilled the product into one idea, the world's smartest pet tag, and built every section around proving it." },
       { title: "Design", text: "A bright, playful system with real app screens and happy pets, so the product feels tangible before purchase." },
-      { title: "Build", text: "Mobile-first Shopify Plus templates with lightweight animation and fast-loading product imagery." },
+      { title: "Build", text: "Mobile-first Shopify templates with lightweight animation and fast-loading product imagery." },
       { title: "Optimise", text: "Bundles, add-ons and clear shipping messaging were tested and refined after launch." },
     ],
     features: [
@@ -174,9 +176,9 @@ export const projects: Project[] = [
     mobileImage: "/images/work/peak-motion-mobile.jpg",
     industry: "Fitness Wear",
     market: "Europe",
-    platform: "Shopify Plus",
+    platform: "Shopify",
     timeline: "6 weeks",
-    tags: ["Shopify Plus", "6 weeks", "Fitness Wear"],
+    tags: ["Shopify", "6 weeks", "Fitness Wear"],
     text: "A premium e-commerce storefront built to match the brand's high-performance energy with a smooth, high-converting shopping experience.",
     summary:
       "Peak Motion launches training apparel in limited editions, from the Silent Motion collection to the heavier Titan Lines. The store had to feel like a drop: bold, fast and editorial, while keeping sizing, shipping and checkout friction-free across Europe.",
@@ -196,7 +198,7 @@ export const projects: Project[] = [
     approach: [
       { title: "Art direction", text: "A dark, high-contrast system with oversized type, built to frame campaign photography." },
       { title: "Launch mechanics", text: "Drop pages and announcement messaging designed around each edition, like Silent Motion's First Edition." },
-      { title: "Build", text: "Shopify Plus templates for lookbooks, collections and products, plus language and currency support." },
+      { title: "Build", text: "Shopify templates for lookbooks, collections and products, plus language and currency support." },
       { title: "Refine", text: "Collection pages, waitlist capture and shipping messaging were tuned after launch." },
     ],
     features: [
@@ -229,9 +231,9 @@ export const projects: Project[] = [
     mobileImage: "/images/work/dermalyft-mobile.jpg",
     industry: "Skincare & Beauty Tech",
     market: "United States & international",
-    platform: "Shopify Plus",
+    platform: "Shopify",
     timeline: "6 weeks",
-    tags: ["Shopify Plus", "6 weeks", "Skincare"],
+    tags: ["Shopify", "6 weeks", "Skincare"],
     text: "A luxury skincare storefront that pairs science-led products with an elegant, editorial shopping experience built for confidence and trust.",
     summary:
       "Dermalyft sells luxury skincare and at-home beauty technology: patches, skincare solutions, micro-infusion, LED light therapy and shower filters. The store had to feel premium and calm, make results believable, and give hesitant buyers a person to talk to.",
@@ -251,7 +253,7 @@ export const projects: Project[] = [
     approach: [
       { title: "Brand direction", text: "A soft sage palette, serif-italic accents and generous whitespace to signal calm, considered luxury." },
       { title: "Architecture", text: "Collections organised by concern and device, so every product sits in a routine rather than a list." },
-      { title: "Build", text: "Shopify Plus templates for collections, products and the brand story, with reviews and subscriptions built in." },
+      { title: "Build", text: "Shopify templates for collections, products and the brand story, with reviews and subscriptions built in." },
       { title: "Trust layer", text: "Guarantee, shipping, support and specialist contact woven through the journey, not hidden in the footer." },
     ],
     features: [
@@ -282,11 +284,11 @@ export const projects: Project[] = [
     image: "/images/work/glo.jpg",
     imageSize: SCREEN,
     mobileImage: "/images/work/glo-mobile.jpg",
-    industry: "Sensory Play & Wellness",
+    industry: "Sensory Toys & Fulfillment",
     market: "United States, 60+ countries",
     platform: "Shopify Plus",
     timeline: "6 weeks",
-    tags: ["Shopify Plus", "6 weeks", "Wellness"],
+    tags: ["Shopify Plus", "6 weeks", "Sensory Toys"],
     text: "A bright, story-driven home for The Glo Companies, bringing five sensory-play brands, wholesale and fulfillment together on one Shopify site.",
     summary:
       "The Glo Companies started as a Mississippi State classroom project and grew into a family of brands (Glo Pals, Glo Cubes, Light-Up Library, MEAVIA and Glo Fulfillment) that, by the brand's own count, has sold more than 10 million products in 60+ countries. The site had to tell that story and serve wholesale partners at the same time.",
@@ -339,9 +341,9 @@ export const projects: Project[] = [
     mobileImage: "/images/work/moodup-mobile.jpg",
     industry: "Food & Beverage",
     market: "United States",
-    platform: "Shopify Plus",
+    platform: "Shopify",
     timeline: "6 weeks",
-    tags: ["Shopify Plus", "6 weeks", "Chocolate Milk"],
+    tags: ["Shopify", "6 weeks", "Chocolate Milk"],
     text: "A playful, high-energy storefront for Moo'd Up's better-for-you chocolate milk mix, built to make nutrition feel fun and subscriptions effortless.",
     summary:
       "Moo'd Up is a dairy-free chocolate milk mix with 10g of protein and just 3g of sugar per serving, made for kids and grown-ups alike. The store had to make the nutrition story instantly clear, feel as fun as the brand, and turn a first bag into a habit.",
@@ -361,7 +363,7 @@ export const projects: Project[] = [
     approach: [
       { title: "Story", text: "We framed the product as chocolate milk, all grown up: nostalgic taste with real benefits." },
       { title: "Design", text: "A purple, character-led system with big type, floating product shots and playful motion." },
-      { title: "Build", text: "Shopify Plus templates for a focused bundle funnel, subscriptions, reviews and a store locator." },
+      { title: "Build", text: "Shopify templates for a focused bundle funnel, subscriptions, reviews and a store locator." },
       { title: "Optimise", text: "Comparison, guarantee and customer stories placed to answer doubts right before checkout." },
     ],
     features: [

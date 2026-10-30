@@ -1,3 +1,4 @@
+import { CONTACT_EMAIL } from "@/lib/contact-email";
 import { site } from "@/lib/site";
 
 /**
@@ -209,7 +210,8 @@ export function renderConfirmation(c: Confirmation) {
     <tr><td style="background:${INK};padding:28px 40px" class="px">
       <div style="font:400 13px/1.7 ${SANS};color:rgba(255,255,255,.7)">
         <a href="${site.url}" style="color:#ffffff;text-decoration:none">theactivesolutions.com</a>
-        &nbsp;·&nbsp; <a href="mailto:${site.email}" style="color:#ffffff;text-decoration:none">${site.email}</a><br>
+        &nbsp;·&nbsp; <a href="mailto:${CONTACT_EMAIL}" style="color:#ffffff;text-decoration:none">${CONTACT_EMAIL}</a>
+        &nbsp;·&nbsp; <a href="tel:${site.phone.tel}" style="color:#ffffff;text-decoration:none">${site.phone.display}</a><br>
         ${escapeHtml(address)}
       </div>
       <div style="font:400 12px/1.6 ${SANS};color:rgba(255,255,255,.45);margin-top:14px">You're receiving this email because this address was used on a form at theactivesolutions.com.${
@@ -235,7 +237,7 @@ export function renderConfirmation(c: Confirmation) {
     "Have something to add? Just reply to this email.",
     "",
     "The Active Solutions team",
-    `${site.url} · ${site.email}`,
+    `${site.url} · ${CONTACT_EMAIL} · ${site.phone.display}`,
     address,
   ].join("\n");
 

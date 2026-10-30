@@ -3,6 +3,7 @@ import { companyNav, legalNav, services, site } from "@/lib/site";
 import { Logo } from "@/components/ui/Logo";
 import { FooterWordmark } from "./FooterWordmark";
 import styles from "./Footer.module.css";
+import { Email } from "@/components/ui/Email";
 
 export function Footer() {
   return (
@@ -56,9 +57,11 @@ export function Footer() {
               <br />
               {site.address.city}, {site.address.postalCode}
               <br />
-              <a href={`mailto:${site.email}`} className={styles.link}>
-                {site.email}
+              <a href={`tel:${site.phone.tel}`} className={styles.link}>
+                {site.phone.display}
               </a>
+              <br />
+              <Email className={styles.link} />
             </address>
           </div>
         </div>

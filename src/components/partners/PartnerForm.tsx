@@ -3,19 +3,21 @@
 import Link from "next/link";
 import { useId, useRef, useState } from "react";
 import { Button } from "@/components/ui/Button";
+import { RevealEmail } from "@/components/ui/RevealEmail";
 import { HONEYPOT_FIELD, submitContact } from "@/components/contact/validation";
 import { site } from "@/lib/site";
 import styles from "./PartnerForm.module.css";
 
 const SERVICES = ["Shopify development", "Web design", "PPC", "Email marketing", "Ecommerce development"];
 
-type Status = { state: "idle" | "sending" | "sent" | "error" | "fallback"; message?: string; mailto?: string };
+type Status = { state: "idle" | "sending" | "sent" | "error" | "fallback"; message?: string; mailBody?: string };
 
 /**
  * Partner enquiry card. Posts to /api/contact as a partner enquiry. If email delivery isn't
  * configured (503) it offers the visitor's email app with the details pre-filled instead.
  */
-export function PartnerForm() {
+/** `emailCode`: encoded contact address (lib/contact-email) for the click-to-reveal fallback. */
+export function PartnerForm({ emailCode }: { emailCode: string }) {
   const id = useId();
   const [services, setServices] = useState<string[]>(["Shopify development", "Email marketing"]);
   const [status, setStatus] = useState<Status>({ state: "idle" });
@@ -55,8 +57,7 @@ export function PartnerForm() {
         "",
         get("requirements"),
       ].join("\n");
-      const mailto = `mailto:${site.email}?subject=${encodeURIComponent("Partnership enquiry")}&body=${encodeURIComponent(body)}`;
-      setStatus({ state: "fallback", message: "Online sending isn't available right now. You can email us your details instead:", mailto });
+      setStatus({ state: "fallback", message: "Online sending isn't available right now. You can email us your details instead:", mailBody: body });
     } else {
       const first = res.errors && Object.values(res.errors)[0];
       setStatus({ state: "error", message: first || res.message || "Something went wrong. Please try again." });
@@ -128,10 +129,10 @@ export function PartnerForm() {
         </Button>
         <p id={`${id}-status`} ref={statusRef} tabIndex={-1} className={styles.status} role="status" data-state={status.state}>
           {status.message ?? "We'll review the details and get back to you."}
-          {status.mailto && (
+          {status.mailBody !== undefined && (
             <>
               {" "}
-              <a href={status.mailto}>{site.email}</a>
+              <RevealEmail code={emailCode} subject="Partnership enquiry" body={status.mailBody} />
             </>
           )}
         </p>

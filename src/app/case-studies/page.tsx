@@ -20,7 +20,7 @@ import styles from "./page.module.css";
 export const metadata = pageMetadata({
   title: "Case Studies: Shopify Projects & Results",
   description:
-    "How we designed and built Shopify Plus stores for DTC brands: ThermoLab, HeyBuddy and Peak Motion. The challenge, our approach and what changed.",
+    "How we designed and built Shopify stores for DTC brands: ThermoLab, HeyBuddy, Peak Motion, Dermalyft, Glo and Moo'd Up. The challenge, our approach and what changed.",
   path: "/case-studies",
 });
 

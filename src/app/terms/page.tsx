@@ -1,6 +1,7 @@
 import { LegalPage } from "@/components/legal/LegalPage";
 import { pageMetadata } from "@/lib/seo";
 import { site } from "@/lib/site";
+import { Email } from "@/components/ui/Email";
 
 export const metadata = pageMetadata({
   title: "Terms & Conditions",
@@ -55,7 +56,7 @@ export default function TermsPage() {
           body: (
             <p>
               We may update these terms from time to time; the date above shows the latest version. Questions? Email{" "}
-              <a href={`mailto:${site.email}`}>{site.email}</a>.
+              <Email />.
             </p>
           ),
         },

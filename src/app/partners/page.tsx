@@ -10,6 +10,7 @@ import { TiltVisual } from "@/components/motion/TiltVisual";
 import { MotionEngine } from "@/components/motion/MotionEngine";
 import { ExtendList } from "@/components/partners/ExtendList";
 import { PartnerForm } from "@/components/partners/PartnerForm";
+import { encodeEmail } from "@/lib/contact-email";
 import { Faq } from "@/components/sections/Faq";
 import styles from "@/components/partners/Partners.module.css";
 import { JsonLd } from "@/components/JsonLd";
@@ -223,7 +224,7 @@ export default function PartnersPage() {
                 review the details and discuss a practical white-label arrangement.
               </p>
             </div>
-            <PartnerForm />
+            <PartnerForm emailCode={encodeEmail()} />
           </div>
         </div>
       </section>
