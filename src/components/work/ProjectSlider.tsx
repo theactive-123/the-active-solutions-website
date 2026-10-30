@@ -192,7 +192,7 @@ export function ProjectSlider({ slides }: { slides: Slide[] }) {
                 tabIndex={i === active ? 0 : -1}
                 style={{ clipPath: i === 0 ? "inset(0% 0% 0% 0%)" : "inset(0% 0% 0% 100%)", zIndex: i === 0 ? 2 : 1 }}
               >
-                <Image src={s.image} alt="" fill sizes="(min-width: 1024px) 44vw, 92vw" className={styles.img} priority={i === 0} />
+                <Image src={s.image} alt="" fill sizes="(min-width: 1024px) 44vw, 92vw" className={styles.img} loading={i === 0 ? "eager" : "lazy"} fetchPriority={i === 0 ? "high" : "auto"} />
               </Link>
             ))}
           </div>

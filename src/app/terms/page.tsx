@@ -1,7 +1,7 @@
+import Link from "next/link";
 import { LegalPage } from "@/components/legal/LegalPage";
 import { pageMetadata } from "@/lib/seo";
 import { site } from "@/lib/site";
-import { Email } from "@/components/ui/Email";
 
 export const metadata = pageMetadata({
   title: "Terms & Conditions",
@@ -55,8 +55,7 @@ export default function TermsPage() {
           heading: "Changes and contact",
           body: (
             <p>
-              We may update these terms from time to time; the date above shows the latest version. Questions? Email{" "}
-              <Email />.
+              We may update these terms from time to time; the date above shows the latest version. Questions? Get in touch through our <Link href="/contact">contact page</Link>.
             </p>
           ),
         },

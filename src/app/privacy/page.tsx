@@ -69,7 +69,7 @@ export default function PrivacyPage() {
           body: (
             <p>
               Depending on where you live you may have the right to access, correct, delete or export your personal information, or to
-              object to how we use it. Email us (<Email />) and we will respond within 30 days.
+              object to how we use it. Contact us using the details below and we will respond within 30 days.
             </p>
           ),
         },
@@ -78,7 +78,9 @@ export default function PrivacyPage() {
           body: (
             <p>
               {site.name}, {site.address.street}, {site.address.city} {site.address.postalCode}, {site.address.countryName}.{" "}
-              Phone: <a href={`tel:${site.phone.tel}`}>{site.phone.display}</a>. Email: <Email />
+              Phone: <a href={`tel:${site.phone.tel}`}>{site.phone.display}</a>
+              <br />
+              Email: <Email />
             </p>
           ),
         },

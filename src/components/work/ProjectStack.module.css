@@ -154,23 +154,30 @@
 }
 
 @media (min-width: 900px) {
-  .card {
-    position: sticky;
-    top: calc(110px + var(--i) * 22px);
+  /* Every card is pinned at the same top, and every row has the same height (1fr), so all cards
+     release at the same scroll position and the stack leaves together after the last one.
+     (A sticky box lets go when its own bottom meets the list's bottom; unequal boxes or tops
+     made earlier cards slide away behind the last.) The visible step comes from the body's margin. */
+  .stack {
+    grid-template-rows: repeat(var(--n), 1fr) 45vh;
   }
 
-  /* Hold: empty scroll space under each card (but the last), so it stays parked and fully
-     visible for a while before the next card arrives. */
-  .card:not(:last-child) {
+  /* Final hold: a spacer row after the cards, so the last card also parks before the
+     whole stack leaves. */
+  .stack::after {
+    content: "";
+  }
+
+  .card {
+    position: sticky;
+    top: 110px;
+    /* Hold: scroll space under each card, so it stays parked and fully visible for a while
+       before the next card arrives (and, for the last card, before the stack leaves). */
     padding-bottom: 45vh;
   }
 
-  /* The same hold at the end keeps the earlier cards pinned until the last one has parked;
-     then the whole stack leaves together. A spacer, not padding: sticky boxes are limited by
-     their container's content box, which excludes padding. */
-  .stack::after {
-    content: "";
-    height: 45vh;
+  .card > .body {
+    margin-top: calc(var(--i) * 22px);
   }
 
   .body {

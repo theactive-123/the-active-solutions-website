@@ -45,7 +45,7 @@ export function PageHero({ title, text, primary, secondary, tagline, visual, chi
         </div>
         {visual && (
           <TiltVisual className={[styles.visual, visual.className].filter(Boolean).join(" ")}>
-            <Image src={visual.src} alt="" width={visual.width} height={visual.height} priority sizes="(min-width: 1024px) 30vw, 60vw" />
+            <Image src={visual.src} alt="" width={visual.width} height={visual.height} loading="eager" fetchPriority="high" sizes="(min-width: 1024px) 30vw, 60vw" />
           </TiltVisual>
         )}
       </div>

@@ -15,6 +15,11 @@ const nextConfig = {
   cacheComponents: true,
   partialPrefetching: true,
   poweredByHeader: false,
+  experimental: {
+    // Styles ship inside the HTML (<style>) instead of render-blocking <link> requests.
+    // The site's CSS is small (~32 KB gzipped), so first visits paint sooner.
+    inlineCss: true,
+  },
   images: {
     formats: ["image/avif", "image/webp"],
     qualities: [75, 85],

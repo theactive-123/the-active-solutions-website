@@ -158,7 +158,8 @@
 }
 
 .consent a,
-.status a {
+.status a,
+.status [data-email-link] {
   color: var(--red);
   text-decoration: underline;
   text-underline-offset: 3px;

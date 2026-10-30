@@ -75,9 +75,7 @@ export default function ContactPage() {
                 <a className={styles.mailLink} href={`tel:${site.phone.tel}`}>
                   {site.phone.display}
                 </a>
-                <span className={styles.emailNote}>
-                  <Email />
-                </span>
+                <Email className={styles.mailLink} label="Show email address" />
               </div>
             </div>
 

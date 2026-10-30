@@ -23,8 +23,20 @@ export function TiltVisual({ children, className, float = true }: { children: Re
     let stopWaiting = () => {};
 
     const ctx = gsap.context(() => {
-      // Enters once the preloader lifts (or right away when there is none).
-      const enter = gsap.from(body, { opacity: 0, scale: 0.82, rotate: -8, y: 40, duration: 1.8, ease: "expo.out", delay: 0.3, paused: introPending() });
+      // Enters once the preloader lifts (or right away when there is none). Behind the preloader
+      // the image is already covered, so it stays opaque there: it paints (and loads) as early as
+      // possible instead of waiting for the curtain, and the scale/rotate entrance still plays.
+      const pending = introPending();
+      const enter = gsap.from(body, {
+        ...(pending ? {} : { opacity: 0 }),
+        scale: 0.82,
+        rotate: -8,
+        y: 40,
+        duration: 1.8,
+        ease: "expo.out",
+        delay: 0.3,
+        paused: pending,
+      });
       if (enter.paused()) stopWaiting = whenIntro(() => enter.restart(true));
       if (float) gsap.to(el, { y: -18, duration: 3.2, ease: "sine.inOut", yoyo: true, repeat: -1 });
       if (!isFinePointer()) return;

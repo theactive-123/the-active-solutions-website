@@ -47,13 +47,40 @@ export function MotionEngine() {
       return anim;
     };
 
-    const ctx = gsap.context(() => {
+    // Lazy set-up: scroll-triggered reveals are created only when their element comes within
+    // reach of the viewport (they stay hidden by CSS until then). Splitting every heading and
+    // creating every tween at load forced a lot of style/layout work before the page settled.
+    // On-load (data-immediate) animations are created straight away.
+    const pending = new Map<Element, () => void>();
+    // eslint-disable-next-line prefer-const -- assigned below; the observer only fires after that
+    let ctx: gsap.Context;
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue;
+          const make = pending.get(entry.target);
+          io.unobserve(entry.target);
+          pending.delete(entry.target);
+          if (make) ctx.add(make);
+        }
+      },
+      { rootMargin: "0px 0px 35% 0px" },
+    );
+    const lazy = (el: Element, make: () => void) => {
+      if (el.hasAttribute("data-immediate")) make();
+      else {
+        pending.set(el, make);
+        io.observe(el);
+      }
+    };
+
+    ctx = gsap.context(() => {
       const trigger = (el: Element, start = "top 88%") =>
         el.hasAttribute("data-immediate") ? undefined : { trigger: el, start, once: true };
       const delayOf = (el: Element) => Number(el.getAttribute("data-delay") ?? 0) + (el.hasAttribute("data-immediate") ? 0.25 : 0);
 
       // Masked line reveals for headings
-      gsap.utils.toArray<HTMLElement>("[data-split]").forEach((el) => {
+      gsap.utils.toArray<HTMLElement>("[data-split]").forEach((el) => lazy(el, () => {
         const type = el.dataset.split === "words" ? "words" : "lines";
         const split = SplitText.create(el, {
           type: type === "words" ? "words,lines" : "lines",
@@ -76,7 +103,7 @@ export function MotionEngine() {
           },
         });
         splits.push(split);
-      });
+      }));
 
       // Generic reveals
       const fromVars: Record<string, gsap.TweenVars> = {
@@ -88,7 +115,7 @@ export function MotionEngine() {
         clip: { clipPath: "inset(100% 0% 0% 0%)", scale: 1.08 },
         line: { scaleX: 0, transformOrigin: "0% 50%" },
       };
-      gsap.utils.toArray<HTMLElement>("[data-reveal]").forEach((el) => {
+      gsap.utils.toArray<HTMLElement>("[data-reveal]").forEach((el) => lazy(el, () => {
         const kind = el.dataset.reveal || "up";
         const masked = kind === "clip" || kind === "line";
         hold(el, gsap.fromTo(
@@ -107,9 +134,9 @@ export function MotionEngine() {
             scrollTrigger: trigger(el),
           },
         ));
-      });
+      }));
 
-      gsap.utils.toArray<HTMLElement>("[data-reveal-stagger]").forEach((el) => {
+      gsap.utils.toArray<HTMLElement>("[data-reveal-stagger]").forEach((el) => lazy(el, () => {
         hold(el, gsap.fromTo(
           el.children,
           { opacity: 0, y: 50 },
@@ -122,7 +149,7 @@ export function MotionEngine() {
             scrollTrigger: trigger(el, "top 85%"),
           },
         ));
-      });
+      }));
 
       // Parallax drift
       gsap.utils.toArray<HTMLElement>("[data-parallax]").forEach((el) => {
@@ -219,6 +246,7 @@ export function MotionEngine() {
     );
 
     return () => {
+      io.disconnect();
       window.clearTimeout(t);
       window.removeEventListener("load", refresh);
       // Revert tweens first: reverting a counter tween re-renders it at 0, so restore text afterwards.

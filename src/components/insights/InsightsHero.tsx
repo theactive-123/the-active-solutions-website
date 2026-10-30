@@ -35,7 +35,7 @@ export function InsightsHero({ title, before, children, tagline, visual }: Props
           {children}
         </div>
         <TiltVisual className={`${styles.visual} figma-crop`}>
-          <Image src={visual.src} alt="" width={visual.width} height={visual.height} priority sizes="(min-width: 1024px) 30vw, 60vw" />
+          <Image src={visual.src} alt="" width={visual.width} height={visual.height} loading="eager" fetchPriority="high" sizes="(min-width: 1024px) 30vw, 60vw" />
         </TiltVisual>
       </div>
       <div className={`container ${styles.bottom}`}>

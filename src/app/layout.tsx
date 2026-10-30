@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import Script from "next/script";
 import { Geist, Inter_Tight, Jost, Newsreader } from "next/font/google";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
@@ -72,8 +73,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: motionBoot }} />
-        {/* Google tag (gtag.js) */}
-        <script async src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`} />
+        {/* Google tag (gtag.js): the queue and config run first; the library itself loads once the
+            page is idle (see <Script> below), and replays everything queued in dataLayer. */}
         <script
           dangerouslySetInnerHTML={{
             __html: `window.dataLayer = window.dataLayer || [];
@@ -98,6 +99,7 @@ gtag('config', '${GA_ID}');`,
           <Cursor />
         </SmoothScroll>
         <JsonLd data={organizationJsonLd} />
+        <Script src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`} strategy="lazyOnload" />
       </body>
     </html>
   );

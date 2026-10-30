@@ -35,8 +35,15 @@ export function HeroScene() {
     let cancelled = false;
     let stopWaiting = () => {};
     const fallback = () => {
-      stopWaiting = whenIntro(() => gsap.to(title, { opacity: 1, y: 0, duration: 1, ease: "expo.out", delay: 0.2 }));
+      stopWaiting = whenIntro(() => gsap.fromTo(title, { opacity: 0, y: 28 }, { opacity: 1, y: 0, duration: 1.1, ease: "expo.out", delay: 0.2 }));
     };
+
+    // Phones and tablets get the plain headline reveal: three.js (~370 KB) and a full-screen
+    // WebGL scene would cost far more there than they add.
+    if (!window.matchMedia("(min-width: 1024px)").matches) {
+      fallback();
+      return () => stopWaiting();
+    }
 
     import("three")
       .then(async (THREE) => {

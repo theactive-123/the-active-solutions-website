@@ -132,7 +132,7 @@ export function PartnerForm({ emailCode }: { emailCode: string }) {
           {status.mailBody !== undefined && (
             <>
               {" "}
-              <RevealEmail code={emailCode} subject="Partnership enquiry" body={status.mailBody} />
+              <RevealEmail code={emailCode} label="show our email address" subject="Partnership enquiry" body={status.mailBody} />
             </>
           )}
         </p>

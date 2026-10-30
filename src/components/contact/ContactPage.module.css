@@ -206,7 +206,7 @@
 
 /* Click-to-reveal email in the hero (the button brings its own dashed underline) */
 .emailNote {
-  color: var(--white);
+  color: var(--on-dark);
   font-size: var(--fs-body);
 }
 
@@ -351,12 +351,14 @@
   text-align: center;
 }
 
-.bookFallback a {
+.bookFallback a,
+.bookFallback [data-email-link] {
   color: var(--ink);
   background: linear-gradient(var(--red), var(--red)) 0 100% / 100% 1px no-repeat;
 }
 
-.bookFallback a:hover {
+.bookFallback a:hover,
+.bookFallback [data-email-link]:hover {
   color: var(--red);
 }
 

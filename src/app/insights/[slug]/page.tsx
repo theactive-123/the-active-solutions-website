@@ -114,7 +114,7 @@ async function InsightArticle({ params }: { params: PageProps<"/insights/[slug]"
       <section className={`theme-paper ${styles.section}`} aria-label="Article">
         <div className="container">
           <figure className={styles.cover} data-reveal="clip">
-            <Image src={article.cover.src} alt={article.cover.alt} width={article.cover.width} height={article.cover.height} sizes="(min-width: 1920px) 1620px, 92vw" priority className={styles.coverImg} />
+            <Image src={article.cover.src} alt={article.cover.alt} width={article.cover.width} height={article.cover.height} sizes="(min-width: 1920px) 1620px, 92vw" loading="eager" fetchPriority="high" className={styles.coverImg} />
           </figure>
           <div className={styles.layout}>
             <div className={styles.stick}>

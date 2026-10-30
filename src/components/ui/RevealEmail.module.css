@@ -1,24 +1,16 @@
-.reveal {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
+/* Only resets, with zero specificity (:where), so the surrounding link style passed as
+   className always wins. */
+:where(.reveal) {
+  display: inline;
   padding: 0;
+  margin: 0;
   border: 0;
-  background: none;
+  background-color: transparent;
   color: inherit;
   font: inherit;
+  letter-spacing: inherit;
+  text-align: inherit;
   cursor: pointer;
-  text-decoration: underline;
-  text-decoration-style: dashed;
-  text-decoration-thickness: 1px;
-  text-underline-offset: 4px;
-  text-align: left;
-  white-space: nowrap;
-  transition: color 0.3s;
-}
-
-.reveal:hover {
-  color: var(--red);
 }
 
 .reveal:focus-visible,
@@ -28,13 +20,24 @@
   border-radius: 2px;
 }
 
-.icon {
-  flex-shrink: 0;
-  color: var(--red);
+/* The address fades in where the button was */
+:where(.revealed) {
+  display: inline-block;
 }
 
 .revealed {
-  color: inherit;
-  /* Breaks only after the "@" (see <wbr>) in narrow columns, never mid-word. */
-  overflow-wrap: normal;
+  animation: reveal 0.5s var(--ease-out) both;
+}
+
+@keyframes reveal {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .revealed {
+    animation: none;
+  }
 }

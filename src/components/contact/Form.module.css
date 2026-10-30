@@ -386,7 +386,8 @@
   outline-offset: 2px;
 }
 
-.status a {
+.status a,
+.status [data-email-link] {
   font-weight: 600;
   text-decoration: underline;
   text-underline-offset: 2px;

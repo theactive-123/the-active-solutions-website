@@ -9,6 +9,8 @@ import styles from "./Preloader.module.css";
 
 /** Shortest and longest time the preloader stays up (ms). */
 const MIN_TIME = 1900;
+/** Small screens skip the 3D logo, so there is less to show and the page appears sooner. */
+const MIN_TIME_SMALL = 1300;
 const MIN_TIME_REDUCED = 500;
 const MAX_TIME = 7000;
 
@@ -38,7 +40,9 @@ export function Preloader() {
     const words = el.querySelectorAll<HTMLElement>("[data-pl-word]");
     const canvas = q<HTMLCanvasElement>("[data-pl-canvas]");
     const reduced = prefersReducedMotion();
-    const minTime = reduced ? MIN_TIME_REDUCED : MIN_TIME;
+    // three.js particle logo on larger screens only; phones keep the ring + mark (lighter, faster).
+    const large = window.matchMedia("(min-width: 1024px)").matches;
+    const minTime = reduced ? MIN_TIME_REDUCED : large ? MIN_TIME : MIN_TIME_SMALL;
 
     // Block scrolling without hiding the scrollbar (hiding it would shift the layout on exit).
     const block = (e: Event) => {
@@ -93,7 +97,7 @@ export function Preloader() {
 
     // three.js particle logo (loaded on demand). Until it is ready, the ring + mark show progress.
     let scene: PreloaderScene | null = null;
-    if (!reduced) {
+    if (!reduced && large) {
       import("three")
         .then((THREE) => createPreloaderScene(THREE, canvas))
         .then((s) => {
@@ -236,7 +240,7 @@ export function Preloader() {
               <circle cx="60" cy="60" r="52" className={styles.track} />
               <circle cx="60" cy="60" r="52" className={styles.progress} data-pl-ring strokeDasharray={RING} strokeDashoffset={RING} />
             </svg>
-            <Image src="/images/brand/logo-mark.png" alt="" width={78} height={72} priority className={styles.logo} />
+            <Image src="/images/brand/logo-mark.png" alt="" width={78} height={72} loading="eager" fetchPriority="high" className={styles.logo} />
           </div>
         </div>
 

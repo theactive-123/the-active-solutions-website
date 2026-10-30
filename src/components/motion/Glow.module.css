@@ -1,41 +1,26 @@
-@property --gx {
-  syntax: "<percentage>";
-  inherits: false;
-  initial-value: 92%;
-}
-
-@property --gy {
-  syntax: "<percentage>";
-  inherits: false;
-  initial-value: 0%;
-}
-
-@property --px {
-  syntax: "<number>";
-  inherits: false;
-  initial-value: 0;
-}
-
-@property --py {
-  syntax: "<number>";
-  inherits: false;
-  initial-value: 0;
-}
-
+/* --gx/--gy: where the light sits, as a percentage of the section (set per variant or by a
+   className). Plain custom properties so they inherit into the light layer. */
 .glow {
   position: absolute;
   inset: 0;
   z-index: 0;
   pointer-events: none;
   overflow: hidden;
-  background:
-    radial-gradient(
-      70% 95% at calc(var(--gx) + var(--px) * 1%) calc(var(--gy) + var(--py) * 1%),
-      rgba(234, 34, 41, 0.7) 0%,
-      rgba(160, 18, 26, 0.45) 30%,
-      rgba(11, 11, 12, 0) 72%
-    ),
-    var(--ink);
+  background: var(--ink);
+}
+
+/* The light: 1.4x the section (20% overflow on each side) so it can move without exposing an
+   edge. Position and size are converted into this layer's coordinates. */
+.light {
+  position: absolute;
+  inset: -20%;
+  background: radial-gradient(
+    50% 67.86% at calc((var(--gx, 92%) + 20%) / 1.4) calc((var(--gy, 0%) + 20%) / 1.4),
+    rgba(234, 34, 41, 0.7) 0%,
+    rgba(160, 18, 26, 0.45) 30%,
+    rgba(11, 11, 12, 0) 72%
+  );
+  will-change: transform;
 }
 
 /* Fine vertical sheen lines seen in the hero artwork */

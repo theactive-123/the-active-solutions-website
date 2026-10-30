@@ -41,7 +41,7 @@ export function BrowserFrame({ src, domain, alt, priority }: { src: string; doma
       </div>
       <div className={styles.viewport}>
         <div className={styles.shot} data-shot>
-          <Image src={src} alt={alt} fill sizes="(min-width: 1100px) 55vw, 92vw" priority={priority} className={styles.img} />
+          <Image src={src} alt={alt} fill sizes="(min-width: 1100px) 55vw, 92vw" className={styles.img} loading={priority ? "eager" : "lazy"} fetchPriority={priority ? "high" : "auto"} />
         </div>
       </div>
     </div>

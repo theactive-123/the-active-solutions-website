@@ -25,7 +25,7 @@ export function HomeHero() {
                 width={174}
                 height={29}
                 className={styles.partner}
-                priority
+                loading="eager"
               />
             </div>
             <h1 id="home-title" className={`display ${styles.title}`} data-hero-title>
@@ -40,7 +40,8 @@ export function HomeHero() {
                 alt=""
                 width={514}
                 height={520}
-                priority
+                loading="eager"
+                fetchPriority="high"
                 sizes="(min-width: 1024px) 27vw, 60vw"
               />
             </TiltVisual>

@@ -50,7 +50,7 @@ export function Footer() {
             </ul>
           </nav>
 
-          <div className={styles.col}>
+          <div className={`${styles.col} ${styles.office}`}>
             <h2 className={styles.colTitle}>Office</h2>
             <address className={styles.address}>
               {site.address.street},
@@ -61,7 +61,7 @@ export function Footer() {
                 {site.phone.display}
               </a>
               <br />
-              <Email className={styles.link} />
+              <Email className={styles.link} label="Show email address" />
             </address>
           </div>
         </div>

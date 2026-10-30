@@ -63,7 +63,7 @@ export function ProjectStack({ projects, total = projects.length }: { projects: 
   );
 
   return (
-    <ol ref={ref} role="list" className={styles.stack}>
+    <ol ref={ref} role="list" className={styles.stack} style={{ "--n": projects.length } as React.CSSProperties}>
       {projects.map((p, i) => (
         <li
           key={p.slug}

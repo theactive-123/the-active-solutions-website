@@ -129,9 +129,24 @@
   gap: 18px;
 }
 
+/* Office column: full width on phones so the phone number and revealed email sit on one line */
+.office {
+  grid-column: 1 / -1;
+}
+
 @media (min-width: 900px) {
   .top {
     grid-template-columns: 1.6fr 1fr 0.8fr 0.8fr;
+  }
+
+  .office {
+    grid-column: auto;
+  }
+}
+
+@media (min-width: 1200px) {
+  .top {
+    grid-template-columns: 1.6fr 1fr 0.8fr minmax(236px, 0.8fr);
   }
 
   .about {

@@ -61,7 +61,8 @@
   margin-top: 0.4em;
 }
 
-.text a {
+.text a,
+.text [data-email-link] {
   color: var(--red);
   text-decoration: underline;
   text-underline-offset: 3px;

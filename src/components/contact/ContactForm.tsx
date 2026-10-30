@@ -351,13 +351,13 @@ export function ContactForm({
             <p>
               {status === "unavailable" ? (
                 <>
-                  Our online form is taking a break. Your details are still here, so you can send them by email (
-                  <RevealEmail code={emailCode} label="click to reveal our address" subject={mailSubject} body={mailBody} />) and
-                  we&apos;ll reply within one business day.
+                  Our online form is taking a break. Your details are still here, so you can{" "}
+                  <RevealEmail code={emailCode} label="email them to us" subject={mailSubject} body={mailBody} /> and we&apos;ll
+                  reply within one business day.
                 </>
               ) : (
                 <>
-                  {message} You can also email us: <RevealEmail code={emailCode} subject={mailSubject} body={mailBody} />
+                  {message} You can also <RevealEmail code={emailCode} label="email us directly" subject={mailSubject} body={mailBody} />.
                 </>
               )}
             </p>

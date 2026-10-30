@@ -82,9 +82,9 @@ export default function SchedulePage() {
 
             <div className={styles.heroActions} data-reveal data-immediate data-delay="0.55">
               <Button href="#book">Pick a time</Button>
-              <span className={styles.emailNote}>
-                Prefer email? <Email />
-              </span>
+              <p className={styles.emailNote}>
+                Prefer email? <Email className={styles.mailLink} label="Show our address" />
+              </p>
             </div>
           </div>
 
@@ -130,7 +130,7 @@ export default function SchedulePage() {
             <a href={BOOKING_URL} target="_blank" rel="noopener noreferrer">
               Open the booking page in a new tab
             </a>{" "}
-            or email us: <Email />.
+            or <Email label="show our email address" />.
           </p>
         </div>
       </section>
