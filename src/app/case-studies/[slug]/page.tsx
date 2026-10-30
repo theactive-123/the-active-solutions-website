@@ -132,7 +132,7 @@ async function CaseStudy({ params }: { params: PageProps<"/case-studies/[slug]">
           <CardGrid items={project.features} columns={3} minHeight="clamp(190px, 13vw, 240px)" />
           <div className={styles.details}>
             {project.details.map((d) => (
-              <DetailShot key={d.caption} src={project.image} shot={d} alt={`${project.name}: ${d.caption}`} />
+              <DetailShot key={d.src} shot={d} alt={`${project.name}: ${d.caption}`} />
             ))}
           </div>
         </div>

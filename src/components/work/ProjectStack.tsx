@@ -14,7 +14,7 @@ import styles from "./ProjectStack.module.css";
  * for a stretch of scroll (the "hold", see CSS) so its buttons are easy to use; then the next
  * card slides over it while it recedes slightly. Inside each card the screenshot drifts with scroll.
  */
-export function ProjectStack({ projects }: { projects: Project[] }) {
+export function ProjectStack({ projects, total = projects.length }: { projects: Project[]; total?: number }) {
   const ref = useRef<HTMLOListElement>(null);
 
   useGSAP(
@@ -91,7 +91,7 @@ export function ProjectStack({ projects }: { projects: Project[] }) {
 
             <div className={styles.info}>
               <p className={styles.count} data-card-reveal>
-                <b>{String(i + 1).padStart(2, "0")}</b> / {String(projects.length).padStart(2, "0")}
+                <b>{String(i + 1).padStart(2, "0")}</b> / {String(total).padStart(2, "0")}
               </p>
               <h3 id={`${p.slug}-title`} className={`h2 ${styles.name}`} data-card-reveal>
                 {p.name}

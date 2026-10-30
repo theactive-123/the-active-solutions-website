@@ -29,7 +29,8 @@ export function FeaturedWork() {
             }
           />
 
-          <ProjectStack projects={projects} />
+          {/* The latest three; the rest are one click away under "All case studies". */}
+          <ProjectStack projects={projects.slice(0, 3)} total={projects.length} />
         </div>
       </div>
     </section>

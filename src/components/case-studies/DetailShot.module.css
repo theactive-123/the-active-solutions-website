@@ -5,7 +5,7 @@
 
 .frame {
   position: relative;
-  aspect-ratio: 4 / 3;
+  aspect-ratio: 16 / 10;
   border-radius: var(--radius);
   overflow: hidden;
   background: #111;
@@ -13,12 +13,12 @@
 
 .img {
   object-fit: cover;
-  transform: scale(var(--zoom));
+  object-position: top center;
   transition: transform 1.4s var(--ease-out);
 }
 
 .shot:hover .img {
-  transform: scale(calc(var(--zoom) * 1.08));
+  transform: scale(1.05);
 }
 
 .caption {

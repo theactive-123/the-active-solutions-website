@@ -50,7 +50,7 @@ export function ClientProof() {
         <div className={styles.grid}>
           <div className={styles.media}>
             <Laptop
-              src="/images/work/thermolab.png"
+              src="/images/work/the-thermolab.jpg"
               width={1905}
               height={914}
               alt="The ThermoLab Shopify storefront home page shown on a laptop"

@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { Glow } from "@/components/motion/Glow";
 import { Button } from "@/components/ui/Button";
@@ -75,6 +76,11 @@ export function CaseHero({ project }: { project: Project }) {
 
         <div className={styles.showcase}>
           <BrowserFrame src={project.image} domain={project.domain} alt={`${project.name} Shopify storefront home page`} priority />
+          <div className={styles.phone} data-reveal="up" data-immediate data-delay="0.6">
+            <div className={styles.phoneScreen}>
+              <Image src={project.mobileImage} alt={`${project.name} storefront on mobile`} fill sizes="(min-width: 900px) 16vw, 40vw" className={styles.phoneImg} />
+            </div>
+          </div>
         </div>
       </div>
     </section>

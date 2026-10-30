@@ -29,7 +29,7 @@ Per-page lists:
 | `/images/brand/logo-mark.png` | Flat red mark | rendered from the Figma logo layer at 4× |
 | `/images/brand/shopify-partners.png` | Shopify Partners badge | original export, trimmed |
 | `/images/clients/*.png` | Trusted-by logos | rendered from Figma vectors at 4× |
-| `/images/work/{thermolab,heybuddy,peak-motion}.png` | Store screenshots | original exports |
+| `/images/work/{slug}.jpg`, `{slug}-mobile.jpg`, `{slug}-detail-{1,2,3}.jpg` | Store screenshots (desktop 1905×914, mobile 780×1688, close-ups 1200×750) for the six case studies | captured from the live stores, Oct 2026 |
 | `/images/team/*.png` | Team avatars + feature photo | original exports |
 | `/images/home/cloud.png` | CTA cloud | original export |
 | `/images/icons/{sparkle,atom,infinity,asterisk}.svg` | Pillar icons, marquee asterisk | original SVG exports |
