@@ -112,3 +112,8 @@
     justify-self: end;
   }
 }
+
+.articleTitle {
+  font-size: clamp(2rem, 4vw, 4.75rem);
+  line-height: 1.08;
+}

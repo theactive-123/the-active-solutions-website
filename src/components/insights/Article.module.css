@@ -6,21 +6,15 @@
 
 .cover {
   overflow: hidden;
-  aspect-ratio: 16 / 10;
   border-radius: var(--radius);
   background: var(--ink-2);
 }
 
-@media (min-width: 900px) {
-  .cover {
-    aspect-ratio: 1620 / 626;
-  }
-}
 
 .coverImg {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
+  height: auto;
+  display: block;
 }
 
 .layout {
@@ -474,4 +468,10 @@
   .related {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
+}
+
+.brandAvatar {
+  object-fit: contain;
+  object-position: center;
+  padding: 10px;
 }

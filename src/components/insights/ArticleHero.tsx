@@ -9,6 +9,7 @@ export function ArticleHero({ article }: { article: Insight }) {
   return (
     <InsightsHero
       title={accented(article.heroTitle)}
+      titleClassName={styles.articleTitle}
       visual={{ src: "/images/insights/cube-3d.png", width: 622, height: 622 }}
       before={
         <nav aria-label="Breadcrumb" data-reveal="fade" data-immediate>

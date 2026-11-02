@@ -10,6 +10,7 @@ export function accented(text: string) {
 
 type Props = {
   title: React.ReactNode;
+  titleClassName?: string;
   /** Rendered above the h1 (e.g. breadcrumb). */
   before?: React.ReactNode;
   /** Rendered under the h1 (copy, meta line, actions). */
@@ -22,14 +23,14 @@ type Props = {
  * Dark hero for the Insights pages. Same look as the shared PageHero, but with a wider copy
  * column (the Figma headlines are ~1018px wide at 1920) and optional slots around the h1.
  */
-export function InsightsHero({ title, before, children, tagline, visual }: Props) {
+export function InsightsHero({ title, before, children, tagline, visual, titleClassName }: Props) {
   return (
     <section className={`${styles.hero} theme-dark`} aria-labelledby="page-title">
       <Glow />
       <div className={`container ${styles.inner}`}>
         <div className={styles.copy}>
           {before}
-          <h1 id="page-title" className={`display ${styles.title}`} data-split data-immediate>
+          <h1 id="page-title" className={`display ${styles.title} ${titleClassName ?? ""}`} data-split data-immediate>
             {title}
           </h1>
           {children}
