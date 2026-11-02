@@ -9,6 +9,8 @@ import styles from "./FeaturedInsight.module.css";
 /** "[ FEATURED ]" — large cover on the left, headline, excerpt, meta and "Read article" on the right. */
 export function FeaturedInsight({ article }: { article: Insight }) {
   const href = insightPath(article.slug);
+  const words = article.excerpt.trim().split(/\s+/);
+  const excerpt = words.length > 25 ? `${words.slice(0, 25).join(" ")}…` : article.excerpt;
   return (
     <section className={`section theme-paper ${styles.section}`} aria-labelledby="featured-title">
       <div className="container">
@@ -25,7 +27,7 @@ export function FeaturedInsight({ article }: { article: Insight }) {
               </Link>
             </h3>
             <p className={`body ${styles.excerpt}`} data-reveal>
-              {article.excerpt}
+              {excerpt}
             </p>
             <div data-reveal data-delay="0.08">
               <InsightMeta article={article} className={styles.meta} />

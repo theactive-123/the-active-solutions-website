@@ -12,20 +12,14 @@
   position: relative;
   display: block;
   overflow: hidden;
-  aspect-ratio: 705 / 504;
   border-radius: var(--radius);
   background: var(--ink);
 }
 
 .img {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 1.2s var(--ease-out);
-}
-
-.feature:hover .img {
-  transform: scale(1.06);
+  height: auto;
+  display: block;
 }
 
 .pill {
@@ -42,11 +36,12 @@
 }
 
 .copy {
-  padding-top: clamp(0px, 1.56vw, 30px);
+  padding-top: 0;
 }
 
 .title {
   max-width: 860px;
+  font-size: max(1.75rem, calc(var(--fs-h2) - 20px));
 }
 
 .titleLink {
