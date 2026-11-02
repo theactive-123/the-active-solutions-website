@@ -27,6 +27,28 @@ export function ShareLinks({ url, title }: { url: string; title: string }) {
     <div className={styles.share}>
       <h2 className={styles.asideLabel}>[ SHARE ]</h2>
       <ul role="list" className={styles.shareList}>
+         <li>
+          <a
+            className={styles.shareBtn}
+            href={`https://www.facebook.com/sharing/share-offsite/?url=${u}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Share on facebook (opens in a new tab)"
+          >
+            <span aria-hidden="true">fb</span>
+          </a>
+        </li>
+        <li>
+          <a
+            className={styles.shareBtn}
+            href={`https://www.instagram.com/sharing/share-offsite/?url=${u}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Share on instagram (opens in a new tab)"
+          >
+            <span aria-hidden="true">in</span>
+          </a>
+        </li>
         <li>
           <a
             className={styles.shareBtn}
