@@ -103,7 +103,7 @@ export default function ContactPage() {
       <section className="section theme-paper" aria-labelledby="map-title">
         <div className="container">
           <h2 id="map-title" className={`h2 ${styles.mapTitle}`} data-split>
-            Based in <em>Karachi, working</em> worldwide.
+            Visit us, or <em>work with us</em> from anywhere.
           </h2>
           <ContactMap />
         </div>

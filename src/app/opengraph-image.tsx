@@ -33,7 +33,7 @@ export default async function OpengraphImage() {
         </div>
         <div style={{ display: "flex", flexDirection: "column" }}>
           <span style={{ fontSize: 22, color: "rgba(255,255,255,0.7)", marginBottom: 20 }}>
-            [ SHOPIFY &amp; DTC GROWTH AGENCY · KARACHI, WORLDWIDE ]
+            [ SHOPIFY &amp; DTC GROWTH AGENCY · US, UK &amp; GLOBAL ]
           </span>
           <span style={{ fontSize: 84, fontWeight: 700, lineHeight: 1.02, letterSpacing: -3 }}>Shopify stores built</span>
           <span style={{ fontSize: 84, fontWeight: 700, lineHeight: 1.02, letterSpacing: -3 }}>

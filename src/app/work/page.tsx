@@ -105,7 +105,7 @@ export default function WorkPage() {
         </div>
       </section>
 
-      <Marquee items={Array.from({ length: 8 }, (_, i) => (i % 2 ? "Built in Karachi" : "Shipped worldwide"))} label="Built in Karachi, shipped worldwide" />
+      <Marquee items={Array.from({ length: 8 }, (_, i) => (i % 2 ? "Built for growth" : "Shipped worldwide"))} label="Built for growth, shipped worldwide" />
 
       <section className="section theme-paper" aria-labelledby="delivered-title">
         <div className="container">

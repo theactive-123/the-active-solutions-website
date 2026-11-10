@@ -10,7 +10,7 @@ const SLIDES: { src: string; alt: string; href?: string }[] = [
   { src: "/images/work/the-thermolab.jpg", alt: "ThermoLab Shopify store homepage", href: "/case-studies/the-thermolab" },
   { src: "/images/work/heybuddy.jpg", alt: "HeyBuddy Shopify store homepage", href: "/case-studies/heybuddy" },
   { src: "/images/work/peak-motion.jpg", alt: "Peak Motion Shopify store homepage", href: "/case-studies/peak-motion" },
-  { src: "/images/team/team-feature.png", alt: "The Active Solutions team at work in Karachi" },
+  { src: "/images/team/team-feature.png", alt: "The Active Solutions team at work" },
 ];
 
 /**

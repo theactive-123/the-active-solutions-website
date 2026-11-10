@@ -45,13 +45,13 @@ export function Industries() {
           ))}
         </ul>
 
-        <div className={styles.karachi}>
+        <div className={styles.everywhere}>
           <h2 className="h2" data-split>
-            Built in Karachi.
+            One team.
             <br /> Working <em>everywhere.</em>
           </h2>
           <p className="body" data-reveal>
-            We&apos;re based in Karachi, Pakistan, but our work is built for brands selling internationally.
+            Our work is built for brands selling internationally, with overlap across US, UK and Gulf working hours.
           </p>
           <ul role="list" className={styles.markets} aria-label="Markets we work in" data-reveal-stagger="0.06">
             {MARKETS.map((m) => (

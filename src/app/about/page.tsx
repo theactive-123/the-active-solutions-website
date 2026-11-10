@@ -16,10 +16,10 @@ import { site } from "@/lib/site";
 
 const PATH = "/about";
 const DESCRIPTION =
-  "Meet The Active Solutions: a Karachi-based Shopify and DTC growth team building, optimizing and marketing Shopify stores for brands in the US, UK and Gulf.";
+  "Meet The Active Solutions: a Shopify and DTC growth team building, optimizing and marketing Shopify stores for brands in the US, UK and Gulf.";
 
 export const metadata = pageMetadata({
-  title: "About Us: Karachi-Based Shopify Growth Agency",
+  title: "About Us: Shopify Growth Agency for DTC Brands",
   description: DESCRIPTION,
   path: PATH,
 });
@@ -57,7 +57,7 @@ const aboutJsonLd = {
     "@id": `${site.url}/#organization`,
     name: site.name,
     url: site.url,
-    foundingLocation: { "@type": "Place", name: `${site.address.city}, ${site.address.countryName}` },
+    foundingLocation: { "@type": "Place", name: site.address.countryName },
     areaServed: ["United States", "United Kingdom", "United Arab Emirates", "Saudi Arabia", "Pakistan"],
   },
 };
@@ -77,19 +77,19 @@ export default function AboutPage() {
       <PageHero
         title={
           <>
-            Karachi-Based.
+            DTC-Driven.
             <br /> <em>Globally</em> Focused.
           </>
         }
         text={
           <p>
-            Digital products built in Karachi for companies worldwide. Shopify, Webflow and custom apps delivered by the senior team you meet in
+            Digital products built for companies worldwide. Shopify, Webflow and custom apps delivered by the senior team you meet in
             the proposal.
           </p>
         }
         primary={{ label: "Schedule a meeting", href: "/contact/schedule" }}
         secondary={{ label: "See our work", href: "/work" }}
-        tagline="KARACHI, PAKISTAN · SERVING BRANDS WORLDWIDE"
+        tagline="SERVING BRANDS IN THE US, UK & WORLDWIDE"
         visual={{ src: "/images/about/star-hero.png", width: 633, height: 633, className: "figma-crop" }}
       />
       <WhoWeAre />

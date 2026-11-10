@@ -15,7 +15,7 @@ export function Footer() {
               <Logo size="lg" />
             </Link>
             <p className={styles.blurb}>
-              Digital products built in Karachi for companies worldwide. Shopify, Webflow and custom apps delivered by the
+              Digital products built for companies worldwide. Shopify, Webflow and custom apps delivered by the
               senior team you meet in the proposal.
             </p>
           </div>

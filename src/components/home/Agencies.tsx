@@ -14,7 +14,7 @@ export function Agencies() {
           </h2>
           <p className="body" data-reveal>
             Agencies bring us in as their Shopify delivery team. White-label development, design, paid media and email
-            support, shipped under your brand and on your timeline, from Karachi to clients worldwide.
+            support, shipped under your brand and on your timeline, for clients worldwide.
           </p>
           <div data-reveal data-delay="0.1">
             <Button href="/partners" variant="outline-dark">

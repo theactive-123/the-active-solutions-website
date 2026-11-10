@@ -24,7 +24,7 @@ export function WorkHero() {
             Shopify stores we built <em>to grow.</em>
           </h1>
           <p className={`body ${styles.text}`} data-reveal data-immediate data-delay="0.35">
-            Storefronts for DTC brands in fitness, pet care and fashion, designed and developed by our team in Karachi for
+            Storefronts for DTC brands in fitness, pet care and fashion, designed and developed by our team for
             customers worldwide.
           </p>
           <div className={styles.actions} data-reveal data-immediate data-delay="0.5">

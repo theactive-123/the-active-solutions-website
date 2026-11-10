@@ -110,7 +110,7 @@ export function Team() {
         <div className={styles.portrait} data-portrait>
           <Image
             src="/images/team/team-feature.png"
-            alt="Our team planning a Shopify build in the Karachi office"
+            alt="Our team planning a Shopify build in the office"
             fill
             sizes="(min-width: 1024px) 30vw, 80vw"
           />

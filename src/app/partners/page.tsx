@@ -135,7 +135,7 @@ export default function PartnersPage() {
         }
         primary={{ label: "Become a Partner", href: "/contact?type=partner" }}
         secondary={{ label: "Schedule a meeting", href: "/contact/schedule" }}
-        tagline="AGENCY PARTNERSHIPS · WHITE LABEL · KARACHI → WORLDWIDE"
+        tagline="AGENCY PARTNERSHIPS · WHITE LABEL · WORLDWIDE"
         visual={{ src: "/images/partners/infinity-3d.png", width: 730, height: 545, className: "figma-crop" }}
       />
 

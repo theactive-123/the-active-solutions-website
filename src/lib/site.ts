@@ -3,7 +3,7 @@ export const site = {
   shortName: "Active Solutions",
   url: (process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.theactivesolutions.com").replace(/\/$/, ""),
   description:
-    "Shopify & DTC growth agency in Karachi, working worldwide. We design, build and grow Shopify brands: development, CRO, paid media and retention under one roof.",
+    "Shopify & DTC growth agency for brands in the US, UK and worldwide. We design, build and grow Shopify brands: development, CRO, paid media and retention under one roof.",
   // The email address is intentionally not here (this config is bundled into client code):
   // see lib/contact-email.ts and <Email /> (click to reveal).
   phone: { display: "+92 314 1047322", tel: "+923141047322" },

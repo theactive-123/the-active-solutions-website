@@ -15,7 +15,7 @@ export function Location() {
           titleClassName={styles.title}
           title={
             <span id="where-title">
-              Based in <em>Karachi</em>, built for brands selling <em>internationally</em>
+              Built for brands selling <em>internationally</em>
             </span>
           }
         />
@@ -23,7 +23,7 @@ export function Location() {
           <a href={MAPS_URL} className={styles.map} target="_blank" rel="noopener noreferrer" data-reveal="clip">
             <Image
               src="/images/about/karachi-map.jpg"
-              alt="Map of Gulistan-e-Johar, Karachi, with AG Trade Center marked"
+              alt="Map showing our office at AG Trade Center"
               fill
               sizes="(min-width: 1024px) 50vw, 100vw"
               className={styles.mapImg}
@@ -48,7 +48,7 @@ export function Location() {
                 <li key={m}>{m}</li>
               ))}
             </ul>
-            <p className={styles.note}>We&apos;re based in Karachi, Pakistan, but our work is built for brands selling internationally.</p>
+            <p className={styles.note}>Our office is in Pakistan; our work is built for brands selling internationally.</p>
           </div>
         </div>
       </div>

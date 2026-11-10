@@ -21,7 +21,7 @@ export function FeaturedWork() {
                 Real stores. Real <em>growth.</em>
               </span>
             }
-            text={<p>Built by our team in Karachi for customers worldwide.</p>}
+            text={<p>Built by our team for DTC brands worldwide.</p>}
             aside={
               <Button href="/case-studies" variant="outline-light">
                 All case studies

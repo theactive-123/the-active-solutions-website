@@ -1,6 +1,6 @@
 # The Active Solutions — website
 
-Marketing site for **The Active Solutions**, a Shopify & DTC growth agency in Karachi working worldwide.
+Marketing site for **The Active Solutions**, a Shopify & DTC growth agency for brands in the US, UK and worldwide.
 Built from the Figma file "New design" (page **New**: Landing, 5 service pages, About, Insights,
 Insight details, Contact, Schedule).
 

@@ -42,7 +42,7 @@ export const metadata: Metadata = {
     "DTC growth agency",
     "ecommerce marketing agency",
     "white label Shopify development",
-    "Karachi",
+    "Shopify agency for DTC brands",
   ],
   formatDetection: { telephone: false, address: false, email: false },
   openGraph: { siteName: site.name, locale: site.locale, type: "website" },

@@ -15,7 +15,7 @@ export function AboutStatement() {
             development, CRO, paid media and retention, under one team.
           </p>
           <p className={styles.note} data-reveal="fade">
-            [ BASED IN KARACHI. BUILT FOR BRANDS WORLDWIDE. ]
+            [ BUILT FOR DTC BRANDS IN THE US, UK &amp; WORLDWIDE ]
           </p>
         </div>
       </div>

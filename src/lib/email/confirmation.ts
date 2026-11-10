@@ -94,7 +94,7 @@ function copyFor(c: Confirmation): Copy {
           ["Format", "30-minute online call"],
         ],
         steps: [
-          ["We check the time", "Against our calendar in Karachi (PKT)."],
+          ["We check the time", "Against our team calendar (Pakistan time)."],
           ["You get a confirmation", "With a calendar invite and meeting link."],
           ["We talk about your store", "Bring your goals; we'll bring ideas."],
         ],

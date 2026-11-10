@@ -13,7 +13,7 @@ export function HomeHero() {
       <HeroScene />
       <div className={`container ${styles.inner}`}>
         <p className={styles.kicker} data-reveal="fade" data-immediate>
-          [ SHOPIFY &amp; DTC GROWTH AGENCY <span>KARACHI</span>, WORLDWIDE ]
+          [ SHOPIFY &amp; DTC GROWTH AGENCY · <span>US, UK</span> &amp; GLOBAL ]
         </p>
 
         <div className={styles.grid}>

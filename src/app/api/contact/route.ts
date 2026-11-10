@@ -205,7 +205,7 @@ export async function POST(req: Request) {
       replyTo = data.email;
       title = "New meeting request (30 min, online)";
       rows = [
-        ["Requested time (Karachi)", office],
+        ["Requested time (PKT)", office],
         ["Visitor's time", data.timeZone ? `${formatInZone(instant, data.timeZone)} (${data.timeZone})` : ""],
         ["ISO datetime", new Date(instant).toISOString()],
         ["Name", data.name],
