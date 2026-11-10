@@ -16,15 +16,18 @@ type Props = {
   visual?: { src: string; width: number; height: number; className?: string };
   /** Extra content placed under the buttons (e.g. a partner badge). */
   children?: React.ReactNode;
+  /** Content above the heading, e.g. breadcrumbs. */
+  before?: React.ReactNode;
 };
 
 /** Dark hero used by service, about and partner pages: headline, copy, CTAs and a floating 3D object. */
-export function PageHero({ title, text, primary, secondary, tagline, visual, children }: Props) {
+export function PageHero({ title, text, primary, secondary, tagline, visual, children, before }: Props) {
   return (
     <section className={`${styles.hero} theme-dark`} aria-labelledby="page-title">
       <Glow />
       <div className={`container ${styles.inner}`}>
         <div className={styles.copy}>
+          {before}
           <h1 id="page-title" className="display" data-split data-immediate>
             {title}
           </h1>

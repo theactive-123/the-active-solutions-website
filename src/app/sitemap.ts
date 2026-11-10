@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { insightPath } from "@/content/insights";
+import { cityPath, countries, countryPath } from "@/content/locations";
 import { caseStudyPath, projects } from "@/content/work";
 import { services, site } from "@/lib/site";
 import { absoluteImage, getInsights } from "@/lib/wordpress";
@@ -12,6 +13,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { path: "/work", priority: 0.8, changeFrequency: "monthly" },
     { path: "/case-studies", priority: 0.8, changeFrequency: "monthly" },
     ...projects.map((p) => ({ path: caseStudyPath(p.slug), priority: 0.7, changeFrequency: "yearly" as const })),
+    { path: "/locations", priority: 0.7, changeFrequency: "monthly" },
+    ...countries.map((c) => ({ path: countryPath(c.slug), priority: 0.7, changeFrequency: "monthly" as const })),
+    ...countries.flatMap((c) => c.cities.map((city) => ({ path: cityPath(c.slug, city.slug), priority: 0.6, changeFrequency: "monthly" as const }))),
     { path: "/partners", priority: 0.8, changeFrequency: "monthly" },
     { path: "/about", priority: 0.7, changeFrequency: "monthly" },
     { path: "/insights", priority: 0.8, changeFrequency: "weekly" },

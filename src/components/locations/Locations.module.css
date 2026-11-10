@@ -1,0 +1,296 @@
+/* Shared styles for /locations pages */
+
+.crumbs {
+  margin-bottom: clamp(18px, 1.8vw, 32px);
+  font-size: var(--fs-small);
+  color: var(--on-dark-2);
+}
+
+.crumbs ol {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 0;
+  padding: 0;
+  list-style: none;
+}
+
+.crumbs li + li::before {
+  content: "/";
+  margin: 0 10px;
+  opacity: 0.5;
+}
+
+.crumbs a {
+  color: var(--on-dark);
+  transition: color 0.3s;
+}
+
+.crumbs a:hover {
+  color: var(--white);
+}
+
+.crumbs [aria-current] {
+  color: var(--white);
+}
+
+/* Long-form copy */
+.prose {
+  display: grid;
+  gap: 1.1em;
+  max-width: 820px;
+  color: var(--muted);
+  font-size: var(--fs-body);
+  line-height: 1.7;
+}
+
+.prose p:first-child {
+  color: var(--ink);
+  font-size: var(--fs-lead, 1.25rem);
+  line-height: 1.55;
+}
+
+/* Facts strip under intros */
+.facts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px 24px;
+  margin-top: clamp(32px, 3vw, 56px);
+  padding-top: clamp(20px, 1.6vw, 28px);
+  border-top: 1px solid var(--line);
+}
+
+.facts dt {
+  color: var(--muted-2);
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.facts dd {
+  margin: 4px 0 0;
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: var(--fs-body);
+}
+
+@media (min-width: 900px) {
+  .facts {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+/* Working-together block (dark section) */
+.together {
+  display: grid;
+  gap: clamp(28px, 3vw, 56px);
+}
+
+.togetherText {
+  color: var(--on-dark);
+  font-size: var(--fs-body);
+  line-height: 1.7;
+  max-width: 640px;
+}
+
+.hours {
+  display: grid;
+  gap: 18px;
+  padding: clamp(22px, 2vw, 36px);
+  border: 1px solid var(--line-light);
+  border-radius: var(--radius-lg);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.hoursLabel {
+  color: var(--on-dark-2);
+  font-size: var(--fs-small);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.hoursValue {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(1.5rem, 1rem + 1.4vw, 2.4rem);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
+.hoursNote {
+  color: var(--on-dark-2);
+  font-size: var(--fs-small);
+}
+
+.hoursLink {
+  justify-self: start;
+  color: var(--white);
+  background: linear-gradient(var(--red), var(--red)) 0 100% / 100% 1px no-repeat;
+}
+
+@media (min-width: 900px) {
+  .together {
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+    align-items: start;
+  }
+}
+
+/* City / country link lists */
+.places {
+  display: grid;
+  gap: clamp(14px, 1.2vw, 20px);
+  padding: 0;
+  list-style: none;
+}
+
+@media (min-width: 640px) {
+  .places {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .places {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.place {
+  display: grid;
+  gap: 10px;
+  height: 100%;
+  padding: clamp(20px, 1.8vw, 30px);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--white);
+  color: var(--ink);
+  transition:
+    border-color 0.3s,
+    transform 0.5s var(--ease-out),
+    box-shadow 0.5s var(--ease-out);
+}
+
+.place:hover,
+.place:focus-visible {
+  border-color: var(--red);
+  transform: translateY(-4px);
+  box-shadow: 0 24px 40px -28px rgba(11, 11, 12, 0.35);
+}
+
+.placeRegion {
+  color: var(--muted-2);
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.placeName {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(1.35rem, 1rem + 0.8vw, 1.9rem);
+  letter-spacing: -0.02em;
+}
+
+.placeText {
+  color: var(--muted);
+  font-size: var(--fs-small);
+  line-height: 1.6;
+}
+
+.placeGo {
+  margin-top: auto;
+  color: var(--red);
+  font-size: var(--fs-small);
+  font-weight: 600;
+}
+
+/* Country block on /locations */
+.countries {
+  display: grid;
+  gap: clamp(40px, 4vw, 72px);
+}
+
+.country {
+  display: grid;
+  gap: 22px;
+  padding-top: clamp(28px, 2.4vw, 40px);
+  border-top: 1px solid var(--line);
+}
+
+.countryHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px 24px;
+}
+
+.countryName {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(1.75rem, 1.2rem + 1.6vw, 3rem);
+  letter-spacing: -0.03em;
+}
+
+.countryName a {
+  color: inherit;
+  transition: color 0.3s;
+}
+
+.countryName a:hover {
+  color: var(--red);
+}
+
+.countryLead {
+  max-width: 760px;
+  color: var(--muted);
+}
+
+.cityLinks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 0;
+  list-style: none;
+}
+
+.cityLinks a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+  padding: 8px 18px;
+  border: 1px solid var(--line);
+  border-radius: 90px;
+  color: var(--ink);
+  font-size: var(--fs-small);
+  transition:
+    background 0.3s,
+    color 0.3s,
+    border-color 0.3s;
+}
+
+.cityLinks a:hover,
+.cityLinks a:focus-visible {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--white);
+}
+
+.caseGrid {
+  display: grid;
+  gap: clamp(16px, 1.6vw, 28px);
+  padding: 0;
+  list-style: none;
+}
+
+@media (min-width: 700px) {
+  .caseGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1100px) {
+  .caseGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}

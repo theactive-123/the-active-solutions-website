@@ -70,6 +70,7 @@ export const companyNav: NavLink[] = [
   { label: "Partnership", href: "/partners" },
   { label: "About", href: "/about" },
   { label: "Insights", href: "/insights" },
+  { label: "Locations", href: "/locations" },
   { label: "Contact", href: "/contact" },
   { label: "Schedule meeting", href: "/contact/schedule" },
 ];
