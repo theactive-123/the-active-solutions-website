@@ -14,16 +14,15 @@ import { Faq } from "@/components/sections/Faq";
 import { CtaBanner } from "@/components/sections/CtaBanner";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { pageMetadata } from "@/lib/seo";
-import { site } from "@/lib/site";
 
 export const metadata: Metadata = {
   ...pageMetadata({
-    title: `${site.name} | Shopify & DTC Growth Agency`,
+    title: "Shopify Agency for DTC Brands | The Active Solutions",
     description:
-      "Shopify stores built to grow brands. A Karachi-based Shopify & DTC growth agency for brands worldwide: Shopify development, CRO, paid media and retention under one team.",
+      "Shopify agency for DTC brands helping ecommerce businesses build, optimize, and grow Shopify stores through strategy, marketing, CRO, and retention.",
     path: "/",
   }),
-  title: { absolute: `${site.name} | Shopify & DTC Growth Agency` },
+  title: { absolute: "Shopify Agency for DTC Brands | The Active Solutions" },
 };
 
 const FAQS = [

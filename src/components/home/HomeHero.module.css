@@ -100,7 +100,7 @@
 
 @media (min-width: 1024px) {
   .grid {
-    grid-template-columns: minmax(0, 1fr) minmax(340px, 35%);
+    grid-template-columns: minmax(0, 1fr) minmax(380px, 40%);
     gap: 32px;
     margin-top: 0;
   }
@@ -110,11 +110,28 @@
     align-content: end;
   }
 
+  /* Sized by viewport height too, so the logo, intro and buttons fit beside the headline
+     on short laptop screens. */
   .visual {
-    width: min(100%, 514px);
+    width: min(100%, 440px, 34svh);
     justify-self: start;
     margin-left: -2%;
     margin-bottom: clamp(-30px, -1vw, 0px);
+  }
+
+  .side {
+    gap: clamp(16px, 2.2svh, 24px);
+  }
+
+  .text {
+    max-width: 540px;
+    font-size: clamp(0.9375rem, 0.8rem + 0.3vw, 1.0625rem);
+    line-height: 1.6;
+  }
+
+  /* Headline: a little smaller on short screens so all three lines stay in view. */
+  .title {
+    font-size: min(var(--fs-display), 10.5svh);
   }
 
   .trusted {

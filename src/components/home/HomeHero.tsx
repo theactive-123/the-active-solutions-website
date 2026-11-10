@@ -29,7 +29,7 @@ export function HomeHero() {
               />
             </div>
             <h1 id="home-title" className={`display ${styles.title}`} data-hero-title>
-              Shopify stores built to <em>grow</em> brands.
+              #1 Trusted <em>Shopify Agency</em> for DTC Brands
             </h1>
           </div>
 
@@ -46,7 +46,9 @@ export function HomeHero() {
               />
             </TiltVisual>
             <p className={`body ${styles.text}`} data-reveal data-immediate data-delay="0.45">
-              We design, build and grow Shopify brands: development, CRO, paid media and retention, under one roof.
+              We are a Shopify agency for DTC brands in the US, UK and global markets. We help brands build better Shopify
+              stores and grow them into stronger revenue channels. From Shopify development and ecommerce optimization to
+              paid marketing, CRO and retention, we bring the key pieces of DTC growth together under one team.
             </p>
             <div className={styles.actions} data-reveal data-immediate data-delay="0.6">
               <Button href="/contact/schedule">Book a growth call</Button>
