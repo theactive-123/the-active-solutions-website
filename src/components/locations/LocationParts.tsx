@@ -76,7 +76,7 @@ export function RelatedWork({ slugs, place }: { slugs: string[]; place: string }
           }
           text={<p>Shopify projects for brands selling to customers in {place} and beyond.</p>}
         />
-        <ul role="list" className={styles.caseGrid} data-count={list.length} data-reveal-stagger="0.1">
+        <ul role="list" className={styles.caseGrid} data-cards={list.length} data-reveal-stagger="0.1">
           {list.map((p, i) => (
             <li key={p.slug}>
               <CaseCard project={p} index={i} />

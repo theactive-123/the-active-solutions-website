@@ -101,7 +101,8 @@
   letter-spacing: -0.02em;
 }
 
-.markets {
+/* Scoped to .card so it outranks the global ul[role="list"] reset (which zeroes margin and padding) */
+.card .markets {
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: clamp(8px, 0.8vw, 15px);
@@ -110,7 +111,7 @@
 }
 
 @media (max-width: 420px) {
-  .markets {
+  .card .markets {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
