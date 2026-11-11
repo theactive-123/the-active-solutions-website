@@ -44,7 +44,13 @@
 
 .stickyGrid {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 8px;
+}
+
+/* let wide children (the sideways scroller) scroll instead of widening the page */
+.stickyGrid > * {
+  min-width: 0;
 }
 
 @media (min-width: 1024px) {
