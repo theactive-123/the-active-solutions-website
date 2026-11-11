@@ -168,7 +168,8 @@
     grid-template-columns: minmax(0, 1fr) auto;
   }
 
+  /* Services (the last fact) lists several links; give it the room so it doesn't wrap word by word */
   .facts {
-    grid-template-columns: repeat(6, minmax(0, 1fr));
+    grid-template-columns: repeat(5, minmax(0, 0.8fr)) minmax(0, 2fr);
   }
 }
