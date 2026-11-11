@@ -6,7 +6,9 @@ import { useCallback, useEffect, useId, useRef, useState } from "react";
 import { mainNav, services, site } from "@/lib/site";
 import { Button } from "@/components/ui/Button";
 import { Logo } from "@/components/ui/Logo";
+import { LocationsMenu } from "./LocationsMenu";
 import { MegaMenu } from "./MegaMenu";
+import { locationNav } from "@/content/locations/nav";
 import { useLenis } from "@/components/motion/SmoothScroll";
 import { gsap, prefersReducedMotion } from "@/components/motion/gsap";
 import styles from "./Header.module.css";
@@ -35,9 +37,13 @@ export function Header() {
   const [hidden, setHidden] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [servicesOpen, setServicesOpen] = useState(false);
+  // Which desktop dropdown is open: Services or Locations
+  const [dropdown, setDropdown] = useState<"services" | "locations" | null>(null);
+  const servicesOpen = dropdown === "services";
+  const locationsOpen = dropdown === "locations";
   const menuId = useId();
   const servicesId = useId();
+  const locationsId = useId();
 
   // Theme + hide-on-scroll
   useEffect(() => {
@@ -68,21 +74,21 @@ export function Header() {
 
   const closeMenu = useCallback(() => setMenuOpen(false), []);
 
-  // Close the services menu on a click/tap outside the header
+  // Close the dropdown on a click/tap outside the header
   useEffect(() => {
-    if (!servicesOpen) return;
+    if (!dropdown) return;
     const onDown = (e: PointerEvent) => {
-      if (!ref.current?.contains(e.target as Node)) setServicesOpen(false);
+      if (!ref.current?.contains(e.target as Node)) setDropdown(null);
     };
     document.addEventListener("pointerdown", onDown);
     return () => document.removeEventListener("pointerdown", onDown);
-  }, [servicesOpen]);
+  }, [dropdown]);
 
   // Close menus on navigation
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect -- reset UI when the route changes
     setMenuOpen(false);
-    setServicesOpen(false);
+    setDropdown(null);
   }, [pathname]);
 
   // Mobile menu: lock scroll, animate, trap focus, close on Escape
@@ -103,7 +109,7 @@ export function Header() {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         setMenuOpen(false);
-        setServicesOpen(false);
+        setDropdown(null);
       }
       if (e.key === "Tab" && menuOpen) {
         const focusables = menu.querySelectorAll<HTMLElement>("a, button");
@@ -126,12 +132,12 @@ export function Header() {
 
   return (
     <>
-      <div className={styles.scrim} data-open={servicesOpen} aria-hidden="true" />
+      <div className={styles.scrim} data-open={dropdown !== null} aria-hidden="true" />
       <header
         ref={ref}
         className={styles.header}
         data-dark={dark || menuOpen}
-        data-hidden={hidden && !menuOpen && !servicesOpen}
+        data-hidden={hidden && !menuOpen && !dropdown}
         data-scrolled={scrolled}
       >
         <div className={styles.bar}>
@@ -150,10 +156,10 @@ export function Header() {
               ))}
               <li
                 className={styles.hasMenu}
-                onMouseEnter={() => setServicesOpen(true)}
-                onMouseLeave={() => setServicesOpen(false)}
+                onMouseEnter={() => setDropdown("services")}
+                onMouseLeave={() => setDropdown(null)}
                 onBlur={(e) => {
-                  if (!e.currentTarget.contains(e.relatedTarget as Node)) setServicesOpen(false);
+                  if (!e.currentTarget.contains(e.relatedTarget as Node)) setDropdown((d) => (d === "services" ? null : d));
                 }}
               >
                 <button
@@ -162,7 +168,7 @@ export function Header() {
                   aria-expanded={servicesOpen}
                   aria-controls={servicesId}
                   data-active={pathname.startsWith("/services")}
-                  onClick={() => setServicesOpen((v) => !v)}
+                  onClick={() => setDropdown((d) => (d === "services" ? null : "services"))}
                 >
                   Services
                   <svg width="10" height="6" viewBox="0 0 10 6" aria-hidden="true" className={styles.chev}>
@@ -178,6 +184,29 @@ export function Header() {
                   </Link>
                 </li>
               ))}
+              <li
+                className={styles.hasMenu}
+                onMouseEnter={() => setDropdown("locations")}
+                onMouseLeave={() => setDropdown(null)}
+                onBlur={(e) => {
+                  if (!e.currentTarget.contains(e.relatedTarget as Node)) setDropdown((d) => (d === "locations" ? null : d));
+                }}
+              >
+                <button
+                  type="button"
+                  className={styles.navLink}
+                  aria-expanded={locationsOpen}
+                  aria-controls={locationsId}
+                  data-active={pathname.startsWith("/locations")}
+                  onClick={() => setDropdown((d) => (d === "locations" ? null : "locations"))}
+                >
+                  Locations
+                  <svg width="10" height="6" viewBox="0 0 10 6" aria-hidden="true" className={styles.chev}>
+                    <path d="M1 1l4 4 4-4" stroke="currentColor" fill="none" strokeWidth="1.4" />
+                  </svg>
+                </button>
+                <LocationsMenu id={locationsId} open={locationsOpen} pathname={pathname} />
+              </li>
             </ul>
           </nav>
 
@@ -232,6 +261,24 @@ export function Header() {
                 </Link>
               </li>
             ))}
+          </ul>
+          <p className={styles.menuLabel} data-menu-item>
+            [ LOCATIONS WE SERVE ]
+          </p>
+          <ul role="list" className={styles.menuLocations}>
+            {locationNav.map((c) => (
+              <li key={c.slug} className={styles.menuRow}>
+                <Link href={`/locations/${c.slug}`} data-menu-item onClick={closeMenu}>
+                  <span className={styles.menuCode}>{c.code}</span>
+                  {c.name}
+                </Link>
+              </li>
+            ))}
+            <li className={styles.menuRow}>
+              <Link href="/locations" data-menu-item onClick={closeMenu} className={styles.menuAll}>
+                All locations →
+              </Link>
+            </li>
           </ul>
           <div data-menu-item className={styles.menuCta}>
             <Button href="/contact/schedule" onClick={closeMenu}>

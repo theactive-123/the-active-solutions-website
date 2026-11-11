@@ -2,6 +2,7 @@ import { SLOT_HOURS, OFFICE_TIME_ZONE } from "@/components/contact/validation";
 import { australia } from "./australia";
 import { canada } from "./canada";
 import { saudiArabia } from "./saudi-arabia";
+import { locationNav } from "./nav";
 import type { City, Country } from "./types";
 import { unitedArabEmirates } from "./united-arab-emirates";
 import { unitedKingdom } from "./united-kingdom";
@@ -11,6 +12,11 @@ export type { City, Country, Faq, Point } from "./types";
 
 /** Order shown on /locations and in the footer. */
 export const countries: Country[] = [unitedStates, unitedKingdom, canada, australia, unitedArabEmirates, saudiArabia];
+
+// The header menu uses a hand-kept copy of the slugs and names; fail the build if it drifts.
+const navKey = locationNav.map((c) => [c.slug, c.name, c.code, c.cities.map((x) => x.slug + ":" + x.name)].join("|")).join("\n");
+const dataKey = countries.map((c) => [c.slug, c.name, c.code, c.cities.map((x) => x.slug + ":" + x.name)].join("|")).join("\n");
+if (navKey !== dataKey) throw new Error("src/content/locations/nav.ts is out of sync with the location data");
 
 export const LOCATIONS_PATH = "/locations";
 export const countryPath = (country: string) => `${LOCATIONS_PATH}/${country}`;

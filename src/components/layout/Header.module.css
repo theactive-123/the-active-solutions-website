@@ -30,7 +30,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 24px;
+  gap: clamp(16px, 1.4vw, 24px);
   min-height: clamp(60px, 4.2vw, 80px);
   padding: 8px 10px 8px clamp(16px, 1.3vw, 24px);
   border-radius: 60px;
@@ -56,7 +56,7 @@
 .navList {
   display: flex;
   align-items: center;
-  gap: clamp(20px, 2.1vw, 40px);
+  gap: clamp(14px, 0.4rem + 1.4vw, 40px);
 }
 
 .navLink {
@@ -65,7 +65,7 @@
   align-items: center;
   gap: 6px;
   padding: 8px 0;
-  font-size: clamp(1rem, 0.92rem + 0.22vw, 1.25rem);
+  font-size: clamp(0.95rem, 0.6rem + 0.45vw, 1.25rem);
   font-weight: 400;
   color: var(--fg);
   white-space: nowrap;
@@ -132,6 +132,7 @@
 
 .cta {
   display: none !important;
+  flex-shrink: 0;
 }
 
 .burger {
@@ -245,12 +246,44 @@
   color: var(--on-dark);
 }
 
+.menuLocations {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 220px), 1fr));
+  gap: 10px 20px;
+  font-size: 1.15rem;
+  color: var(--on-dark);
+}
+
+.menuLocations a {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.menuCode {
+  min-width: 40px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  color: var(--on-dark-2);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-align: center;
+}
+
+.menuAll {
+  color: var(--white);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-decoration-color: var(--red);
+}
+
 .menuCta {
   margin-top: 16px;
 }
 
-/* Seven links + logo + CTA need ~1200px; below that the burger menu is used. */
-@media (min-width: 1200px) {
+/* Eight links + logo + CTA need ~1280px; below that the burger menu is used. */
+@media (min-width: 1280px) {
   .nav {
     display: block;
   }
