@@ -134,9 +134,10 @@
   grid-column: 1 / -1;
 }
 
+/* Tablets/small laptops: the blurb spans the top row, the three link columns share the row below */
 @media (min-width: 900px) {
   .top {
-    grid-template-columns: 1.6fr 1fr 0.8fr 0.8fr;
+    grid-template-columns: 1.3fr 1fr 1.2fr;
   }
 
   .office {

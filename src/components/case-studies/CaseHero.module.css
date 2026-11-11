@@ -157,6 +157,13 @@
     0 0 120px -40px var(--accent);
 }
 
+/* Phones: the two-column grid leaves Services (several links) too narrow, so it takes a full row */
+@media (max-width: 699px) {
+  .fact:last-child {
+    grid-column: 1 / -1;
+  }
+}
+
 @media (min-width: 700px) {
   .facts {
     grid-template-columns: repeat(3, minmax(0, 1fr));
