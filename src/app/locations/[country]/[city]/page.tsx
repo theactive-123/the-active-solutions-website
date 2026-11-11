@@ -4,15 +4,14 @@ import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { JsonLd } from "@/components/JsonLd";
 import { withAccent } from "@/components/case-studies/accent";
-import { Crumbs, PlaceServices, RelatedWork, WorkingTogether } from "@/components/locations/LocationParts";
-import styles from "@/components/locations/Locations.module.css";
+import { LocationHero } from "@/components/locations/Heroes";
+import { Crumbs, RelatedWork } from "@/components/locations/LocationParts";
+import { cityRecipe } from "@/components/locations/recipes";
+import { Block, FaqCards, Intro, Places, Points, Services, Together } from "@/components/locations/Variants";
 import { MotionEngine } from "@/components/motion/MotionEngine";
-import { CardGrid } from "@/components/sections/CardGrid";
 import { CtaBanner } from "@/components/sections/CtaBanner";
 import { Faq } from "@/components/sections/Faq";
-import { PageHero } from "@/components/sections/PageHero";
-import { SectionHeader } from "@/components/ui/SectionHeader";
-import { LOCATIONS_PATH, cityPath, countries, countryPath, getCity } from "@/content/locations";
+import { LOCATIONS_PATH, callWindows, cityPath, countries, countryPath, getCity, zoneName } from "@/content/locations";
 import { breadcrumbJsonLd, pageMetadata } from "@/lib/seo";
 import { site } from "@/lib/site";
 
@@ -49,6 +48,7 @@ async function CityContent({ params }: { params: PageProps<"/locations/[country]
   const { country, city } = found;
   const path = cityPath(country.slug, city.slug);
   const others = country.cities.filter((c) => c.slug !== city.slug);
+  const r = cityRecipe(country.slug, country.cities.indexOf(city));
 
   const serviceJsonLd = {
     "@context": "https://schema.org",
@@ -79,8 +79,9 @@ async function CityContent({ params }: { params: PageProps<"/locations/[country]
           serviceJsonLd,
         ]}
       />
-      <PageHero
-        before={
+      <LocationHero
+        kind={r.hero}
+        crumbs={
           <Crumbs
             items={[
               { name: "Locations", href: LOCATIONS_PATH },
@@ -90,156 +91,155 @@ async function CityContent({ params }: { params: PageProps<"/locations/[country]
           />
         }
         title={withAccent(city.headline)}
-        text={<p>{city.lead}</p>}
+        lead={city.lead}
+        place={city.name}
+        names={country.cities.map((c) => c.name)}
+        facts={[
+          { label: "Region", value: `${city.region}, ${country.name}` },
+          { label: "Currency", value: country.currency },
+          { label: `Call times (${zoneName(city.timeZone)})`, value: callWindows(city.timeZone).label },
+          { label: "Platform", value: "Shopify & Shopify Plus" },
+        ]}
         primary={{ label: "Book a growth call", href: "/contact/schedule" }}
         secondary={{ label: "See our work", href: "/work" }}
-        tagline={`SHOPIFY AGENCY · ${city.name} · ${city.region} · ${country.name}`.toUpperCase()}
       />
 
-      <section className="section theme-paper" aria-labelledby="market-title">
-        <div className="container">
-          <SectionHeader
-            eyebrow={`ECOMMERCE IN ${city.name.toUpperCase()}`}
-            title={
-              <span id="market-title">
-                Selling online in <em>{city.name}</em>
-              </span>
-            }
-          />
-          <div className={styles.prose} data-reveal>
-            {city.intro.map((p) => (
-              <p key={p.slice(0, 40)}>{p}</p>
-            ))}
-          </div>
-          <dl className={styles.facts} data-reveal-stagger="0.06">
-            <div>
-              <dt>Location</dt>
-              <dd>
-                {city.region}, {country.name}
-              </dd>
-            </div>
-            <div>
-              <dt>Currency</dt>
-              <dd>{country.currency}</dd>
-            </div>
-            <div>
-              <dt>Platform</dt>
-              <dd>Shopify &amp; Shopify Plus</dd>
-            </div>
-            <div>
-              <dt>How we work</dt>
-              <dd>Remote, with live calls</dd>
-            </div>
-          </dl>
-        </div>
-      </section>
+      <Block
+        id="market-title"
+        theme={r.themes.intro}
+        layout={r.layout}
+        eyebrow={`ECOMMERCE IN ${city.name.toUpperCase()}`}
+        title={
+          <>
+            Selling online in <em>{city.name}</em>
+          </>
+        }
+      >
+        <Intro
+          kind={r.intro}
+          paragraphs={city.intro}
+          facts={[
+            { label: "Location", value: `${city.region}, ${country.name}` },
+            { label: "Currency", value: country.currency },
+            { label: "Platform", value: "Shopify & Shopify Plus" },
+            { label: "How we work", value: "Remote, with live calls" },
+          ]}
+        />
+      </Block>
 
-      <section className="section theme-sand" aria-labelledby="industries-title">
-        <div className="container">
-          <SectionHeader
-            eyebrow="KEY SECTORS"
-            title={
-              <span id="industries-title">
-                Who we build for in <em>{city.name}</em>
-              </span>
-            }
-          />
-          <CardGrid items={city.industries} columns={city.industries.length === 4 ? 2 : 3} />
-        </div>
-      </section>
+      <Block
+        id="industries-title"
+        theme={r.themes.a}
+        layout={r.layout}
+        eyebrow="KEY SECTORS"
+        title={
+          <>
+            Who we build for in <em>{city.name}</em>
+          </>
+        }
+      >
+        <Points items={city.industries} kind={r.pointsA} theme={r.themes.a} />
+      </Block>
 
-      <section className="section theme-dark" aria-labelledby="services-title">
-        <div className="container">
-          <SectionHeader
-            eyebrow="SERVICES"
-            title={
-              <span id="services-title">
-                Shopify services for <em>{city.name}</em> brands
-              </span>
-            }
-            text={<p>One team for the build, the conversion work and the marketing that brings shoppers back.</p>}
-          />
-          <PlaceServices place={city.name} />
-        </div>
-      </section>
+      <Block
+        id="services-title"
+        theme={r.themes.services}
+        layout={r.layout}
+        eyebrow="SERVICES"
+        title={
+          <>
+            Shopify services for <em>{city.name}</em> brands
+          </>
+        }
+        text={<p>One team for the build, the conversion work and the marketing that brings shoppers back.</p>}
+      >
+        <Services place={city.name} kind={r.services} theme={r.themes.services} />
+      </Block>
 
-      <section className="section theme-paper" aria-labelledby="local-title">
-        <div className="container">
-          <SectionHeader
-            eyebrow="WHAT WE PLAN FOR"
-            title={
-              <span id="local-title">
-                What a <em>{city.name}</em> store needs
-              </span>
-            }
-            text={
-              <p>
-                Country-wide rules on tax, payments and shipping are covered on our{" "}
-                <Link href={countryPath(country.slug)}>{country.name} page</Link>. These are the details specific to {city.name}.
-              </p>
-            }
-          />
-          <CardGrid items={city.local} columns={2} />
-        </div>
-      </section>
+      <Block
+        id="local-title"
+        theme={r.themes.b}
+        layout={r.layout}
+        eyebrow="WHAT WE PLAN FOR"
+        title={
+          <>
+            What a <em>{city.name}</em> store needs
+          </>
+        }
+        text={
+          <p>
+            Country-wide rules on tax, payments and shipping are covered on our <Link href={countryPath(country.slug)}>{country.name} page</Link>.
+            These are the details specific to {city.name}.
+          </p>
+        }
+      >
+        <Points items={city.local} kind={r.pointsB} theme={r.themes.b} />
+      </Block>
 
-      <section className="section theme-dark" aria-labelledby="together-title">
-        <div className="container">
-          <SectionHeader
-            eyebrow="WORKING TOGETHER"
-            title={
-              <span id="together-title">
-                Remote team, <em>{city.name}</em> hours
-              </span>
-            }
-          />
-          <WorkingTogether text={country.workingTogether} timeZone={city.timeZone} place={city.name} />
-        </div>
-      </section>
+      <Block
+        id="together-title"
+        theme="dark"
+        layout={r.layout === "sticky" ? "stack" : r.layout}
+        eyebrow="WORKING TOGETHER"
+        title={
+          <>
+            Remote team, <em>{city.name}</em> hours
+          </>
+        }
+      >
+        <Together kind={r.together} text={country.workingTogether} timeZone={city.timeZone} place={city.name} />
+      </Block>
 
       <RelatedWork slugs={country.caseStudies} place={country.name} />
 
-      <section className="section theme-paper" aria-labelledby="nearby-title">
-        <div className="container">
-          <SectionHeader
-            eyebrow={`MORE IN ${country.name.toUpperCase()}`}
-            title={
-              <span id="nearby-title">
-                Other <em>{country.name}</em> cities
-              </span>
-            }
-          />
-          <ul role="list" className={styles.places} data-reveal-stagger="0.06">
-            {others.map((c) => (
-              <li key={c.slug}>
-                <Link href={cityPath(country.slug, c.slug)} className={styles.place}>
-                  <span className={styles.placeRegion}>{c.region}</span>
-                  <span className={styles.placeName}>Shopify agency in {c.name}</span>
-                  <span className={styles.placeGo}>Explore {c.name} →</span>
-                </Link>
-              </li>
-            ))}
-            <li>
-              <Link href={countryPath(country.slug)} className={styles.place}>
-                <span className={styles.placeRegion}>{country.code}</span>
-                <span className={styles.placeName}>All of {country.name}</span>
-                <span className={styles.placeGo}>Tax, payments &amp; shipping →</span>
-              </Link>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <Faq
-        items={city.faqs}
-        theme="sand"
+      <Block
+        id="nearby-title"
+        theme={r.themes.nearby}
+        layout={r.layout === "sticky" ? "stack" : r.layout}
+        eyebrow={`MORE IN ${country.name.toUpperCase()}`}
         title={
           <>
-            {city.name} <em>questions</em>
+            Other <em>{country.name}</em> cities
           </>
         }
-        text={`What ${city.name} brands ask us before starting a Shopify project.`}
-      />
+      >
+        <Places
+          kind={r.places}
+          items={[
+            ...others.map((c) => ({
+              href: cityPath(country.slug, c.slug),
+              name: c.name,
+              region: c.region,
+              go: `Shopify agency in ${c.name}`,
+            })),
+            { href: countryPath(country.slug), name: `All of ${country.name}`, region: country.code, go: "Tax, payments & shipping" },
+          ]}
+        />
+      </Block>
+
+      {r.faq === "cards" ? (
+        <FaqCards
+          items={city.faqs}
+          theme={r.themes.faq === r.themes.nearby ? "sand" : r.themes.faq}
+          title={
+            <>
+              {city.name} <em>questions</em>
+            </>
+          }
+          text={`What ${city.name} brands ask us before starting a Shopify project.`}
+        />
+      ) : (
+        <Faq
+          items={city.faqs}
+          theme={r.themes.nearby === "sand" ? "paper" : "sand"}
+          title={
+            <>
+              {city.name} <em>questions</em>
+            </>
+          }
+          text={`What ${city.name} brands ask us before starting a Shopify project.`}
+        />
+      )}
 
       <CtaBanner
         title={

@@ -72,3 +72,24 @@ export function callWindows(timeZone: string): { label: string; seasonal?: strin
   const southern = offsetMinutes(timeZone, new Date(Date.UTC(2026, 0, 15))) > offsetMinutes(timeZone, new Date(Date.UTC(2026, 6, 15)));
   return southern ? { label: summer, seasonal: `${winter} in daylight saving time` } : { label: winter, seasonal: `${summer} in daylight saving time` };
 }
+
+/**
+ * The same call windows as minutes after local midnight (mid-January), for drawing a 24-hour day.
+ * Each block runs from its first start time to 30 minutes after its last (calls are 30 minutes).
+ */
+export function callBlocks(timeZone: string): { from: number; to: number }[] {
+  const d = new Date(Date.UTC(2026, 0, 15, 12));
+  const diff = offsetMinutes(timeZone, d) - offsetMinutes(OFFICE_TIME_ZONE, d);
+  return OFFICE_BLOCKS.map(([a, b]) => {
+    const from = (((a * 60 + diff) % 1440) + 1440) % 1440;
+    return { from, to: from + (b - a) * 60 + 30 };
+  });
+}
+
+/** Short local zone name for a city, e.g. "GMT", "EST", "GST" (falls back to "GMT+4"). */
+export function zoneName(timeZone: string) {
+  const part = new Intl.DateTimeFormat("en-US", { timeZone, timeZoneName: "short" })
+    .formatToParts(new Date(Date.UTC(2026, 0, 15, 12)))
+    .find((p) => p.type === "timeZoneName");
+  return part?.value ?? timeZone;
+}

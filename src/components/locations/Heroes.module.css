@@ -1,0 +1,382 @@
+/* Location heroes: six layouts, one per country. Shared base first. */
+.hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding-top: clamp(120px, 11vw, 210px);
+  padding-bottom: clamp(40px, 3.4vw, 72px);
+  min-height: min(92svh, 820px);
+}
+
+.inner {
+  position: relative;
+  z-index: 1;
+}
+
+.title {
+  max-width: 15ch;
+}
+
+.lead {
+  max-width: 600px;
+  margin-top: clamp(18px, 1.6vw, 30px);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px 18px;
+  margin-top: clamp(24px, 2.2vw, 40px);
+}
+
+/* dl facts share these basics */
+.panelList dt,
+.tiles dt,
+.fullFacts dt,
+.splitFacts dt {
+  color: var(--on-dark-2);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.panelList dd,
+.tiles dd,
+.fullFacts dd,
+.splitFacts dd {
+  margin: 6px 0 0;
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: var(--fs-body);
+  line-height: 1.35;
+}
+
+/* ------------------------------------------------------------------ giant (US)
+   Headline and lead side by side, the place name set huge and outlined along the bottom. */
+.giant {
+  min-height: min(100svh, 900px);
+  padding-bottom: 0;
+}
+
+.giantRow {
+  display: grid;
+  gap: 24px 64px;
+  align-items: end;
+}
+
+.giant .lead {
+  margin-top: 0;
+}
+
+.giantWord {
+  position: relative;
+  z-index: 0;
+  margin: clamp(28px, 3vw, 56px) 0 -0.16em;
+  padding-inline: var(--gutter);
+  /* Fits the longest names on one line: never wider than the viewport */
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: min(19vw, calc(150vw / var(--chars)));
+  line-height: 0.9;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: transparent;
+  -webkit-text-stroke: 1.5px rgba(255, 255, 255, 0.28);
+  user-select: none;
+}
+
+@media (min-width: 1024px) {
+  .giantRow {
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+  }
+}
+
+/* ----------------------------------------------------------------- panel (UK)
+   Copy on the left, an "at a glance" ledger card on the right. */
+.panelGrid {
+  display: grid;
+  gap: 48px;
+  align-items: end;
+}
+
+.panelCard {
+  padding: clamp(22px, 1.8vw, 34px);
+  border: 1px solid var(--line-light);
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.panelHead {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--line-light);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--on-dark-2);
+}
+
+.panelHead span:last-child {
+  color: var(--red);
+}
+
+.panelList > div {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  gap: 16px;
+  align-items: baseline;
+  padding: 16px 0;
+  border-bottom: 1px dashed var(--line-light);
+}
+
+.panelList > div:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+
+.panelList dd {
+  margin: 0;
+}
+
+@media (min-width: 1024px) {
+  .panelCard {
+    min-height: 0;
+  }
+
+  .panelGrid {
+    grid-template-columns: minmax(0, 1fr) minmax(320px, 0.62fr);
+    gap: clamp(48px, 5vw, 110px);
+  }
+}
+
+/* -------------------------------------------------------------- centered (CA)
+   Centred copy with a slow band of the country's city names underneath. */
+.centered {
+  min-height: min(100svh, 880px);
+  justify-content: center;
+  padding-bottom: 0;
+}
+
+.centerCol {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.centerCol .title {
+  max-width: 18ch;
+}
+
+.centerCol .lead {
+  margin-inline: auto;
+}
+
+.centerCol .actions {
+  justify-content: center;
+}
+
+.centerCol nav ol {
+  justify-content: center;
+}
+
+.band {
+  position: relative;
+  z-index: 1;
+  margin-top: clamp(48px, 5vw, 96px);
+  padding-block: clamp(16px, 1.4vw, 26px);
+  border-block: 1px solid var(--line-light);
+  overflow: hidden;
+  mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+}
+
+.bandTrack {
+  display: flex;
+  width: max-content;
+  animation: band 40s linear infinite;
+}
+
+.bandSet {
+  display: flex;
+  flex-shrink: 0;
+}
+
+.bandSet span {
+  padding-inline: clamp(20px, 2vw, 40px);
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: clamp(1.75rem, 1.2rem + 2vw, 3.5rem);
+  color: rgba(255, 255, 255, 0.32);
+  white-space: nowrap;
+}
+
+.bandSet span::after {
+  content: "✦";
+  margin-left: clamp(20px, 2vw, 40px);
+  font-size: 0.5em;
+  font-style: normal;
+  color: var(--red);
+  vertical-align: middle;
+}
+
+.bandSet .bandOn {
+  color: var(--white);
+}
+
+@keyframes band {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* ----------------------------------------------------------------- bento (AU)
+   Copy left, four fact tiles right. */
+.bentoGrid {
+  display: grid;
+  gap: 40px;
+  align-items: end;
+}
+
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.tiles > div {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 18px;
+  min-height: clamp(120px, 10vw, 170px);
+  padding: clamp(16px, 1.3vw, 24px);
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--line-light);
+}
+
+.tiles > div:nth-child(1) {
+  background: var(--red);
+  border-color: var(--red);
+}
+
+.tiles > div:nth-child(1) dt {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.tiles > div:nth-child(4) {
+  background: var(--paper);
+  border-color: var(--paper);
+  color: var(--ink);
+}
+
+.tiles > div:nth-child(4) dt {
+  color: var(--muted-2);
+}
+
+.tiles dd {
+  font-size: var(--fs-h5);
+  letter-spacing: -0.01em;
+}
+
+@media (min-width: 1024px) {
+  .bentoGrid {
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+    gap: clamp(48px, 5vw, 100px);
+  }
+}
+
+/* ------------------------------------------------------------- fullbleed (UAE)
+   Full-height, headline set across the page, facts in columns along the bottom rule. */
+.fullbleed {
+  min-height: 100svh;
+}
+
+.fullCol .title {
+  max-width: 20ch;
+  font-size: clamp(2.75rem, 1.6rem + 5vw, 7.5rem);
+}
+
+.fullRow {
+  display: grid;
+  gap: 8px 48px;
+  align-items: end;
+}
+
+.fullFacts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px 24px;
+  margin-top: clamp(40px, 4vw, 80px);
+  padding-top: clamp(18px, 1.5vw, 26px);
+  border-top: 1px solid var(--line-light);
+}
+
+@media (min-width: 900px) {
+  .fullRow {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .fullFacts {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+/* ----------------------------------------------------------------- split (KSA)
+   Headline left, the lead boxed on the right behind a red rule, facts as a strip. */
+.splitGrid {
+  display: grid;
+  gap: 32px;
+  align-items: end;
+}
+
+.splitBox {
+  padding: clamp(20px, 1.8vw, 32px) 0 0 clamp(20px, 1.8vw, 32px);
+  border-left: 3px solid var(--red);
+}
+
+.splitBox .lead {
+  margin-top: 0;
+}
+
+.splitFacts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: clamp(36px, 3.6vw, 70px);
+}
+
+.splitFacts > div {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 10px 18px;
+  border: 1px solid var(--line-light);
+  border-radius: 99px;
+}
+
+.splitFacts dd {
+  margin: 0;
+  font-size: var(--fs-small);
+}
+
+@media (min-width: 1024px) {
+  .splitGrid {
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+    gap: clamp(48px, 5vw, 110px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bandTrack {
+    animation: none;
+  }
+}
