@@ -24,8 +24,6 @@ const jost = Jost({ variable: "--font-jost", subsets: ["latin"], weight: ["300",
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
-  // Google Search Console ownership: renders <meta name="google-site-verification" ...> in <head>
-  verification: { google: "gmhq4-0mORXGFxVlIhFLTNQNurOdU_RrJwx-0yn93q0" },
   title: {
     default: `${site.name} | Shopify & DTC Growth Agency`,
     template: `%s | ${site.name}`,
